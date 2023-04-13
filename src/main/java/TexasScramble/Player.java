@@ -1,4 +1,4 @@
-package src.main.java.TexasScramble;
+package texasScramble;
 
 public interface Player {
 }
