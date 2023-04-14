@@ -16,7 +16,7 @@
 
 <repositories>
     <repository>
-        <id>comp30880-cardsharps-git-repo</id>
+        <id>comp30880-TexasScramble-git-repo</id>
         <url>https://github.com/Murnane1/COMP30880-TexasScramble</url>
     </repository>
 </repositories>
