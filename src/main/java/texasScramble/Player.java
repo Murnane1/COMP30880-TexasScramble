@@ -1,4 +1,4 @@
 package texasScramble;
 
-public interface Player {
+public class Player {
 }

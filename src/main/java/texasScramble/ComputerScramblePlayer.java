@@ -1,4 +1,4 @@
 package texasScramble;
 
-public class ComputerScramblePlayer extends AbstractPlayer {
+public class ComputerScramblePlayer extends Player {
 }

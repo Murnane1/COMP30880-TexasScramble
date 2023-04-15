@@ -1,4 +1,4 @@
 package texasScramble;
 
-public class HumanScramblePlayer extends AbstractPlayer {
+public class HumanScramblePlayer extends Player {
 }
