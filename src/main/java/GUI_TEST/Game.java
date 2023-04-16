@@ -1,21 +1,39 @@
+package GUI_TEST;
+import java.awt.Graphics;
+
 import GUI.*;
+import gameStates.GameState;
+import gameStates.Menu;
+import gameStates.Playing;
 
 public class Game implements Runnable{
     
-    private GameWindow gameWindow;
     private GamePanel gamePanel;
     
+    private Playing playing;
+    private Menu menu;
+
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
 
+
+
     public Game(){
 
-        this.gamePanel = new GamePanel();
-        this.gameWindow = new GameWindow(gamePanel);
+        initClasses();
+
+        this.gamePanel = new GamePanel(this);
+        new GameWindow(gamePanel);
         this.gamePanel.requestFocus();   //Requests the input focus
 
         startGameLoop();
+    }
+
+    private void initClasses() {
+       menu = new Menu(this);
+       playing = new Playing(this);
+
     }
 
     private void startGameLoop(){
@@ -24,8 +42,37 @@ public class Game implements Runnable{
     }
     public void update(){
         //Code for the game
-        gamePanel.updateGame();
+        
+        switch(GameState.state){
+            case MENU:
+                menu.update();
+                break;
+            case PLAYING:
+                playing.update();
+                break;
+            
+            default:
+                break;
+            
+        }
     }
+
+    public void render(Graphics g){
+        
+        switch(GameState.state){
+            case MENU:
+                menu.draw(g);
+                break;
+            case PLAYING:
+                playing.draw(g);
+                break;
+            
+            default:
+                break;
+            
+        }
+    }
+
     @Override
     public void run() {
         
@@ -73,6 +120,14 @@ public class Game implements Runnable{
 
         }
 
+    }
+
+    public Menu getMenu(){
+        return menu;
+    }
+
+    public Playing getPlaying(){
+        return playing;
     }
 
     public static void main(String[] args) {

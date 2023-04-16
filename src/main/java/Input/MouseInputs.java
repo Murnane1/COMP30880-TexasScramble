@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import GUI.GamePanel;
+import gameStates.GameState;
 
 public class MouseInputs implements MouseListener , MouseMotionListener {
 
@@ -16,7 +17,17 @@ public class MouseInputs implements MouseListener , MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         // TODO Auto-generated method stub
-        gamePanel.setRectPosition(e.getX(), e.getY());
+        switch(GameState.state){
+            case MENU:
+                gamePanel.getGame().getMenu().mouseDragged(e); 
+                break;
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mouseDragged(e);
+                break;
+            default:
+                break;
+            
+        }
     }
 
     @Override

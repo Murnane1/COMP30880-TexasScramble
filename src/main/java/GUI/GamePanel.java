@@ -1,6 +1,7 @@
 package GUI;
-
 import Input.*;
+
+import GUI_TEST.Game;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -14,13 +15,12 @@ import java.io.InputStream;
 public class GamePanel extends JPanel{
     
     private MouseInputs mouseInputs;
-    private int xDelta = 100, yDelta = 100;
+ 
+    private Game game;
 
-    private BufferedImage image;
+    public GamePanel(Game game){
 
-    public GamePanel(){
-
-        importImg();
+        this.game = game;
 
         setPanelSize();
 
@@ -32,17 +32,6 @@ public class GamePanel extends JPanel{
 
     }
 
-    private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/Images/blank-tile.png");
-        
-        try {
-            image = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-    }
-
     private void setPanelSize(){
         Dimension size = new Dimension(960, 540);   //16:9 1920x1080
         setMinimumSize(size);
@@ -50,26 +39,14 @@ public class GamePanel extends JPanel{
         setMaximumSize(size);
     }
 
-    public void changeXDelta(int value){
-        this.xDelta += value;
-    }
-
-    public void changeYDelta(int value){
-        this.yDelta +=value;
-    }
-
-    public void setRectPosition(int x, int y){
-        this.xDelta = x;
-        this.yDelta = y;
-    }
-
-    public void updateGame(){
-        
-    }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        g.drawImage(image, 0,0,75,75, null);
+        game.render(g);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
