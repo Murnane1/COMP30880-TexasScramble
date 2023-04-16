@@ -8,10 +8,13 @@ public class GameWindow extends JFrame{
 
         super();
 
-        setSize(960,540);    // 16:9 1920x1080
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //Stop program when window is closed
 
         add(gamePanel);
+
+        setResizable(false);
+        pack();
+
         setLocationRelativeTo(null);    //window appears in centre
 
         setVisible(true);   //call at end

@@ -7,6 +7,7 @@ public class Game implements Runnable{
     
     private Thread gameThread;
     private final int FPS_SET = 120;
+    private final int UPS_SET = 200;
 
     public Game(){
 
@@ -26,14 +27,23 @@ public class Game implements Runnable{
     public void run() {
         
         double timePerFrame = 1000000000.0 / FPS_SET; //nano seconds
+        double timePerUpdate = 1000000000.0 / UPS_SET;
+
         long lastFrame = System.nanoTime();
-        
+        long now = System.nanoTime();
+
+        long previousTime = System.nanoTime();
+
+
         int frames = 0;
         long lastCheck = System.currentTimeMillis();
 
+        int updates = 0;
+
         while(true){
             
-            if(System.nanoTime() - lastFrame >= timePerFrame){
+            now = System.nanoTime();
+            if(now - lastFrame >= timePerFrame){
                 gamePanel.repaint();
 
                 lastFrame = System.nanoTime();
