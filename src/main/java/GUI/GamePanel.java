@@ -22,18 +22,15 @@ public class GamePanel extends JPanel{
 
     public void changeXDelta(int value){
         this.xDelta += value;
-        repaint();
     }
 
     public void changeYDelta(int value){
         this.yDelta +=value;
-        repaint();
     }
 
     public void setRectPosition(int x, int y){
         this.xDelta = x;
         this.yDelta = y;
-        repaint();
     }
 
     public void paintComponent(Graphics g){

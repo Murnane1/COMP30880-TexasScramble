@@ -22,37 +22,37 @@ public class MouseInputs implements MouseListener , MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mouseMoved'");
+        //System.out.println("Unimplemented method 'mouseMoved'");
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mouseClicked'");
+        //System.out.println("Unimplemented method 'mouseClicked'");
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mousePressed'");
+        //System.out.println("Unimplemented method 'mousePressed'");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mouseReleased'");
+        //System.out.println("Unimplemented method 'mouseReleased'");
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mouseEntered'");
+        //System.out.println("Unimplemented method 'mouseEntered'");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("Unimplemented method 'mouseExited'");
+        //System.out.println("Unimplemented method 'mouseExited'");
     }
     
 }
