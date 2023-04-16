@@ -63,6 +63,10 @@ public class GamePanel extends JPanel{
         this.yDelta = y;
     }
 
+    public void updateGame(){
+        
+    }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
