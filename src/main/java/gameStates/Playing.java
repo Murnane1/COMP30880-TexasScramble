@@ -5,23 +5,28 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import Entities.guiPlayer;
+import GUI.PauseOverlay;
 import GUI_TEST.Game;
 import Levels.LevelManager;
 
 public class Playing extends State implements StateMethods{
     
     
+    private guiPlayer player;
+    private LevelManager levelMangager;
+    private PauseOverlay pauseOverlay;
+    private boolean paused = false;
+    
     public Playing(Game game) {
         super(game);
         initClasses();
     }
 
-    private guiPlayer player;
-    private LevelManager levelMangager;
     
     private void initClasses() {
         player = new guiPlayer(200, 200);   //Random Position
         levelMangager = new LevelManager(game);
+        pauseOverlay = new PauseOverlay();
     }
     
     @Override
@@ -29,42 +34,50 @@ public class Playing extends State implements StateMethods{
         // TODO Auto-generated method stub
         levelMangager.update();
         player.update();
+        if(paused){
+            pauseOverlay.update();
+        }
     }
     @Override
     public void draw(Graphics g) {
         // TODO Auto-generated method stub
         levelMangager.draw(g);
         player.render(g);
+        if(paused){
+            pauseOverlay.draw(g);
+        }
     }
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
     }
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+        if(paused){
+            pauseOverlay.mousePressed(e);
+        }
     }
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
+        if(paused){
+            pauseOverlay.mouseReleased(e);
+        }
+    }    
     @Override
     public void mouseDragged(MouseEvent e) {
-        // TODO Auto-generated method stub
+        if(paused){
+            pauseOverlay.mouseDragged(e);
+        }
         player.setPosition(e.getX(), e.getY());
     }
     @Override
     public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
-    }
+        if(paused){
+            pauseOverlay.mouseMoved(e);
+        }
+    }    
     @Override
     public void keyPressed(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
     }
     @Override
     public void keyReleased(KeyEvent e) {
@@ -87,7 +100,8 @@ public class Playing extends State implements StateMethods{
                 player.changeXDelta(5);
                 break;
             case KeyEvent.VK_ESCAPE:
-                GameState.state = GameState.MENU;
+                // GameState.state = GameState.MENU;
+                paused = !paused;
                 break;
             default:
                 System.out.println("Some key is pressed");

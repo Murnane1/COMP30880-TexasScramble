@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import GUI.GamePanel;
+import GUI_Framework.GamePanel;
 import gameStates.GameState;
 
 public class MouseInputs implements MouseListener , MouseMotionListener {
@@ -16,7 +16,6 @@ public class MouseInputs implements MouseListener , MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        // TODO Auto-generated method stub
         switch(GameState.state){
             case MENU:
                 gamePanel.getGame().getMenu().mouseDragged(e); 
@@ -32,26 +31,60 @@ public class MouseInputs implements MouseListener , MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-        //System.out.println("Unimplemented method 'mouseMoved'");
+        switch(GameState.state){
+            case MENU:
+                gamePanel.getGame().getMenu().mouseMoved(e); 
+                break;
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mouseMoved(e);
+                break;
+            default:
+                break;
+            
+        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        //System.out.println("Unimplemented method 'mouseClicked'");
+        switch(GameState.state){
+           
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mouseClicked(e);
+                break;
+            default:
+                break;
+            
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        //System.out.println("Unimplemented method 'mousePressed'");
+        switch(GameState.state){
+            case MENU:
+                gamePanel.getGame().getMenu().mousePressed(e); 
+                break;
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mousePressed(e);
+                break;
+            default:
+                break;
+            
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        //System.out.println("Unimplemented method 'mouseReleased'");
+        switch(GameState.state){
+            case MENU:
+                gamePanel.getGame().getMenu().mouseReleased(e); 
+                break;
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mouseReleased(e);
+                break;
+            default:
+                break;
+            
+        }
     }
 
     @Override

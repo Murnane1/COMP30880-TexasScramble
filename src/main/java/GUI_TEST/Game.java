@@ -1,7 +1,7 @@
 package GUI_TEST;
 import java.awt.Graphics;
 
-import GUI.*;
+import GUI_Framework.*;
 import gameStates.GameState;
 import gameStates.Menu;
 import gameStates.Playing;
@@ -17,14 +17,14 @@ public class Game implements Runnable{
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
 
-
-
     public Game(){
 
         initClasses();
 
         this.gamePanel = new GamePanel(this);
+
         new GameWindow(gamePanel);
+        gamePanel.setFocusable(true);
         this.gamePanel.requestFocus();   //Requests the input focus
 
         startGameLoop();
@@ -122,12 +122,16 @@ public class Game implements Runnable{
 
     }
 
+
     public Menu getMenu(){
         return menu;
     }
 
     public Playing getPlaying(){
         return playing;
+    }
+    public GamePanel getGamePanel(){
+        return gamePanel;
     }
 
     public static void main(String[] args) {

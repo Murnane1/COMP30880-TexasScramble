@@ -1,4 +1,4 @@
-package GUI;
+package GUI_Framework;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
