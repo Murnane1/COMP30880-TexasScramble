@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
-//TODO Extend Player
+//TODO 
+/*
+* Maybe make this abstract class?
+* Display player tiles
+*
+*/
 public class guiPlayer extends Entity{
     
     private BufferedImage image;

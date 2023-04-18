@@ -15,7 +15,7 @@ import GUI_TEST.Game;
 public class Menu extends State implements StateMethods{
 
     private MenuButton[] buttons = new MenuButton[3];
-    private BufferedImage background;
+    private BufferedImage menuBackground, background;
     private int menuX, menuY, menuWidth, menuHeight;
 
     public Menu(Game game) {
@@ -26,14 +26,15 @@ public class Menu extends State implements StateMethods{
     }
 
     private void loadBackground() {
-        background = importImg();
-        menuWidth = background.getWidth();
-        menuHeight = background.getHeight();
+        background = importImg("background_menu.png");
+        menuBackground = importImg("menu_background.png");
+        menuWidth = menuBackground.getWidth();
+        menuHeight = menuBackground.getHeight();
         menuX = 960/2 - menuWidth/2;
         menuY = 540/2 - menuHeight/2;
     }
-    private BufferedImage importImg() {
-        InputStream is = getClass().getResourceAsStream("/Images/menu_background.png");
+    private BufferedImage importImg(String filename) {
+        InputStream is = getClass().getResourceAsStream("/Images/" + filename);
         
         try {
             return ImageIO.read(is);
@@ -52,7 +53,6 @@ public class Menu extends State implements StateMethods{
 
     @Override
     public void update() {
-        // TODO Auto-generated method stub
         for(MenuButton mb : buttons){
             mb.update();
         }
@@ -60,8 +60,8 @@ public class Menu extends State implements StateMethods{
 
     @Override
     public void draw(Graphics g) {
-        // TODO Auto-generated method stub
-        g.drawImage(background, menuX, menuY, menuWidth, menuHeight, null);
+        g.drawImage(background, 0, 0, 960, 540, null);
+        g.drawImage(menuBackground, menuX, menuY, menuWidth, menuHeight, null);
         for(MenuButton mb : buttons)
         {
             mb.draw(g);

@@ -11,7 +11,11 @@ import Levels.LevelManager;
 
 public class Playing extends State implements StateMethods{
     
-    
+    //TODO
+    /*
+     * Round of Texas Scramble
+     */
+
     private guiPlayer player;
     private LevelManager levelMangager;
     private PauseOverlay pauseOverlay;
@@ -54,18 +58,21 @@ public class Playing extends State implements StateMethods{
     public void mousePressed(MouseEvent e) {
         if(paused){
             pauseOverlay.mousePressed(e);
+            return;
         }
     }
     @Override
     public void mouseReleased(MouseEvent e) {
         if(paused){
             pauseOverlay.mouseReleased(e);
+            return;
         }
     }    
     @Override
     public void mouseDragged(MouseEvent e) {
         if(paused){
             pauseOverlay.mouseDragged(e);
+            return;
         }
         player.setPosition(e.getX(), e.getY());
     }
@@ -73,6 +80,7 @@ public class Playing extends State implements StateMethods{
     public void mouseMoved(MouseEvent e) {
         if(paused){
             pauseOverlay.mouseMoved(e);
+            return;
         }
     }    
     @Override
@@ -100,7 +108,6 @@ public class Playing extends State implements StateMethods{
                 player.changeXDelta(5);
                 break;
             case KeyEvent.VK_ESCAPE:
-                // GameState.state = GameState.MENU;
                 paused = !paused;
                 break;
             default:
