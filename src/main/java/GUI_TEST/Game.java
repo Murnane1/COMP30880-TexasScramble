@@ -8,6 +8,11 @@ import gameStates.Playing;
 
 public class Game implements Runnable{
     
+    //TODO
+    /*
+     * Game of Texas Scramble
+     */
+
     private GamePanel gamePanel;
     
     private Playing playing;
@@ -66,7 +71,8 @@ public class Game implements Runnable{
             case PLAYING:
                 playing.draw(g);
                 break;
-            
+            case QUIT:
+                System.exit(0);
             default:
                 break;
             
@@ -79,9 +85,7 @@ public class Game implements Runnable{
         double timePerFrame = 1000000000.0 / FPS_SET; //nano seconds
         double timePerUpdate = 1000000000.0 / UPS_SET;
 
-
         long previousTime = System.nanoTime();
-
 
         int frames = 0;
         long lastCheck = System.currentTimeMillis();
