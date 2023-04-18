@@ -8,7 +8,6 @@ public abstract class Player {
     private boolean folded 		= false;     // set to true when the player folds (gives up)
     private boolean allIn       = false;
 
-
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
     // Constructor
