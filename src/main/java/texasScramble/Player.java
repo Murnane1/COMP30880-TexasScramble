@@ -4,7 +4,7 @@ public abstract class Player {
     private int bank       		= 0;		 // the total amount of money the player has left, not counting his/her
     private int stake      		= 0;		 // the amount of money the player has thrown into the current pot
     private String name    		= "Player";  // the unique identifying name given to the player
-    //private ScrambleHand hand 	= null;      // the hand dealt to this player
+    private ScrambleHand hand 	= null;      // the hand dealt to this player
     private boolean folded 		= false;     // set to true when the player folds (gives up)
     private boolean allIn       = false;
 
@@ -55,9 +55,9 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    /*public ScrambleHand getHand() {
+    public ScrambleHand getHand() {
         return hand;
-    }*/
+    }
 
     public int getBank() {
         return bank;
@@ -104,9 +104,9 @@ public abstract class Player {
 */
 
 
-    /*public void dealTo(BagOfTiles tiles) {
-        hand = deck.dealHand();
-    }*/
+    public void dealTo(BagOfTiles bag) {
+        hand = bag.dealHand();
+    }
 
     public void reduceStake(int reduction){
         stake -= reduction;
@@ -116,7 +116,7 @@ public abstract class Player {
         // when the winner of a hand takes the pot as his/her winnings
 
         System.out.println("\n> " + getName() + " says: I WIN " + addCount(pot.getTotal(), "chip", "chips") + "!\n");
-        //System.out.println("Winning hand: \n" + hand.toString());
+        System.out.println("Winning hand: \n" + hand.toString());
 
         bank += pot.takePot();
 

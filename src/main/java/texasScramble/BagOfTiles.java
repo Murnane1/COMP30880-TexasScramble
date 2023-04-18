@@ -79,4 +79,8 @@ public class BagOfTiles {
         }
     }
 
+    //TODO method to deal hands
+
+    //TODO method to deal community cards
+
 }

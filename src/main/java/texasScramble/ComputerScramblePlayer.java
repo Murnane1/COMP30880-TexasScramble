@@ -47,7 +47,6 @@ public class ComputerScramblePlayer extends Player {
         } else {
             return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getRiskWorthiness() +
                     getRiskTolerance();
-            return true;
         }
     }
 }
