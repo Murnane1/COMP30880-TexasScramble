@@ -10,7 +10,7 @@ public class BagOfTiles {
 
     private int next = 0;
 
-    private Random dice = new Random(System.currentTimeMillis());;
+    private Random dice = new Random(System.currentTimeMillis());
 
     public BagOfTiles(){
         addTiles('A', 1, 9);
@@ -79,8 +79,8 @@ public class BagOfTiles {
         }
     }
 
-    //TODO method to deal hands
+    //TODO method to deal hands (for Player)
 
-    //TODO method to deal community cards
+    //TODO method to deal community tiles (for Round)
 
 }
