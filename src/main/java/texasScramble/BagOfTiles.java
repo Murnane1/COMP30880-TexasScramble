@@ -81,6 +81,4 @@ public class BagOfTiles {
 
     //TODO method to deal hands (for Player)
 
-    //TODO method to deal community tiles (for Round)
-
 }
