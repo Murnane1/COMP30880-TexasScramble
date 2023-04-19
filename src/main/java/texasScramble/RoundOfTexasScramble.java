@@ -132,7 +132,7 @@ public class RoundOfTexasScramble {
         System.out.println(list);
 
         for (int i = 0; i < getNumPlayers(); i++) {
-            players[i].addCommunityCards(list);
+            players[i].addCommunityTiles(list);
         }
     }
 
