@@ -271,6 +271,7 @@ public abstract class Player {
             return count + " " + plural;
     }
 
-    public void addCommunityCards(List<Tile> list) {
+    public void addCommunityTiles(List<Tile> list) {
+        hand.addCommunityTiles(list);
     }
 }

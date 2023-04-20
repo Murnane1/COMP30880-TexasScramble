@@ -81,13 +81,8 @@ public class ScrambleHand {
         return 0;
     }
 
-    public int getBestHandValue() {
-        return 0;
-    }
 
-    public Tile[] getHand() {
-        return null;
-    }
+
 
     /*TODO methods for round
                     int getBestHandValue(),
