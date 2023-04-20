@@ -68,6 +68,7 @@ public class RoundOfTexasScramble {
                     getPlayer(index).reset();
                     getPlayer(index).dealTo(bag);
 
+                    
                     System.out.println(getPlayer(index));
                 }
             }
@@ -341,7 +342,7 @@ public class RoundOfTexasScramble {
         return sidePots;
     }
 
-    private void printPlayerHand() {
+    public void printPlayerHand() {
 
         System.out.println(">Your Cards : ");
         for (Tile tile : players[0].getHand().getHand()) {

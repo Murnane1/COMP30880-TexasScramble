@@ -14,7 +14,7 @@ public class BagOfTiles {
     private Random dice = new Random(System.currentTimeMillis());
 
     
-    BagOfTiles(){
+    public BagOfTiles(){
         addTiles('A', 1, 9);
         addTiles('B', 3, 2);
         addTiles('C', 3, 2);
@@ -80,7 +80,8 @@ public class BagOfTiles {
         }
     }
     public ScrambleHand dealHand() {
-        return null;
+        ScrambleHand hand = new ScrambleHand(this);
+        return hand;
     }
 
  

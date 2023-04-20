@@ -4,10 +4,15 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import Entities.guiPlayer;
+
 import GUI.PauseOverlay;
 import GUI_TEST.Game;
 import Levels.LevelManager;
+import guiTexasScramble.guiRoundOfTexasScramble;
+import texasScramble.BagOfTiles;
+import texasScramble.ComputerScramblePlayer;
+import texasScramble.HumanScramblePlayer;
+import texasScramble.Player;
 
 public class Playing extends State implements StateMethods{
     
@@ -16,11 +21,13 @@ public class Playing extends State implements StateMethods{
      * Round of Texas Scramble
      */
 
-    private guiPlayer player;
+
     private LevelManager levelMangager;
     private PauseOverlay pauseOverlay;
     private boolean paused = false;
     
+    private guiRoundOfTexasScramble round;
+
     public Playing(Game game) {
         super(game);
         initClasses();
@@ -28,16 +35,33 @@ public class Playing extends State implements StateMethods{
 
     
     private void initClasses() {
-        player = new guiPlayer(200, 200);   //Random Position
+        //player = new guiHumanScramblePlayer(200, 200, "Generic Name - Dan", 10);   //Random Position
         levelMangager = new LevelManager(game);
         pauseOverlay = new PauseOverlay();
+
+        //TODO REFACTOR
+        String[] names = {"Human", "Bob", "Dylan", "Mark"};
+        int numPlayers = names.length;
+        Player[] players = new Player[numPlayers];
+
+        for (int i = 0; i < numPlayers; i++)
+            if (i == 0)
+                players[i] = new HumanScramblePlayer(names[i].trim(), 10);
+            else
+                players[i] = new ComputerScramblePlayer(names[i].trim(), 10);
+        
+        BagOfTiles bag = new BagOfTiles();
+        
+
+        round = new guiRoundOfTexasScramble(bag, players, 1, 0);
+        round.play();   
     }
     
     @Override
     public void update() {
         // TODO Auto-generated method stub
         levelMangager.update();
-        player.update();
+        round.getGuiPlayers().get(0).update();
         if(paused){
             pauseOverlay.update();
         }
@@ -46,7 +70,7 @@ public class Playing extends State implements StateMethods{
     public void draw(Graphics g) {
         // TODO Auto-generated method stub
         levelMangager.draw(g);
-        player.render(g);
+        round.draw(g);
         if(paused){
             pauseOverlay.draw(g);
         }
@@ -74,7 +98,8 @@ public class Playing extends State implements StateMethods{
             pauseOverlay.mouseDragged(e);
             return;
         }
-        player.setPosition(e.getX(), e.getY());
+        round.getGuiPlayers().get(0).setPosition(e.getX(), e.getY());
+        
     }
     @Override
     public void mouseMoved(MouseEvent e) {
@@ -89,23 +114,19 @@ public class Playing extends State implements StateMethods{
     }
     @Override
     public void keyReleased(KeyEvent e) {
+        
         switch (e.getKeyCode()) {
-
             case KeyEvent.VK_W:
-                System.out.println("W");
-                player.changeYDelta(-5);
+                round.getGuiPlayers().get(0).changeYDelta(-5);
                 break;
             case KeyEvent.VK_A:
-                System.out.println("A");
-                player.changeXDelta(-5);
+                round.getGuiPlayers().get(0).changeXDelta(-5);
                 break;
             case KeyEvent.VK_S:
-                System.out.println("S");
-                player.changeYDelta(-5);
+                round.getGuiPlayers().get(0).changeYDelta(-5);
                 break;
             case KeyEvent.VK_D:
-                System.out.println("D");
-                player.changeXDelta(5);
+                round.getGuiPlayers().get(0).changeXDelta(5);
                 break;
             case KeyEvent.VK_ESCAPE:
                 paused = !paused;
@@ -113,12 +134,12 @@ public class Playing extends State implements StateMethods{
             default:
                 System.out.println("Some key is pressed");
                 break;
-        }    }
+        }    
+    }
+
     public void windowFocusLost(){
         // player.reset();
     }
 
-    public guiPlayer getPlayer() {
-        return player;
-    }
+  
 }

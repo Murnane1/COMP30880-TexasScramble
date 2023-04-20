@@ -14,11 +14,14 @@ import javax.imageio.ImageIO;
 * Display player tiles
 *
 */
-public class guiPlayer extends Entity{
+public abstract class guiPlayer extends Entity{
     
+    protected Player playerComponent;
+
     private BufferedImage image;
-    public guiPlayer(int x, int y){
+    public guiPlayer(int x, int y, Player playerComponent){
         super(x, y);
+        this.playerComponent = playerComponent;
         importImg();
     }
 
@@ -53,5 +56,7 @@ public class guiPlayer extends Entity{
         this.y +=value;
     }
 
-
+    public Player getPlayerComponent() {
+        return playerComponent;
+    }
 }
