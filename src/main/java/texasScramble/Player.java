@@ -1,5 +1,7 @@
 package texasScramble;
 
+import java.util.List;
+
 public abstract class Player {
     private int bank       		= 0;		 // the total amount of money the player has left, not counting his/her
     private int stake      		= 0;		 // the amount of money the player has thrown into the current pot
@@ -267,5 +269,8 @@ public abstract class Player {
             return count + " " + singular;
         else
             return count + " " + plural;
+    }
+
+    public void addCommunityCards(List<Tile> list) {
     }
 }

@@ -144,8 +144,7 @@ public class RoundOfTexasScramble {
         pots.add(mainPot);
 
         // Initialize bank and print the values for each player;
-        Integer numActive = mainPot.getNumPlayers();
-        Integer stake = -1;
+
         bag.reset();
 
 
@@ -227,11 +226,17 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
+    //TODO 
+    /*
+     * ADD CHALLENGING PLAYERS
+     * CHANGE HUMAN PLAYER TO TYPE IN THEIR WORD INSTEAD OF TAKING THEIR BEST WORD
+     * COMPUTER PLAYER HAVE TO SUBMIT WORDS
+     */
     private void showdown(ArrayList<PotOfMoney> pots) {
 
         System.out.println("---SHOWDOWN---");
 
-        int bestHandScore = 0, score = 0, bestPos = 0, potNum = 0;
+        int bestHandScore = 0, score = 0,  potNum = 0;
         Player bestPlayer = null, currentPlayer = null;
 
         for (PotOfMoney pot : pots) {
@@ -247,7 +252,7 @@ public class RoundOfTexasScramble {
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
                     continue;
                 }
-                System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getBestHand());
+                System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getBestHandValue());
                 score = currentPlayer.getHand().getBestHandValue();
                 if (score > bestHandScore) {
                     bestHandScore = score;
@@ -262,7 +267,6 @@ public class RoundOfTexasScramble {
     }
 
     public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int indexCurrPot = 0;
         int stake = -1;
         int numActive = mainPot.getNumPlayers();
 
@@ -301,7 +305,14 @@ public class RoundOfTexasScramble {
     public ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
         ArrayList<PotOfMoney> sidePots = new ArrayList<>();
 
-        Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
+        //Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
+
+        Collections.sort(pot.getPlayers(), new Comparator<Player>() {
+			@Override
+			public int compare(Player p1, Player p2) {
+				return p1.getStake() - p2.getStake();
+			}
+		});
 
         ArrayList<Player> remainingPlayers = new ArrayList<>(pot.getPlayers());
         for(Player player: pot.getPlayers()){

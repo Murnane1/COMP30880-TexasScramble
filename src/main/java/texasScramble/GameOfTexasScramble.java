@@ -1,9 +1,14 @@
 package texasScramble;
 
+
+/*
+ * TAKE IN LANGUAGE PASS IT TO BAG
+ */
 public class GameOfTexasScramble {
     private Player[] players;
 
     private BagOfTiles bag;
+
 
     private int numPlayers;
 
@@ -25,7 +30,7 @@ public class GameOfTexasScramble {
                 players[i] = new HumanScramblePlayer(names[i].trim(), bank);
             else
                 players[i] = new ComputerScramblePlayer(names[i].trim(), bank);
-
+        
         bag = new BagOfTiles();
     }
 
