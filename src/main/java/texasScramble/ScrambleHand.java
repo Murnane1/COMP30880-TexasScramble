@@ -17,10 +17,14 @@ public class ScrambleHand {
         this.bestHandValue = 0;
     }
 
-
     //modifiers
     public void addCommunityTiles(List<Tile> tiles){ //append 
         this.communityTiles.addAll(tiles);
+    }
+
+    //TODO this is just for testing DELETE
+    public void addPlayerTiles(List<Tile> tiles){ //append
+        this.playerTiles.addAll(tiles);
     }
 
     //setters
@@ -56,6 +60,10 @@ public class ScrambleHand {
         return this.bestHandValue;
     }
 
+    public void setBestHandValueToZero(){
+        bestHandValue = 0;
+    }
+
 
     public List<Tile> getBestHand(){
         List<Tile> tiles = new ArrayList<>();
@@ -77,13 +85,8 @@ public class ScrambleHand {
         return tiles;
     }
 
-    /*TODO methods for round
-                    int getBestHandValue(),
-                    List<Tile> getBestHand(),
-                    List<Tile> getHand()
-     */
-
-    /*TODO methods for computerPlayer
-                    int getRiskWortiness() - might need to do it a different way
-     */
+    //TODO might need to do it a different way than previous projects
+    public int getRiskWorthiness() {
+        return 0;
+    }
 }

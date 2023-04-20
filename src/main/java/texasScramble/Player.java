@@ -7,6 +7,7 @@ public abstract class Player {
     private ScrambleHand hand 	= null;      // the hand dealt to this player
     private boolean folded 		= false;     // set to true when the player folds (gives up)
     private boolean allIn       = false;
+    private String word         = null;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -73,6 +74,9 @@ public abstract class Player {
         return name;
     }
 
+    public String getWord() {
+        return word;
+    }
 
     public boolean isBankrupt() {
         // no more money left
@@ -105,7 +109,15 @@ public abstract class Player {
 
 
     public void dealTo(BagOfTiles bag) {
-        hand = bag.dealHand();
+        //hand = bag.dealHand();
+    }
+
+    public void setWord(String word){
+        this.word = word;
+    }
+
+    public void setHand(ScrambleHand hand){
+        this.hand = hand;
     }
 
     public void reduceStake(int reduction){
@@ -123,6 +135,10 @@ public abstract class Player {
         System.out.println(this);
     }
 
+    public void penalty(int penaltyValue, PotOfMoney pot) {
+        bank -= penaltyValue;
+        pot.addToPot(penaltyValue);
+    }
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -208,6 +224,10 @@ public abstract class Player {
     abstract boolean shouldRaise(PotOfMoney pot);
 
     abstract boolean shouldAllIn(PotOfMoney pot);
+
+    abstract boolean shouldChallenge(PotOfMoney pot, String word);
+
+    abstract String chooseWord();
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//

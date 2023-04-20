@@ -5,8 +5,10 @@ import java.util.*;
 
 public class RoundOfTexasScramble {
     public static final int DELAY_BETWEEN_ACTIONS = 1000;  // number of milliseconds between game actions
+    private static final int PENALTY = 3;
     private Player[] players;
     private BagOfTiles bag;
+    private Dictionary dict;    //TODO create word dictionary
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
@@ -132,7 +134,7 @@ public class RoundOfTexasScramble {
         System.out.println(list);
 
         for (int i = 0; i < getNumPlayers(); i++) {
-            players[i].addCommunityTiles(list);
+            players[i].getHand().addCommunityTiles(list);
         }
     }
 
@@ -172,6 +174,8 @@ public class RoundOfTexasScramble {
         river(mainPot);
 
         printPlayerHand();
+        declareWords(mainPot);
+
         pots = newSidePots(mainPot);
         showdown(pots);
     }
@@ -225,6 +229,21 @@ public class RoundOfTexasScramble {
         int playerStart = button + 1;    //3 becouse player left to big blind starts
 
         bettingCycle(mainPot, playerStart);
+    }
+
+    private void declareWords(PotOfMoney mainPot) {
+        System.out.println("---WORD REVEAL---");
+
+        int playerStart = button + 1;    //3 becouse player left to big blind starts
+
+        for (Player player: players) {
+            player.chooseWord();
+            for (Player challenger: players) {
+                if(challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger){
+                    challenge(player, challenger, mainPot);
+                }
+            }
+        }
     }
 
     private void showdown(ArrayList<PotOfMoney> pots) {
@@ -328,6 +347,15 @@ public class RoundOfTexasScramble {
         }
 
         return sidePots;
+    }
+
+    //should this be here or in player?
+    public void challenge(Player player, Player challenger, PotOfMoney pot){
+        /*if(dict.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+            challenger.penalty(PENALTY, pot);
+        } else {                        //if word invalid - player's score for round is 0
+            player.getHand().setBestHandValueToZero();
+        }*/
     }
 
     private void printPlayerHand() {

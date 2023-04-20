@@ -49,4 +49,15 @@ public class ComputerScramblePlayer extends Player {
                     getRiskTolerance();
         }
     }
+
+    @Override
+    boolean shouldChallenge(PotOfMoney pot, String word) {
+        //TODO when does computer challenge word
+        return true;
+    }
+
+    @Override
+    String chooseWord() {
+        return "computerWord";
+    }
 }
