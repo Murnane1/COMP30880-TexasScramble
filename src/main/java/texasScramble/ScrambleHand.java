@@ -22,18 +22,17 @@ public class ScrambleHand {
         this.communityTiles.addAll(tiles);
     }
 
-    //TODO this is just for testing DELETE
-    public void addPlayerTiles(List<Tile> tiles){ //append
-        this.playerTiles.addAll(tiles);
-    }
 
     //setters
-    public void setTile(int num, Tile tile){ //sets tile at index
-        if (num >= 0 && num < TOTAL_TILES){
+    public void setPlayerTiles(int num, Tile tile){ //sets tile at index
+        if (num >= 0 && num < playerTiles.size()){
             playerTiles.set(num, tile);
         }
     }
 
+    public void setCommunityTiles(int num, Tile tile) {
+        communityTiles.set(num, tile);
+    }
 
     //getters
     public List<Tile> getCommunityTiles() { // gets all current community tiles

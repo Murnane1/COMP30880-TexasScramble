@@ -27,10 +27,12 @@ public class HumanScramblePlayerTest {
     public void setUp() {
         playerHand = new ScrambleHand(tiles);
 
-        playerTiles.add(tile1);
-        playerTiles.add(tile2);
+        /*playerTiles.add(tile1);
+        playerTiles.add(tile2);*/
+        playerHand.setPlayerTiles(0, tile1);
+        playerHand.setPlayerTiles(1, tile2);
         //player.getHand().addPlayerTiles(playerTiles);
-        playerHand.addPlayerTiles(playerTiles);
+        //playerHand.addPlayerTiles(playerTiles);
 
         commTiles.add(tile3);
         commTiles.add(tile4);
@@ -58,5 +60,8 @@ public class HumanScramblePlayerTest {
 
         boolean check5 = player.checkWord("N a s C A r");
         assertEquals(true, check5);
+
+        boolean check6 = player.checkWord("aa");
+        assertEquals(true, check6);
     }
 }
