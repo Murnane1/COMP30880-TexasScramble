@@ -5,8 +5,8 @@ import java.util.*;
 
 public class RoundOfTexasScramble {
     public static final int DELAY_BETWEEN_ACTIONS = 1000;  // number of milliseconds between game actions
-    private Player[] players;
-    private BagOfTiles bag;
+    protected Player[] players;
+    protected BagOfTiles bag;
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
@@ -55,7 +55,7 @@ public class RoundOfTexasScramble {
         }
     }
 
-    public void deal() {
+    protected void deal() {
 
         for (int i = 0; i < getNumPlayers(); i++) {
             int index = (button + i + 1) % getNumPlayers();
@@ -77,7 +77,7 @@ public class RoundOfTexasScramble {
         System.out.println("\n");
     }
 
-    public void canOpen(PotOfMoney pot) {
+    protected void canOpen(PotOfMoney pot) {
         if (numPlayers <= 1) {
             return;
         }
@@ -123,7 +123,7 @@ public class RoundOfTexasScramble {
         players[(button + i + 1) % numPlayers].postBlind(pot, bigBlind, "Big Blind");
     }
 
-    private void dealCommunity(int numCards) {
+    protected void dealCommunity(int numCards) {
         List<Tile> list = new ArrayList<>(); //define community cards as an array of cards for reference
 
         for (int j = 0; j < numCards; j++) {
@@ -176,7 +176,7 @@ public class RoundOfTexasScramble {
         showdown(pots);
     }
 
-    private void preflop(PotOfMoney mainPot) {
+    protected void preflop(PotOfMoney mainPot) {
 
         System.out.println("---PREFLOP---");
 
@@ -186,7 +186,7 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
-    private void flop(PotOfMoney mainPot) {
+    protected void flop(PotOfMoney mainPot) {
 
         System.out.println("---FLOP---");
 
@@ -200,7 +200,7 @@ public class RoundOfTexasScramble {
 
     }
 
-    private void turn(PotOfMoney mainPot) {
+    protected void turn(PotOfMoney mainPot) {
 
         System.out.println("---TURN---");
 
@@ -213,7 +213,7 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
-    private void river(PotOfMoney mainPot) {
+    protected void river(PotOfMoney mainPot) {
 
 
         System.out.println("---RIVER---");
@@ -233,7 +233,7 @@ public class RoundOfTexasScramble {
      * CHANGE HUMAN PLAYER TO TYPE IN THEIR WORD INSTEAD OF TAKING THEIR BEST WORD
      * COMPUTER PLAYER HAVE TO SUBMIT WORDS
      */
-    private void showdown(ArrayList<PotOfMoney> pots) {
+    protected void showdown(ArrayList<PotOfMoney> pots) {
 
         System.out.println("---SHOWDOWN---");
 
@@ -267,7 +267,7 @@ public class RoundOfTexasScramble {
         }
     }
 
-    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
+    protected void bettingCycle(PotOfMoney mainPot, int playerStart) {
         int stake = -1;
         int numActive = mainPot.getNumPlayers();
 
@@ -303,7 +303,7 @@ public class RoundOfTexasScramble {
      * 		remove this player's stake from every other remaining player's stake
      * 		add to list of side pots
      */
-    public ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
+    protected ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
         ArrayList<PotOfMoney> sidePots = new ArrayList<>();
 
         //Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
@@ -342,7 +342,7 @@ public class RoundOfTexasScramble {
         return sidePots;
     }
 
-    public void printPlayerHand() {
+    protected void printPlayerHand() {
 
         System.out.println(">Your Cards : ");
         for (Tile tile : players[0].getHand().getHand()) {
@@ -351,7 +351,7 @@ public class RoundOfTexasScramble {
         System.out.println("");
     }
 
-    private void delay(int numMilliseconds) {
+    protected void delay(int numMilliseconds) {
         try {
             Thread.sleep(numMilliseconds);
         } catch (Exception e) {

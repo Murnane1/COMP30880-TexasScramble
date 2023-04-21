@@ -203,13 +203,13 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    abstract boolean shouldOpen(PotOfMoney pot);
+    public abstract boolean shouldOpen(PotOfMoney pot);
 
-    abstract boolean shouldSee(PotOfMoney pot);
+    public abstract boolean shouldSee(PotOfMoney pot);
 
-    abstract boolean shouldRaise(PotOfMoney pot);
+    public abstract boolean shouldRaise(PotOfMoney pot);
 
-    abstract boolean shouldAllIn(PotOfMoney pot);
+    public abstract boolean shouldAllIn(PotOfMoney pot);
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//

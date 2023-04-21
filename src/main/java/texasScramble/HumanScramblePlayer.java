@@ -6,7 +6,7 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    boolean shouldOpen(PotOfMoney pot) {
+    public boolean shouldOpen(PotOfMoney pot) {
         return true;
     }
 

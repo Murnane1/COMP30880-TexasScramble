@@ -54,21 +54,22 @@ public class Playing extends State implements StateMethods{
         
 
         round = new guiRoundOfTexasScramble(bag, players, 1, 0);
-        round.play();   
     }
     
     @Override
     public void update() {
-        // TODO Auto-generated method stub
+        round.update();
+
+        if(!round.flag)
+            round.play();
+        round.update();
         levelMangager.update();
-        round.getGuiPlayers().get(0).update();
         if(paused){
             pauseOverlay.update();
         }
     }
     @Override
     public void draw(Graphics g) {
-        // TODO Auto-generated method stub
         levelMangager.draw(g);
         round.draw(g);
         if(paused){
@@ -84,6 +85,7 @@ public class Playing extends State implements StateMethods{
             pauseOverlay.mousePressed(e);
             return;
         }
+        round.mousePressed(e);
     }
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -91,6 +93,7 @@ public class Playing extends State implements StateMethods{
             pauseOverlay.mouseReleased(e);
             return;
         }
+        round.mouseReleased(e);
     }    
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -107,6 +110,7 @@ public class Playing extends State implements StateMethods{
             pauseOverlay.mouseMoved(e);
             return;
         }
+        round.mouseMoved(e);
     }    
     @Override
     public void keyPressed(KeyEvent e) {
@@ -131,6 +135,7 @@ public class Playing extends State implements StateMethods{
             case KeyEvent.VK_ESCAPE:
                 paused = !paused;
                 break;
+            
             default:
                 System.out.println("Some key is pressed");
                 break;
