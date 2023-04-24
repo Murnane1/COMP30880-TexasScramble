@@ -97,37 +97,37 @@ public class ScrambleHand {
     }
     
 
-    // public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
-    //     List<Tile> hand = getHand();
-    //     Map<Character, Integer> characterFrequency = new HashMap<>();
-    //     for (Tile tile : hand) {
-    //         char c = tile.getLetter();
-    //         characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
-    //     }
-
-    //     for (char c : word.toCharArray()) {
-    //         if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
-    //             return false;
-    //         }
-    //         characterFrequency.put(c, characterFrequency.get(c) - 1);
-    //     }
-
-    //     return trieDictionary.contains(word); // check this return, dont know what state the case is for words atm.
-    //                                           // (Should be uppercase)
-    // }
-
-    public boolean isValidWord(List<Tile> hand, String word, ScrabbleDictionary dictionary) {
-        List<List<Tile>> combinations = generateCombinations(hand);
-        for (List<Tile> combo : combinations) {
-            List<String> permutations = generatePermutations(combo);
-            for (String perm : permutations) {
-                if (dictionary.contains(perm) && perm.equals(word)) {
-                    return true;
-                }
-            }
+    public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
+        List<Tile> hand = getHand();
+        Map<Character, Integer> characterFrequency = new HashMap<>();
+        for (Tile tile : hand) {
+            char c = tile.getLetter();
+            characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
         }
-        return false;
+
+        for (char c : word.toCharArray()) {
+            if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
+                return false;
+            }
+            characterFrequency.put(c, characterFrequency.get(c) - 1);
+        }
+
+        return trieDictionary.contains(word); // check this return, dont know what state the case is for words atm.
+                                              // (Should be uppercase)
     }
+
+    // public boolean isValidWord(List<Tile> hand, String word, ScrabbleDictionary dictionary) {
+    //     List<List<Tile>> combinations = generateCombinations(hand);
+    //     for (List<Tile> combo : combinations) {
+    //         List<String> permutations = generatePermutations(combo);
+    //         for (String perm : permutations) {
+    //             if (dictionary.contains(perm) && perm.equals(word)) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 
     private List<List<Tile>> generateCombinations(List<Tile> tiles) {
         List<List<Tile>> combinations = new ArrayList<>();
@@ -144,9 +144,24 @@ public class ScrambleHand {
         return combinations;
     }
 
-    private List<String> generatePermutations(List<Tile> tiles) {
-        List<String> permutations = new ArrayList<>();
-        runBackThroughTree(permutations, new StringBuilder(), new boolean[tiles.size()], tiles);
+    private List<List<Character>> generatePermutations(List<Character> letters) {
+        List<List<Character>> permutations = new ArrayList<>();
+        if (letters.size() == 1) {
+            permutations.add(letters);
+            return permutations;
+        }
+        for (int i = 0; i < letters.size(); i++) {
+            Character letter = letters.get(i);
+            List<Character> remaining = new ArrayList<>(letters.subList(0, i));
+            remaining.addAll(letters.subList(i + 1, letters.size()));
+            List<List<Character>> subPermutations = generatePermutations(remaining);
+            for (List<Character> subPermutation : subPermutations) {
+                List<Character> permutation = new ArrayList<>();
+                permutation.add(letter);
+                permutation.addAll(subPermutation);
+                permutations.add(permutation);
+            }
+        }
         return permutations;
     }
 
@@ -176,19 +191,27 @@ public class ScrambleHand {
         return sb.toString();
     }
 
+    private String permutationToString(List<Character> permutation) {
+        StringBuilder sb = new StringBuilder();
+        for (Character letter : permutation) {
+            sb.append(letter);
+        }
+        return sb.toString();
+    }
+
 
     public List<String> getPossibleWords(ScrabbleDictionary dictionary) {
-        List<String> possibleWords = new ArrayList<>();
+        ArrayList<String> possibleWords = new ArrayList<>();
         List<Tile> hand = getHand();
-        String handLetters = tilesToString(hand);
-
-        // generate all substrings of the hand letters and check if they are valid words
-        for (int i = 0; i < handLetters.length(); i++) {
-            for (int j = i + 1; j <= handLetters.length(); j++) {
-                String substring = handLetters.substring(i, j);
-                if (isValidWord(hand, substring, dictionary)) {
-                    possibleWords.add(substring);
-                }
+        ArrayList<Character> letters = new ArrayList<>();
+        for (Tile tile : hand) {
+            letters.add(tile.getLetter());
+        }
+        List<List<Character>> permutations = generatePermutations(letters);
+        for (List<Character> permutation : permutations) {
+            String word = permutationToString(permutation);
+            if (dictionary.contains(word)) {
+                possibleWords.add(word);
             }
         }
         return possibleWords;
@@ -208,9 +231,7 @@ public class ScrambleHand {
         ScrambleHand hand = new ScrambleHand(bag, dictionary);
 
         List<Tile> communityTiles = new ArrayList<>();
-        communityTiles.add(new Tile('C', 3));
-        communityTiles.add(new Tile('A', 3));
-        communityTiles.add(new Tile('T', 3));
+        communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         hand.addCommunityTiles(communityTiles);
