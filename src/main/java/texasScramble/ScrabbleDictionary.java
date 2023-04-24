@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import texasScramble.TrieDictionary.TrieNode;
+
 import java.net.URL;
 
 public class ScrabbleDictionary {
@@ -54,8 +57,8 @@ class TrieDictionary {
     private static TrieDictionary instance = null; //instance of TrieDictionary which is used to implement singleton pattern
 
     public static class TrieNode {
-        private Map<Character, TrieNode> children = new HashMap<>(); //nodes in trie structure
-        private boolean isWord; //check to see if it is a word
+        Map<Character, TrieNode> children = new HashMap<>(); //nodes in trie structure
+        boolean isWord; //check to see if it is a word
     }
 
     private TrieNode root = new TrieNode(); //new instance of trienode for root node
@@ -88,5 +91,17 @@ class TrieDictionary {
             node = node.children.get(c); //gets the word and sets it
         }
         return node.isWord; //retuns that its true for being a word
+    }
+
+    public TrieNode getSubTrie(char c) { // modified method with char parameter
+        TrieNode node = root.children.get(c); // get the child node corresponding to the given character
+        if (node == null) { // if the child node does not exist, return null
+            return null;
+        }
+        return node; // return the child node
+    }
+
+    public TrieNode getRoot(){
+        return this.root;
     }
 }
