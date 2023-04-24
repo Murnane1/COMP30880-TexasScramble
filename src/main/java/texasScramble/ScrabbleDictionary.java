@@ -20,7 +20,7 @@ public class ScrabbleDictionary {
     }
 
     public boolean contains(String word) { //checks if a word exists (USE THIS METHOD AND NOT THE ONE IN TRIEDICTIONARY (I think))
-        return trie.contains(word.toUpperCase());
+        return word.contains(word.toUpperCase());
     }
 
     public static void main(String[] args) { //../pathtofile when getting specific path
@@ -44,12 +44,16 @@ public class ScrabbleDictionary {
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary\n");
         }
     }
+
+    public TrieDictionary getTrie() {
+        return this.trie;
+    }
 }
 
 class TrieDictionary {
     private static TrieDictionary instance = null; //instance of TrieDictionary which is used to implement singleton pattern
 
-    private static class TrieNode {
+    public static class TrieNode {
         private Map<Character, TrieNode> children = new HashMap<>(); //nodes in trie structure
         private boolean isWord; //check to see if it is a word
     }
