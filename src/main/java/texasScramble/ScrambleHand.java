@@ -24,7 +24,22 @@ public class ScrambleHand {
         
         this.communityTiles = new ArrayList<>(); //init community tiles
         this.bestHandValue = 0;
-        this.trieDictionary = scrabbleDictionary.getTrie();;
+        this.trieDictionary = scrabbleDictionary.getTrie();
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        List<Tile> hand = getHand();
+        sb.append("Tiles: [");
+        for (Tile tile : hand) {
+            sb.append(tile.getLetter()).append(", ");
+        }
+        if (hand.size() > 0) {
+            sb.delete(sb.length() - 2, sb.length()); // Remove trailing ", "
+        }
+        sb.append("]");
+        return sb.toString(); 
     }
 
     //modifiers
@@ -82,54 +97,74 @@ public class ScrambleHand {
     }
     
 
-    public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
-        List<Tile> hand = getHand();
-        Map<Character, Integer> characterFrequency = new HashMap<>();
-        for (Tile tile : hand) {
-            char c = tile.getLetter();
-            characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
-        }
+    // public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
+    //     List<Tile> hand = getHand();
+    //     Map<Character, Integer> characterFrequency = new HashMap<>();
+    //     for (Tile tile : hand) {
+    //         char c = tile.getLetter();
+    //         characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
+    //     }
 
-        for (char c : word.toCharArray()) {
-            if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
-                return false;
+    //     for (char c : word.toCharArray()) {
+    //         if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
+    //             return false;
+    //         }
+    //         characterFrequency.put(c, characterFrequency.get(c) - 1);
+    //     }
+
+    //     return trieDictionary.contains(word); // check this return, dont know what state the case is for words atm.
+    //                                           // (Should be uppercase)
+    // }
+
+    public boolean isValidWord(List<Tile> hand, String word, ScrabbleDictionary dictionary) {
+        List<List<Tile>> combinations = generateCombinations(hand);
+        for (List<Tile> combo : combinations) {
+            List<String> permutations = generatePermutations(combo);
+            for (String perm : permutations) {
+                if (dictionary.contains(perm) && perm.equals(word)) {
+                    return true;
+                }
             }
-            characterFrequency.put(c, characterFrequency.get(c) - 1);
         }
-
-        return trieDictionary.contains(word); // check this return, dont know what state the case is for words atm.
-                                              // (Should be uppercase)
+        return false;
     }
 
-    public List<String> getPossibleWords(ScrabbleDictionary dictionary){
-        List<String> possibleWords = new ArrayList<>();
-        List<Tile> hand = getHand();
-
-        List<List<Tile>> combinations = generateCombinations(hand, TOTAL_TILES);
-        for (List<Tile> combination: combinations){
-            String word = tilesToString(combination);
-            if (isValidWord(word, dictionary)){ //changes to isValid
-                possibleWords.add(word);
-            }
-        }
-        return possibleWords;
-    }
-
-    private List<List<Tile>> generateCombinations(List<Tile> tiles, int k){
+    private List<List<Tile>> generateCombinations(List<Tile> tiles) {
         List<List<Tile>> combinations = new ArrayList<>();
-        runBackThroughTree(combinations, new ArrayList<Tile>(), tiles, k, 0);
+        int size = tiles.size();
+        for (int i = 0; i < (1 << size); i++) {
+            List<Tile> combo = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                if ((i & (1 << j)) != 0) {
+                    combo.add(tiles.get(j));
+                }
+            }
+            combinations.add(combo);
+        }
         return combinations;
     }
 
-    private void runBackThroughTree(List<List<Tile>> combinations, List<Tile> tempCombination, List<Tile> tiles, int k, int start){
-        if (tempCombination.size() == k){
-            combinations.add(new ArrayList<>(tempCombination));
+    private List<String> generatePermutations(List<Tile> tiles) {
+        List<String> permutations = new ArrayList<>();
+        runBackThroughTree(permutations, new StringBuilder(), new boolean[tiles.size()], tiles);
+        return permutations;
+    }
+
+    private void runBackThroughTree(List<String> permutations, StringBuilder tempPermutation, boolean[] used,
+            List<Tile> tiles) {
+        if (tempPermutation.length() == tiles.size()) {
+            permutations.add(tempPermutation.toString());
             return;
         }
-        for (int i = start; i < tiles.size(); i++){
-            tempCombination.add(tiles.get(i));
-            runBackThroughTree(combinations, tempCombination, tiles, k, i+1);
-            tempCombination.remove(tempCombination.size()-1);
+        for (int i = 0; i < tiles.size(); i++) {
+            if (used[i]) {
+                continue;
+            }
+            used[i] = true;
+            tempPermutation.append(tiles.get(i).getLetter());
+            runBackThroughTree(permutations, tempPermutation, used, tiles);
+            tempPermutation.deleteCharAt(tempPermutation.length() - 1);
+            used[i] = false;
         }
     }
 
@@ -141,9 +176,22 @@ public class ScrambleHand {
         return sb.toString();
     }
 
-    public boolean isValidWord(String word){
-        TrieDictionary dictionary = TrieDictionary.getInstance();
-        return dictionary.contains(word);
+
+    public List<String> getPossibleWords(ScrabbleDictionary dictionary) {
+        List<String> possibleWords = new ArrayList<>();
+        List<Tile> hand = getHand();
+        String handLetters = tilesToString(hand);
+
+        // generate all substrings of the hand letters and check if they are valid words
+        for (int i = 0; i < handLetters.length(); i++) {
+            for (int j = i + 1; j <= handLetters.length(); j++) {
+                String substring = handLetters.substring(i, j);
+                if (isValidWord(hand, substring, dictionary)) {
+                    possibleWords.add(substring);
+                }
+            }
+        }
+        return possibleWords;
     }
 
 
@@ -154,21 +202,23 @@ public class ScrambleHand {
 
     public static void main(String[] args) throws IOException{
         BagOfTiles bag = new BagOfTiles();
-        String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
+        String path = "src/main/resources/WordLists/usEnglishScrabbleWordlist.txt";
         File file = new File(path);
         ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());
         ScrambleHand hand = new ScrambleHand(bag, dictionary);
 
         List<Tile> communityTiles = new ArrayList<>();
         communityTiles.add(new Tile('C', 3));
-        communityTiles.add(new Tile('A', 1));
-        communityTiles.add(new Tile('T', 1));
+        communityTiles.add(new Tile('A', 3));
+        communityTiles.add(new Tile('T', 3));
+        communityTiles.add(bag.dealNext());
+        communityTiles.add(bag.dealNext());
         hand.addCommunityTiles(communityTiles);
 
+        System.out.println(hand.toString());
+
         List<String> possibleWords = hand.getPossibleWords(dictionary);
-        possibleWords.size();
-        System.out.println(possibleWords.size());
-        System.out.println(Arrays.toString(possibleWords.toArray()));
+        System.out.println(possibleWords);
         
     }
 }

@@ -20,7 +20,7 @@ public class ScrabbleDictionary {
     }
 
     public boolean contains(String word) { //checks if a word exists (USE THIS METHOD AND NOT THE ONE IN TRIEDICTIONARY (I think))
-        return word.contains(word.toUpperCase());
+        return trie.contains(word.toUpperCase());
     }
 
     public static void main(String[] args) { //../pathtofile when getting specific path
@@ -38,7 +38,7 @@ public class ScrabbleDictionary {
         }
 
         // Test if words are in dictionary
-        String[] words = { "HELLO", "WORLD", "HOUSE", "PROGRAM", "WORD", "CLOUD", "FUN", "ACT", "NO", "TO", "FLABBERGASTED", "BILFRIT", "BILKIRKEGÅRD", "DRÆBE", "HALVT", "STIKKER", "UBM", "TH"};
+        String[] words = { "test", "hello", "WORLD", "HOUSE", "PROGRAM", "WORD", "CLOUD", "FUN", "ACT", "NO", "TO", "FLABBERGASTED", "BILFRIT", "BILKIRKEGÅRD", "DRÆBE", "HALVT", "STIKKER", "UBM", "TH"};
         for (String word : words) {
             boolean contains = dictionary.contains(word);
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary\n");
