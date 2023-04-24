@@ -36,7 +36,7 @@ public class ScrambleHand {
             sb.append(tile.getLetter()).append(", ");
         }
         if (hand.size() > 0) {
-            sb.delete(sb.length() - 1, sb.length()); // Remove trailing ", "
+            sb.delete(sb.length() - 2, sb.length()); // Remove trailing ", "
         }
         sb.append("]");
         return sb.toString(); 
@@ -168,6 +168,7 @@ public class ScrambleHand {
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
+        communityTiles.add(bag.dealNext());
         hand.addCommunityTiles(communityTiles);
 
         System.out.println(hand.toString());
@@ -178,6 +179,7 @@ public class ScrambleHand {
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary");
         }
         
-        System.out.println(possibleWords);
+        System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
+
     }
 }
