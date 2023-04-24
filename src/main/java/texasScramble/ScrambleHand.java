@@ -36,7 +36,7 @@ public class ScrambleHand {
             sb.append(tile.getLetter()).append(", ");
         }
         if (hand.size() > 0) {
-            sb.delete(sb.length() - 2, sb.length()); // Remove trailing ", "
+            sb.delete(sb.length() - 1, sb.length()); // Remove trailing ", "
         }
         sb.append("]");
         return sb.toString(); 
@@ -97,20 +97,19 @@ public class ScrambleHand {
     }
 
     public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
-    List<Tile> hand = getHand();
-    Map<Character, Integer> characterFrequency = new HashMap<>();
-    for (Tile tile : hand) {
-    char c = tile.getLetter();
-    characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
-    }
-
-    for (char c : word.toCharArray()) {
-    if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
-    return false;
-    }
-    characterFrequency.put(c, characterFrequency.get(c) - 1);
-    }
-    return trieDictionary.contains(word);
+        List<Tile> hand = getHand();
+        Map<Character, Integer> characterFrequency = new HashMap<>();
+        for (Tile tile : hand) {
+            char c = tile.getLetter();
+            characterFrequency.put(c, characterFrequency.getOrDefault(c, 0) + 1);
+        }
+        for (char c : word.toCharArray()) {
+            if (!characterFrequency.containsKey(c) || characterFrequency.get(c) == 0) {
+                return false;
+            }
+            characterFrequency.put(c, characterFrequency.get(c) - 1);
+        }
+        return trieDictionary.contains(word);
     }
 
     public List<String> getPossibleWords(ScrabbleDictionary dictionary) {
@@ -133,7 +132,7 @@ public class ScrambleHand {
             return;
         }
 
-        // Try using each tile in the word
+        //try using each tile in the word
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
             List<Tile> remainingTiles = new ArrayList<>(tiles);
@@ -141,14 +140,21 @@ public class ScrambleHand {
             generatePossibleWords(remainingTiles, wordSoFar + tile.getLetter(), dictionary, possibleWords);
         }
 
-        // Try not using any tile in the word
+        //try not using any tile in the word
         generatePossibleWords(tiles.subList(1, tiles.size()), wordSoFar, dictionary, possibleWords);
+
+        //remove empty string at end of list
+        if (!possibleWords.isEmpty() && possibleWords.get(possibleWords.size() - 1).isEmpty()) {
+            possibleWords.remove(possibleWords.size() - 1);
+        }
     }
 
 
     public int getRiskWorthiness() {
         return 0;
     }
+
+    //TODO: Get value of a hand
 
 
     public static void main(String[] args) throws IOException{
@@ -171,6 +177,7 @@ public class ScrambleHand {
             boolean contains = dictionary.contains(word);
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary");
         }
-        System.out.println(possibleWords.toString());
+        
+        System.out.println(possibleWords);
     }
 }
