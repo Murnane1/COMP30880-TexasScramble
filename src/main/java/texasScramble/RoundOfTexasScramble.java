@@ -219,9 +219,7 @@ public class RoundOfTexasScramble {
 
     private void river(PotOfMoney mainPot) {
 
-
         System.out.println("---RIVER---");
-
 
         // Deal the river
         dealCommunity(1);
@@ -232,14 +230,18 @@ public class RoundOfTexasScramble {
     }
 
     private void declareWords(PotOfMoney mainPot) {
-        System.out.println("---WORD REVEAL---");
 
-        int playerStart = button + 1;    //3 becouse player left to big blind starts
+        System.out.println("---WORD REVEAL---");
 
         for (Player player: players) {
             player.chooseWord();
-            for (Player challenger: players) {
-                if(challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger){
+        }
+
+        //for each player's word all other players have the option to challenge it
+        for (Player player: players) {
+            System.out.println(player.getName() + "'s word is " + player.getWord());
+            for (Player challenger : players) {
+                if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger) {
                     challenge(player, challenger, mainPot);
                 }
             }

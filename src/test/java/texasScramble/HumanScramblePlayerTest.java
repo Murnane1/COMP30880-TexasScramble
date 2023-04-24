@@ -20,7 +20,7 @@ public class HumanScramblePlayerTest {
 
     List<Tile> playerTiles = new ArrayList<>();
     List<Tile> commTiles = new ArrayList<>();
-    BagOfTiles tiles = new BagOfTiles();
+    BagOfTiles tiles = new BagOfTiles("ENGLISH");
     ScrambleHand playerHand;
 
     @Before

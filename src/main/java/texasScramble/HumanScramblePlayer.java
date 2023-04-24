@@ -30,6 +30,7 @@ public class HumanScramblePlayer extends Player {
 
     @Override
     public boolean shouldAllIn(PotOfMoney pot) {
+        //TODO is there a way to let player know they won't have blind for next round
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
