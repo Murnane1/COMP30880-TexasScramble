@@ -1,4 +1,5 @@
 package texasScramble;
+
 import java.util.*;
 
 public class ScrambleHand {
@@ -24,10 +25,9 @@ public class ScrambleHand {
 
 
     //setters
-    public void setPlayerTiles(int num, Tile tile){ //sets tile at index
-        if (num >= 0 && num < playerTiles.size()){
-            playerTiles.set(num, tile);
-        }
+    public void setPlayerTiles(List<Tile> tiles){ //sets tile at index
+        playerTiles.clear();
+        playerTiles.addAll(tiles);
     }
 
     public void setCommunityTiles(int num, Tile tile) {
@@ -51,10 +51,10 @@ public class ScrambleHand {
         return new ArrayList<>(playerTiles);
     }
 
-    public int getValue() {
+    public int getValue() { //get value of single tile
         return getTile(0).getValue(); //this has to work for letter values
     }
-
+    
     public int getBestHandValue(){
         return this.bestHandValue;
     }
@@ -63,28 +63,6 @@ public class ScrambleHand {
         bestHandValue = 0;
     }
 
-
-    public List<Tile> getBestHand(){
-        List<Tile> tiles = new ArrayList<>();
-        tiles.addAll(playerTiles); //add player tiles to the tiles list
-        if (!communityTiles.isEmpty() && communityTiles != null){
-            tiles.addAll(communityTiles);
-
-            //List<List<Tile>> possibleHands = generateHands().....
-            List<Tile> bestHand = null;
-            // for (List<Tile> hand : possibleHands) {
-            //     int handValue = .....evalhand()
-            //     if (handValue > bestHandValue) {
-            //         bestHandValue = handValue;
-            //         bestHand = ...... .getHand()
-            //     }
-            // }
-            return bestHand;
-        }
-        return tiles;
-    }
-
-    //TODO might need to do it a different way than previous projects
     public int getRiskWorthiness() {
         return 0;
     }
