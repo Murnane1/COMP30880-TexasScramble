@@ -146,35 +146,25 @@ public class RoundOfTexasScramble {
         PotOfMoney mainPot = new PotOfMoney(listPlayers);
         pots.add(mainPot);
 
-        // Initialize bank and print the values for each player;
         Integer numActive = mainPot.getNumPlayers();
         Integer stake = -1;
         bag.reset();
 
-
-        //roundOpen(mainPot, players[(button+1)%numPlayers], players[(button+2)%numPlayers]);
         canOpen(mainPot);
-        //PRINTING PLAYER HAND
         printPlayerHand();
 
-        // Game actions
-        // (call, raise, fold);
-        // Start betting sequence left of the big blind;
         preflop(mainPot);
-
         printPlayerHand();
-        //Whilst there are >= 2 players are still active;
+
         flop(mainPot);
-
         printPlayerHand();
-        // Turn 4th community card (turn) is turned while there are >= 2 players active.
+
         turn(mainPot);
-
         printPlayerHand();
-        // Turn 5th community card (river) is turned if there are still >= 2 players active.
+
         river(mainPot);
-
         printPlayerHand();
+
         declareWords(mainPot);
 
         pots = newSidePots(mainPot);
@@ -240,7 +230,7 @@ public class RoundOfTexasScramble {
 
         //for each player's word all other players have the option to challenge it
         for (Player player: players) {
-            System.out.println(player.getName() + "'s word is " + player.getWord());
+            System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
             for (Player challenger : players) {
                 if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger) {
                     challenge(player, challenger, mainPot);
@@ -352,11 +342,15 @@ public class RoundOfTexasScramble {
         return sidePots;
     }
 
-    //should this be here or in player?
     public void challenge(Player player, Player challenger, PotOfMoney pot){
+        System.out.println(challenger.getName() + " challenges " + player.getName() + "'s word \"" + "\"");
         if(dictionary.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+            System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is a valid word \n "
+                + "The challenger " + challenger.getName() + " pays a penalty of " + PENALTY + " into the pot");
             challenger.penalty(PENALTY, pot);
         } else {                        //if word invalid - player's score for round is 0
+            System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is NOT a valid word \n"
+                    + player.getName() + " gets a score of" + player.getHand().getBestHandValue() + "for this round");
             player.getHand().setBestHandValueToZero();
         }
     }
@@ -377,3 +371,4 @@ public class RoundOfTexasScramble {
         }
     }
 }
+
