@@ -131,7 +131,6 @@ public class ScrambleHand {
             }
             return;
         }
-
         //try using each tile in the word
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
@@ -149,12 +148,20 @@ public class ScrambleHand {
         }
     }
 
-
-    public int getRiskWorthiness() {
-        return 0;
+    public static int calculateWordValue(String word) {
+        BagOfTiles bagOfTiles = new BagOfTiles();
+        int value = 0;
+        for (char c : word.toCharArray()) {
+            for (Tile tile : bagOfTiles.getBag()) {
+                if (tile.getLetter() == c) {
+                    value += tile.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
     }
-
-    //TODO: Get value of a hand
+    
 
 
     public static void main(String[] args) throws IOException{
@@ -168,7 +175,6 @@ public class ScrambleHand {
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
-        communityTiles.add(bag.dealNext());
         hand.addCommunityTiles(communityTiles);
 
         System.out.println(hand.toString());
@@ -176,10 +182,9 @@ public class ScrambleHand {
         List<String> possibleWords = hand.getPossibleWords(dictionary);
         for (String word: possibleWords){
             boolean contains = dictionary.contains(word);
-            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary");
+            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + calculateWordValue(word));
         }
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
-
     }
 }

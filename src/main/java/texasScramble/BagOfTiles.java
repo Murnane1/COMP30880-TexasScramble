@@ -79,6 +79,10 @@ public class BagOfTiles {
         }
     }
 
+    public Tile[] getBag(){
+        return bag;
+    }
+
     //TODO method to deal hands (for Player)
 
 }
