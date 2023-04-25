@@ -158,7 +158,7 @@ public class ScrambleHand {
 
 
     public static void main(String[] args) throws IOException{
-        BagOfTiles bag = new BagOfTiles();
+        BagOfTiles bag = new BagOfTiles("ENGLISH");
         String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
         File file = new File(path);
         ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());

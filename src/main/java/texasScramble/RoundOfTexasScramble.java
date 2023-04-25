@@ -8,14 +8,14 @@ public class RoundOfTexasScramble {
     private static final int PENALTY = 3;
     private Player[] players;
     private BagOfTiles bag;
-    private Dictionary dict;    //TODO create word dictionary
+    private ScrabbleDictionary dictionary;
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
     private int bigBlind    = 2;
 
 
-    public RoundOfTexasScramble(BagOfTiles bag, Player[] players, int smallBlind, int button) {
+    public RoundOfTexasScramble(BagOfTiles bag, Player[] players, int smallBlind, int button, ScrabbleDictionary dictionary) {
         this.players = players; //init players
         this.bag = bag; //init deck
         this.smallBlind = smallBlind;
@@ -23,6 +23,7 @@ public class RoundOfTexasScramble {
         numPlayers = players.length; //get totalPlayers
 
         this.button = button;
+        this.dictionary = dictionary;
 
         System.out.println("\n\nNew Deal:\n\n");
         deal();
@@ -268,7 +269,7 @@ public class RoundOfTexasScramble {
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
                     continue;
                 }
-                System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getBestHand());
+                //System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getHand());
                 score = currentPlayer.getHand().getBestHandValue();
                 if (score > bestHandScore) {
                     bestHandScore = score;
@@ -353,11 +354,11 @@ public class RoundOfTexasScramble {
 
     //should this be here or in player?
     public void challenge(Player player, Player challenger, PotOfMoney pot){
-        /*if(dict.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+        if(dictionary.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
             challenger.penalty(PENALTY, pot);
         } else {                        //if word invalid - player's score for round is 0
             player.getHand().setBestHandValueToZero();
-        }*/
+        }
     }
 
     private void printPlayerHand() {

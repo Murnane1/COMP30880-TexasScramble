@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -22,10 +24,20 @@ public class HumanScramblePlayerTest {
     List<Tile> commTiles = new ArrayList<>();
     BagOfTiles tiles = new BagOfTiles("ENGLISH");
     ScrambleHand playerHand;
+    ScrabbleDictionary dictionary;
 
     @Before
     public void setUp() {
-        playerHand = new ScrambleHand(tiles);
+        String filename = "usEnglishScrabbleWordlist.txt";
+        URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+        String filepath = url.getPath();
+        try {
+            dictionary = new ScrabbleDictionary(filepath);
+        } catch (IOException e) {
+            System.out.println("COULD NOT ADD DICTIONARY");
+        }
+
+        playerHand = new ScrambleHand(tiles, dictionary);
 
         /*playerTiles.add(tile1);
         playerTiles.add(tile2);*/
