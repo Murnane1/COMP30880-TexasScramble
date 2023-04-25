@@ -2,12 +2,8 @@ package texasScramble;
 
 import java.util.*;
 
-import java.net.URL;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class ScrambleHand {
     private List<Tile> playerTiles;
@@ -153,9 +149,11 @@ public class ScrambleHand {
         int value = 0;
         for (char c : word.toCharArray()) {
             for (Tile tile : bagOfTiles.getBag()) {
-                if (tile.getLetter() == c) {
-                    value += tile.getValue();
-                    break;
+                if (tile != null){
+                    if (tile.getLetter() == c) {
+                        value += tile.getValue();
+                        break;
+                    }
                 }
             }
         }
@@ -165,7 +163,7 @@ public class ScrambleHand {
 
 
     public static void main(String[] args) throws IOException{
-        BagOfTiles bag = new BagOfTiles("ENGLISH");
+        BagOfTiles bag = new BagOfTiles();
         String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
         File file = new File(path);
         ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());
