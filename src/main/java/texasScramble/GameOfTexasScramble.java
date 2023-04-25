@@ -1,13 +1,16 @@
 package texasScramble;
 
+import java.net.URL;
+import java.util.Scanner;
+
 public class GameOfTexasScramble {
     private Player[] players;
-
     private BagOfTiles bag;
-
+    private ScrabbleDictionary dictionary;
     private int numPlayers;
-
     private final static int INIT_SMALL_BLIND = 1;
+
+    private final static int SMALL_BLIND_INCREASE_PER_ROUND = 1;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -20,13 +23,21 @@ public class GameOfTexasScramble {
         players = new Player[numPlayers];
 
         //TODO make possible for multiple human players
-        for (int i = 0; i < numPlayers; i++)
-            if (i == 0)
+        for (int i = 0; i < numPlayers; i++) {
+            if (i == 0){
                 players[i] = new HumanScramblePlayer(names[i].trim(), bank);
-            else
+            }
+            else {
                 players[i] = new ComputerScramblePlayer(names[i].trim(), bank);
+            }
+        }
 
-        bag = new BagOfTiles();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter e to play in English" +
+                "\n or F to play in French");
+        char language = sc.next().charAt(0);
+        bag = bagOfLanguage(language);
+        dictionary = getDictionary(language);
     }
 
 
@@ -36,9 +47,50 @@ public class GameOfTexasScramble {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
+    public BagOfTiles bagOfLanguage(char languageChar) {
+        BagOfTiles newBag = null;
+        try {
+            if (languageChar == 'e' || languageChar == 'E') {
+                newBag = new BagOfTiles("ENGLISH");
+            } else if (languageChar == 'f' || languageChar == 'F') {
+                newBag = new BagOfTiles("FRENCH");
+            }
+        }
+        catch (Exception e){System.out.println("Error selecting language");};
+
+        return newBag;
+    }
+
+    public ScrabbleDictionary getDictionary(char languageChar){
+        ScrabbleDictionary newDict = null;
+        try {
+            if (languageChar == 'e' || languageChar == 'E') {
+                String filename = "usEnglishScrabbleWordlist.txt";
+                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+                String filepath = url.getPath();
+                newDict = new ScrabbleDictionary(filepath);
+            } else if (languageChar == 'f' || languageChar == 'F') {
+                String filename = "FrenchScrabbleWordlist.txt";
+                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+                String filepath = url.getPath();
+                newDict = new ScrabbleDictionary(filepath);
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error selecting dictionary");
+            e.printStackTrace();
+        }
+
+        return newDict;
+    }
+
     public int getNumPlayers() {
         return numPlayers;
 
+    }
+
+    public int getSmallBlindIncreasePerRound(){
+        return SMALL_BLIND_INCREASE_PER_ROUND;
     }
 
 
@@ -73,11 +125,11 @@ public class GameOfTexasScramble {
         int smallBlind = INIT_SMALL_BLIND;
         int button = 0;
         while (getNumSolventPlayers() > 1) {
-            RoundOfTexasScramble round = new RoundOfTexasScramble(bag, players, smallBlind, button);
+            RoundOfTexasScramble round = new RoundOfTexasScramble(bag, players, smallBlind, button, dictionary);
 
             round.play();
 
-            smallBlind++;
+            smallBlind += SMALL_BLIND_INCREASE_PER_ROUND;
             button++;
             try {
                 System.out.print("\n\nPlay another round? Press 'q' to terminate this game ... ");
@@ -90,7 +142,7 @@ public class GameOfTexasScramble {
                     if ((char)input[i] == 'q' || (char)input[i] == 'Q')
                         return;
             }
-            catch (Exception e) {};
+            catch (Exception e) {e.printStackTrace();};
         }
     }
 
@@ -104,7 +156,7 @@ public class GameOfTexasScramble {
     public static void main(String[] args) {
         String[] names = {"Human", "Tom", "Dick", "Harry"};
 
-        System.out.println("\nWelcome to the Automated Texas Hold'em Machine ...\n\n");
+        System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
 
         System.out.print("\nWhat is your name?  ");
 
@@ -119,7 +171,7 @@ public class GameOfTexasScramble {
 
         int startingBank = 10;
 
-        System.out.println("\nLet's play POKER ...\n\n");
+        System.out.println("\nLet's play SCRAMBLE ...\n\n");
 
         GameOfTexasScramble game = new GameOfTexasScramble(names, startingBank);
 

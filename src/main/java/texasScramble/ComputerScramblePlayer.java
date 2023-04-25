@@ -53,11 +53,14 @@ public class ComputerScramblePlayer extends Player {
     @Override
     boolean shouldChallenge(PotOfMoney pot, String word) {
         //TODO when does computer challenge word
+        //increasing chance of challenging as word is further down sorted dictionary
+        //challenge 85% of invalid words?
         return true;
     }
 
     @Override
     String chooseWord() {
         return "computerWord";
+        //first contructable word from sorted wordlist
     }
 }

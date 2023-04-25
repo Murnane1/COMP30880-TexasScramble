@@ -8,14 +8,14 @@ public class RoundOfTexasScramble {
     private static final int PENALTY = 3;
     private Player[] players;
     private BagOfTiles bag;
-    private Dictionary dict;    //TODO create word dictionary
+    private ScrabbleDictionary dictionary;
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
     private int bigBlind    = 2;
 
 
-    public RoundOfTexasScramble(BagOfTiles bag, Player[] players, int smallBlind, int button) {
+    public RoundOfTexasScramble(BagOfTiles bag, Player[] players, int smallBlind, int button, ScrabbleDictionary dictionary) {
         this.players = players; //init players
         this.bag = bag; //init deck
         this.smallBlind = smallBlind;
@@ -23,6 +23,7 @@ public class RoundOfTexasScramble {
         numPlayers = players.length; //get totalPlayers
 
         this.button = button;
+        this.dictionary = dictionary;
 
         System.out.println("\n\nNew Deal:\n\n");
         deal();
@@ -145,35 +146,25 @@ public class RoundOfTexasScramble {
         PotOfMoney mainPot = new PotOfMoney(listPlayers);
         pots.add(mainPot);
 
-        // Initialize bank and print the values for each player;
         Integer numActive = mainPot.getNumPlayers();
         Integer stake = -1;
         bag.reset();
 
-
-        //roundOpen(mainPot, players[(button+1)%numPlayers], players[(button+2)%numPlayers]);
         canOpen(mainPot);
-        //PRINTING PLAYER HAND
         printPlayerHand();
 
-        // Game actions
-        // (call, raise, fold);
-        // Start betting sequence left of the big blind;
         preflop(mainPot);
-
         printPlayerHand();
-        //Whilst there are >= 2 players are still active;
+
         flop(mainPot);
-
         printPlayerHand();
-        // Turn 4th community card (turn) is turned while there are >= 2 players active.
+
         turn(mainPot);
-
         printPlayerHand();
-        // Turn 5th community card (river) is turned if there are still >= 2 players active.
+
         river(mainPot);
-
         printPlayerHand();
+
         declareWords(mainPot);
 
         pots = newSidePots(mainPot);
@@ -219,9 +210,7 @@ public class RoundOfTexasScramble {
 
     private void river(PotOfMoney mainPot) {
 
-
         System.out.println("---RIVER---");
-
 
         // Deal the river
         dealCommunity(1);
@@ -232,14 +221,18 @@ public class RoundOfTexasScramble {
     }
 
     private void declareWords(PotOfMoney mainPot) {
-        System.out.println("---WORD REVEAL---");
 
-        int playerStart = button + 1;    //3 becouse player left to big blind starts
+        System.out.println("---WORD REVEAL---");
 
         for (Player player: players) {
             player.chooseWord();
-            for (Player challenger: players) {
-                if(challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger){
+        }
+
+        //for each player's word all other players have the option to challenge it
+        for (Player player: players) {
+            System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
+            for (Player challenger : players) {
+                if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger) {
                     challenge(player, challenger, mainPot);
                 }
             }
@@ -266,7 +259,7 @@ public class RoundOfTexasScramble {
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
                     continue;
                 }
-                System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getBestHand());
+                //System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getHand());
                 score = currentPlayer.getHand().getBestHandValue();
                 if (score > bestHandScore) {
                     bestHandScore = score;
@@ -349,13 +342,17 @@ public class RoundOfTexasScramble {
         return sidePots;
     }
 
-    //should this be here or in player?
     public void challenge(Player player, Player challenger, PotOfMoney pot){
-        /*if(dict.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+        System.out.println(challenger.getName() + " challenges " + player.getName() + "'s word \"" + "\"");
+        if(dictionary.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+            System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is a valid word \n "
+                + "The challenger " + challenger.getName() + " pays a penalty of " + PENALTY + " into the pot");
             challenger.penalty(PENALTY, pot);
         } else {                        //if word invalid - player's score for round is 0
+            System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is NOT a valid word \n"
+                    + player.getName() + " gets a score of" + player.getHand().getBestHandValue() + "for this round");
             player.getHand().setBestHandValueToZero();
-        }*/
+        }
     }
 
     private void printPlayerHand() {
@@ -374,3 +371,4 @@ public class RoundOfTexasScramble {
         }
     }
 }
+
