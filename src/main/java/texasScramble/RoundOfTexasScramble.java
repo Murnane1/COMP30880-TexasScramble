@@ -6,7 +6,7 @@ import java.util.*;
 public class RoundOfTexasScramble {
     public static final int DELAY_BETWEEN_ACTIONS = 1000;  // number of milliseconds between game actions
     private static final int PENALTY = 3;
-    private Player[] players;
+    protected Player[] players;
     private BagOfTiles bag;
     private ScrabbleDictionary dictionary;
 
