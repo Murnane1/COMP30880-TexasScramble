@@ -186,4 +186,8 @@ public class ScrambleHand {
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
     }
+
+    public int getRiskWorthiness() {
+        return 0;
+    }
 }

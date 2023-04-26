@@ -9,6 +9,7 @@ import GUI.PauseButton;
 import GUI.PlayButton;
 import texasScramble.*;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class guiRoundOfTexasScramble extends RoundOfTexasScramble{
 
@@ -18,13 +19,36 @@ public class guiRoundOfTexasScramble extends RoundOfTexasScramble{
 
     public boolean flag = false;
 
+    private static ScrabbleDictionary dictionary = getDictionary('e');
+
     public guiRoundOfTexasScramble(BagOfTiles bag, Player[] players, int smallBlind, int button) {
-        super(bag, players, smallBlind, button);
+        super(bag, players, smallBlind, button, dictionary);
 
         init(players);
     }
 
- 
+    public static ScrabbleDictionary getDictionary(char languageChar){
+        ScrabbleDictionary newDict = null;
+        try {
+            if (languageChar == 'e' || languageChar == 'E') {
+                String filename = "usEnglishScrabbleWordlist.txt";
+                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+                String filepath = url.getPath();
+                newDict = new ScrabbleDictionary(filepath);
+            } else if (languageChar == 'f' || languageChar == 'F') {
+                String filename = "FrenchScrabbleWordlist.txt";
+                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+                String filepath = url.getPath();
+                newDict = new ScrabbleDictionary(filepath);
+            }
+        }
+        catch (Exception e){
+            System.out.println("Error selecting dictionary");
+            e.printStackTrace();
+        }
+
+        return newDict;
+    }
 
     private void init(Player[] players) {
         int i = 100;

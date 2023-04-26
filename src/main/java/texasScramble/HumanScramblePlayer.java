@@ -64,8 +64,7 @@ public class HumanScramblePlayer extends Player {
         testWord = testWord.replace(" ","");
 
         //entered word to set of chars
-        List<Character> enteredChars = testWord.chars()
-                .mapToObj(e->(char)e).collect(Collectors.toList());
+        List<Character> enteredChars = testWord.chars().mapToObj(e->(char)e).collect(Collectors.toList());
 
         List<Character> playerTiles = new ArrayList<>();
         for (Tile tile: getHand().getHand()) {

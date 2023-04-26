@@ -137,7 +137,7 @@ public class BagOfTiles {
         }
     }
     public ScrambleHand dealHand() {
-        ScrambleHand hand = new ScrambleHand(this);
+        ScrambleHand hand = new ScrambleHand(this, null);
         return hand;
     }
 
