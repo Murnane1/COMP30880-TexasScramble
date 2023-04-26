@@ -1,6 +1,7 @@
 package Entities;
 
 import texasScramble.Player;
+import texasScramble.PotOfMoney;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,11 +15,14 @@ import javax.imageio.ImageIO;
 * Display player tiles
 *
 */
-public class guiPlayer extends Entity{
+public abstract class guiPlayer extends Entity{
     
+    protected Player playerComponent;
+
     private BufferedImage image;
-    public guiPlayer(int x, int y){
+    public guiPlayer(int x, int y, Player playerComponent){
         super(x, y);
+        this.playerComponent = playerComponent;
         importImg();
     }
 
@@ -53,5 +57,58 @@ public class guiPlayer extends Entity{
         this.y +=value;
     }
 
+    abstract boolean shouldOpen(PotOfMoney pot);
+
+    abstract boolean shouldSee(PotOfMoney pot);
+
+    abstract boolean shouldRaise(PotOfMoney pot);
+
+    abstract boolean shouldAllIn(PotOfMoney pot);
+
+
+    public void nextAction(PotOfMoney pot){
+        if (playerComponent.hasFolded()) return;  // no longer in the game
+
+        if (playerComponent.isBankrupt() ) {
+            // not enough money to cover the bet
+
+            System.out.println("\n> " + playerComponent.getName() + " says: I'm out!\n");
+
+            playerComponent.fold();
+
+            return;
+        }
+        if(shouldAllIn(pot)) {
+            playerComponent.allIn(pot);
+            return;
+        }
+
+        else if(!playerComponent.isAllIn()){
+            if (pot.getCurrentStake() > playerComponent.getStake()) {
+                // existing bet must be covered
+
+                if (shouldSee(pot)) {
+                    playerComponent.seeBet(pot);
+                }
+                else{
+                    playerComponent.fold();
+                    return;
+                }
+            }
+            if (shouldRaise(pot)){
+                playerComponent.raiseBet(pot);
+                return;
+            }
+
+            else {
+                System.out.println(pot.getCurrentStake() + " " + playerComponent.getStake());
+                System.out.println("\n> " + playerComponent.getName() + " says: I check!\n");
+            }
+        }
+    }
+
+    public Player getPlayerComponent() {
+        return playerComponent;
+    }
 
 }

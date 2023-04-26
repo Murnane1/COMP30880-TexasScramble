@@ -9,6 +9,7 @@ public class RoundOfTexasScramble {
     private Player[] players;
     private BagOfTiles bag;
     private ScrabbleDictionary dictionary;
+
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
@@ -58,7 +59,7 @@ public class RoundOfTexasScramble {
         }
     }
 
-    public void deal() {
+    protected void deal() {
 
         for (int i = 0; i < getNumPlayers(); i++) {
             int index = (button + i + 1) % getNumPlayers();
@@ -71,6 +72,7 @@ public class RoundOfTexasScramble {
                     getPlayer(index).reset();
                     getPlayer(index).dealTo(bag);
 
+                    
                     System.out.println(getPlayer(index));
                 }
             }
@@ -79,7 +81,7 @@ public class RoundOfTexasScramble {
         System.out.println("\n");
     }
 
-    public void canOpen(PotOfMoney pot) {
+    protected void canOpen(PotOfMoney pot) {
         if (numPlayers <= 1) {
             return;
         }
@@ -125,7 +127,7 @@ public class RoundOfTexasScramble {
         players[(button + i + 1) % numPlayers].postBlind(pot, bigBlind, "Big Blind");
     }
 
-    private void dealCommunity(int numCards) {
+    protected void dealCommunity(int numCards) {
         List<Tile> list = new ArrayList<>(); //define community cards as an array of cards for reference
 
         for (int j = 0; j < numCards; j++) {
@@ -148,6 +150,7 @@ public class RoundOfTexasScramble {
 
         Integer numActive = mainPot.getNumPlayers();
         Integer stake = -1;
+
         bag.reset();
 
         canOpen(mainPot);
@@ -171,7 +174,7 @@ public class RoundOfTexasScramble {
         showdown(pots);
     }
 
-    private void preflop(PotOfMoney mainPot) {
+    protected void preflop(PotOfMoney mainPot) {
 
         System.out.println("---PREFLOP---");
 
@@ -181,7 +184,7 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
-    private void flop(PotOfMoney mainPot) {
+    protected void flop(PotOfMoney mainPot) {
 
         System.out.println("---FLOP---");
 
@@ -195,7 +198,7 @@ public class RoundOfTexasScramble {
 
     }
 
-    private void turn(PotOfMoney mainPot) {
+    protected void turn(PotOfMoney mainPot) {
 
         System.out.println("---TURN---");
 
@@ -208,7 +211,7 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
-    private void river(PotOfMoney mainPot) {
+    protected void river(PotOfMoney mainPot) {
 
         System.out.println("---RIVER---");
 
@@ -241,9 +244,10 @@ public class RoundOfTexasScramble {
 
     private void showdown(ArrayList<PotOfMoney> pots) {
 
+
         System.out.println("---SHOWDOWN---");
 
-        int bestHandScore = 0, score = 0, bestPos = 0, potNum = 0;
+        int bestHandScore = 0, score = 0,  potNum = 0;
         Player bestPlayer = null, currentPlayer = null;
 
         for (PotOfMoney pot : pots) {
@@ -260,6 +264,7 @@ public class RoundOfTexasScramble {
                     continue;
                 }
                 //System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getHand());
+
                 score = currentPlayer.getHand().getBestHandValue();
                 if (score > bestHandScore) {
                     bestHandScore = score;
@@ -273,8 +278,7 @@ public class RoundOfTexasScramble {
         }
     }
 
-    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int indexCurrPot = 0;
+    protected void bettingCycle(PotOfMoney mainPot, int playerStart) {
         int stake = -1;
         int numActive = mainPot.getNumPlayers();
 
@@ -310,10 +314,17 @@ public class RoundOfTexasScramble {
      * 		remove this player's stake from every other remaining player's stake
      * 		add to list of side pots
      */
-    public ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
+    protected ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
         ArrayList<PotOfMoney> sidePots = new ArrayList<>();
 
-        Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
+        //Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
+
+        Collections.sort(pot.getPlayers(), new Comparator<Player>() {
+			@Override
+			public int compare(Player p1, Player p2) {
+				return p1.getStake() - p2.getStake();
+			}
+		});
 
         ArrayList<Player> remainingPlayers = new ArrayList<>(pot.getPlayers());
         for(Player player: pot.getPlayers()){
@@ -357,6 +368,7 @@ public class RoundOfTexasScramble {
 
     private void printPlayerHand() {
 
+
         System.out.println(">Your Cards : ");
         for (Tile tile : players[0].getHand().getHand()) {
             System.out.print(tile + " ");
@@ -364,7 +376,7 @@ public class RoundOfTexasScramble {
         System.out.println("");
     }
 
-    private void delay(int numMilliseconds) {
+    protected void delay(int numMilliseconds) {
         try {
             Thread.sleep(numMilliseconds);
         } catch (Exception e) {

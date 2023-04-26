@@ -175,6 +175,7 @@ public class ScrambleHand {
         communityTiles.add(bag.dealNext());
         hand.addCommunityTiles(communityTiles);
 
+
         System.out.println(hand.toString());
 
         List<String> possibleWords = hand.getPossibleWords(dictionary);

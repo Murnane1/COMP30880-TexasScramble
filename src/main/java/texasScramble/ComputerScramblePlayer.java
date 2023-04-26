@@ -21,12 +21,12 @@ public class ComputerScramblePlayer extends Player {
 
 
     @Override
-    boolean shouldOpen(PotOfMoney pot) {
+    public boolean shouldOpen(PotOfMoney pot) {
         return true;
     }
 
     @Override
-    boolean shouldSee(PotOfMoney pot) {
+    public boolean shouldSee(PotOfMoney pot) {
         if (getStake() == 0)
             return true;
         else
@@ -35,13 +35,13 @@ public class ComputerScramblePlayer extends Player {
     }
 
     @Override
-    boolean shouldRaise(PotOfMoney pot) {
+    public boolean shouldRaise(PotOfMoney pot) {
         return Math.abs(dice.nextInt()) % 80 < getHand().getRiskWorthiness() +
                 getRiskTolerance();
     }
 
     @Override
-    boolean shouldAllIn(PotOfMoney pot) {
+    public boolean shouldAllIn(PotOfMoney pot) {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {

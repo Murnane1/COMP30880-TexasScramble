@@ -1,5 +1,7 @@
 package texasScramble;
 
+import java.util.List;
+
 public abstract class Player {
     private int bank       		= 0;		 // the total amount of money the player has left, not counting his/her
     private int stake      		= 0;		 // the amount of money the player has thrown into the current pot
@@ -217,13 +219,13 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    abstract boolean shouldOpen(PotOfMoney pot);
+    public abstract boolean shouldOpen(PotOfMoney pot);
 
-    abstract boolean shouldSee(PotOfMoney pot);
+    public abstract boolean shouldSee(PotOfMoney pot);
 
-    abstract boolean shouldRaise(PotOfMoney pot);
+    public abstract boolean shouldRaise(PotOfMoney pot);
 
-    abstract boolean shouldAllIn(PotOfMoney pot);
+    public abstract boolean shouldAllIn(PotOfMoney pot);
 
     abstract boolean shouldChallenge(PotOfMoney pot, String word);
 
@@ -290,5 +292,9 @@ public abstract class Player {
             return count + " " + singular;
         else
             return count + " " + plural;
+    }
+
+    public void addCommunityTiles(List<Tile> list) {
+        hand.addCommunityTiles(list);
     }
 }

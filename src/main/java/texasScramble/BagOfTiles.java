@@ -6,15 +6,16 @@ public class BagOfTiles {
     //ENGLISH
     public static final int NUMTILES = 100;
     
+
     private Tile[] bag = new Tile[NUMTILES];
 
     private int next = 0;
 
     private Random dice = new Random(System.currentTimeMillis());
 
-
     public BagOfTiles(){ //language arg?
         //String language = "ENGLISH";
+
         addTiles('A', 1, 9);
         addTiles('B', 3, 2);
         addTiles('C', 3, 2);
@@ -111,10 +112,9 @@ public class BagOfTiles {
 		int alpha = 0, beta = 0;
 		
 		for (int i = 0; i < NUMTILES*NUMTILES; i++) {
-			alpha       = Math.abs(dice.nextInt())%NUMTILES;
-			beta        = Math.abs(dice.nextInt())%NUMTILES;
-			
-			palm        = bag[alpha];
+			alpha      = Math.abs(dice.nextInt())%NUMTILES;
+			beta       = Math.abs(dice.nextInt())%NUMTILES;
+			palm       = bag[alpha];
 			bag[alpha] = bag[beta];
 			bag[beta]  = palm;
 		}
@@ -136,6 +136,10 @@ public class BagOfTiles {
             bag[next++] = new Tile(letter, value);
         }
     }
+    public ScrambleHand dealHand() {
+        ScrambleHand hand = new ScrambleHand(this);
+        return hand;
+    }
 
     public Tile[] getBag(){
         return bag;
@@ -150,5 +154,6 @@ public class BagOfTiles {
     // }
 
     //TODO method to deal hands (for Player)
+
 
 }

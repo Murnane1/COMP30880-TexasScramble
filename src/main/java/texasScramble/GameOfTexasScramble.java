@@ -3,10 +3,12 @@ package texasScramble;
 import java.net.URL;
 import java.util.Scanner;
 
+
 public class GameOfTexasScramble {
     private Player[] players;
     private BagOfTiles bag;
     private ScrabbleDictionary dictionary;
+
     private int numPlayers;
     private final static int INIT_SMALL_BLIND = 1;
 
@@ -38,6 +40,7 @@ public class GameOfTexasScramble {
         char language = sc.next().charAt(0);
         bag = bagOfLanguage(language);
         dictionary = getDictionary(language);
+
     }
 
 
