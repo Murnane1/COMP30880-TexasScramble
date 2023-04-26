@@ -63,12 +63,15 @@ class TrieDictionary {
     }
 
     private TrieNode root = new TrieNode(); //new instance of trienode for root node
-    private WordFrequencyDictionary wordFrequencyDictionary;
+    String filename = "englishWordFrequency.txt";
+    URL url = ScrabbleDictionary.class.getResource("/WordFrequencies/" + filename);
+    String filepath = url.getPath();
+    private WordFrequencyDictionary wordFrequencyDictionary = new WordFrequencyDictionary(filepath); //TODO this is not elegant
 
-    public TrieDictionary() { //does nothing, needed for instance
+    public TrieDictionary() throws IOException { //does nothing, needed for instance
     }
 
-    public static TrieDictionary getInstance() { //gets the instance of the trie structure, returns this instance
+    public static TrieDictionary getInstance() throws IOException { //gets the instance of the trie structure, returns this instance
         if (instance == null) {
             instance = new TrieDictionary();
         }
@@ -76,10 +79,6 @@ class TrieDictionary {
     }
 
     public void insert(String word) throws IOException { //inserts the word into the trie structure
-        String filename = "englishWordFrequency.txt";
-        URL url = ScrabbleDictionary.class.getResource("/WordFrequencies/" + filename);
-        String filepath = url.getPath();
-        wordFrequencyDictionary = new WordFrequencyDictionary(filepath); //TODO this is not elegant
         TrieNode node = root;
         for (char c : word.toCharArray()) {
             node.children.putIfAbsent(c, new TrieNode());
@@ -87,7 +86,6 @@ class TrieDictionary {
         }
 
         node.isWord = true;
-
         node.freq = wordFrequencyDictionary.getWordFrequency(word);
 
     }

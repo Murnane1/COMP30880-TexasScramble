@@ -31,10 +31,13 @@ public class WordFrequencyDictionaryTest {
 
     @Test
     public void testWordFrequencyDictionary(){
-        System.out.println(":"+wordFrequencies.get(0).getWord() + ":word | freq " + wordFrequencies.get(0).getFreq());
         assertEquals(wordFrequencies.get(0).getFreq(), 23135851162L);
-        assertEquals(wordFrequencies.get(0).getWord(), "the");
+        assertEquals(wordFrequencies.get(0).getWord(), "THE");
 
+        System.out.println("length: "+wordFrequencyDictionary.getWordFrequencies().get(wordFrequencies.size()-2).getWord());
 
+        System.out.println("frequency of: "+wordFrequencyDictionary.getWordFrequency("THE"));
+        System.out.println("frequency of: "+wordFrequencyDictionary.getWordFrequency(wordFrequencies.get(0).getWord()));
+        System.out.println("frequency of: "+wordFrequencyDictionary.getWordFrequency("MOUSE")); //33667003
     }
 }

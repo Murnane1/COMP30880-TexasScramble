@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class WordFrequencyDictionary {
 
     private ArrayList<WordFrequency> wordFrequencies;
-
+    private final static int MAX_WORD_LENGTH = 7;
 
     public WordFrequencyDictionary(String filename) throws IOException {
         ArrayList<WordFrequency> frequencyList = new ArrayList<>();
@@ -18,13 +18,16 @@ public class WordFrequencyDictionary {
             while ((line = reader.readLine()) != null) {
                 line = line.trim().replaceAll("\t", " ");
                 line = line.trim().replaceAll(" +", " ");
+                line = line.trim().toUpperCase();
                 String[] parts = line.split(" ");
 
                 String word = parts[0];
-                long freq = Long.parseLong(parts[1]);
 
-                WordFrequency wordFreq = new WordFrequency(word, freq);
-                frequencyList.add(wordFreq);
+                if (word.length() <= MAX_WORD_LENGTH){
+                    long freq = Long.parseLong(parts[1]);
+                    WordFrequency wordFreq = new WordFrequency(word, freq);
+                    frequencyList.add(wordFreq);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,30 +43,10 @@ public class WordFrequencyDictionary {
     //if the word is in the frequency dictionary return number of occurrences
     public long getWordFrequency(String word) {
         for (WordFrequency wordFrequency: wordFrequencies) {
-            if (wordFrequency.getWord() == "word"){
+            if (wordFrequency.getWord().equals(word)){
                 return wordFrequency.getFreq();
             }
         }
         return 0;
     }
-
-
-    /*public void readFrequencyFile(String filename)throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) { //open file and creates buffer to read file, which is closed after reading in data.
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim().replaceAll(" +", " ");
-                String[] parts = line.split(" ");
-
-                String word = parts[0];
-                int freq = Integer.parseInt(parts[1]);
-
-                WordFrequency wordFreq = new WordFrequency(word, freq);
-                wordFrequencies.add(wordFreq);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
 }
