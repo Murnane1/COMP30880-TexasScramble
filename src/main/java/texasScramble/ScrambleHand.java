@@ -2,12 +2,8 @@ package texasScramble;
 
 import java.util.*;
 
-import java.net.URL;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class ScrambleHand {
     private List<Tile> playerTiles;
@@ -131,7 +127,6 @@ public class ScrambleHand {
             }
             return;
         }
-
         //try using each tile in the word
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
@@ -149,23 +144,32 @@ public class ScrambleHand {
         }
     }
 
-
-    public int getRiskWorthiness() {
-        return 0;
+    public static int calculateWordValue(String word) {
+        BagOfTiles bagOfTiles = new BagOfTiles();
+        int value = 0;
+        for (char c : word.toCharArray()) {
+            for (Tile tile : bagOfTiles.getBag()) {
+                if (tile != null){
+                    if (tile.getLetter() == c) {
+                        value += tile.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+        return value;
     }
-
-    //TODO: Get value of a hand
+    
 
 
     public static void main(String[] args) throws IOException{
-        BagOfTiles bag = new BagOfTiles("ENGLISH");
+        BagOfTiles bag = new BagOfTiles();
         String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
         File file = new File(path);
         ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());
         ScrambleHand hand = new ScrambleHand(bag, dictionary);
 
         List<Tile> communityTiles = new ArrayList<>();
-        communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
         communityTiles.add(bag.dealNext());
@@ -176,10 +180,9 @@ public class ScrambleHand {
         List<String> possibleWords = hand.getPossibleWords(dictionary);
         for (String word: possibleWords){
             boolean contains = dictionary.contains(word);
-            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary");
+            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + calculateWordValue(word));
         }
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
-
     }
 }
