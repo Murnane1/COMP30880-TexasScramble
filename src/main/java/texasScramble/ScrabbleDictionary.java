@@ -59,14 +59,9 @@ class TrieDictionary {
     public static class TrieNode {
         Map<Character, TrieNode> children = new HashMap<>(); //nodes in trie structure
         boolean isWord; //check to see if it is a word
-        long freq;      //word score
     }
 
     private TrieNode root = new TrieNode(); //new instance of trienode for root node
-    String filename = "englishWordFrequency.txt";
-    URL url = ScrabbleDictionary.class.getResource("/WordFrequencies/" + filename);
-    String filepath = url.getPath();
-    private WordFrequencyDictionary wordFrequencyDictionary = new WordFrequencyDictionary(filepath); //TODO this is not elegant
 
     public TrieDictionary() throws IOException { //does nothing, needed for instance
     }
@@ -86,8 +81,6 @@ class TrieDictionary {
         }
 
         node.isWord = true;
-        node.freq = wordFrequencyDictionary.getWordFrequency(word);
-
     }
 
     public boolean contains(String word) { //checks to see if the trie contains a specific word.

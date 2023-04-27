@@ -1,5 +1,6 @@
 package texasScramble;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -7,6 +8,7 @@ public class GameOfTexasScramble {
     private Player[] players;
     private BagOfTiles bag;
     private ScrabbleDictionary dictionary;
+    private WordFrequencyDictionary wordFrequencyDictionary;
     private int numPlayers;
     private final static int INIT_SMALL_BLIND = 1;
 
@@ -38,6 +40,7 @@ public class GameOfTexasScramble {
         char language = sc.next().charAt(0);
         bag = bagOfLanguage(language);
         dictionary = getDictionary(language);
+        wordFrequencyDictionary = getWordFrequencyDictionary(language);
     }
 
 
@@ -64,17 +67,15 @@ public class GameOfTexasScramble {
     public ScrabbleDictionary getDictionary(char languageChar){
         ScrabbleDictionary newDict = null;
         try {
+            String filename = null;
             if (languageChar == 'e' || languageChar == 'E') {
-                String filename = "usEnglishScrabbleWordlist.txt";
-                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
-                String filepath = url.getPath();
-                newDict = new ScrabbleDictionary(filepath);
+                filename = "usEnglishScrabbleWordlist.txt";
             } else if (languageChar == 'f' || languageChar == 'F') {
-                String filename = "FrenchScrabbleWordlist.txt";
-                URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
-                String filepath = url.getPath();
-                newDict = new ScrabbleDictionary(filepath);
+                filename = "FrenchScrabbleWordlist.txt";
             }
+            URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
+            String filepath = url.getPath();
+            newDict = new ScrabbleDictionary(filepath);
         }
         catch (Exception e){
             System.out.println("Error selecting dictionary");
@@ -82,6 +83,27 @@ public class GameOfTexasScramble {
         }
 
         return newDict;
+    }
+
+    public WordFrequencyDictionary getWordFrequencyDictionary(char languageChar) {
+        WordFrequencyDictionary newFrequencies;
+        try {
+            String filename = null;
+            if (languageChar == 'e' || languageChar == 'E') {
+                filename = "englishWordFrequency.txt";
+            } else if (languageChar == 'f' || languageChar == 'F') {
+                //filename = "FrenchScrabbleWordlist.txt";
+                System.out.println("FRENCH FREQUENCIES NOT AVAILABLE");     //TODO find french frequencies
+            }
+            URL url = ScrabbleDictionary.class.getResource("/WordFrequencies/" + filename);
+            String filepath = url.getPath();
+            newFrequencies = new WordFrequencyDictionary(filepath);
+        }
+        catch (Exception e){
+            System.out.println("Error selecting word frequency");
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public int getNumPlayers() {
