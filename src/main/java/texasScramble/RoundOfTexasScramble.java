@@ -75,7 +75,6 @@ public class RoundOfTexasScramble {
                 }
             }
         }
-
         System.out.println("\n");
     }
 
@@ -146,8 +145,6 @@ public class RoundOfTexasScramble {
         PotOfMoney mainPot = new PotOfMoney(listPlayers);
         pots.add(mainPot);
 
-        Integer numActive = mainPot.getNumPlayers();
-        Integer stake = -1;
         bag.reset();
 
         canOpen(mainPot);
@@ -175,9 +172,7 @@ public class RoundOfTexasScramble {
 
         System.out.println("---PREFLOP---");
 
-
-        int playerStart = button + 3;    //3 becouse player left to big blind starts
-
+        int playerStart = button + 3;    //3 because player left to big blind starts
         bettingCycle(mainPot, playerStart);
     }
 
@@ -189,8 +184,6 @@ public class RoundOfTexasScramble {
         dealCommunity(3);
 
         int playerStart = button + 1;    //3 becouse player left to big blind starts
-
-
         bettingCycle(mainPot, playerStart);
 
     }
@@ -199,12 +192,10 @@ public class RoundOfTexasScramble {
 
         System.out.println("---TURN---");
 
-
         // Deal the turn
         dealCommunity(1);
 
-        int playerStart = button + 1;    //3 becouse player left to big blind starts
-
+        int playerStart = button + 1;
         bettingCycle(mainPot, playerStart);
     }
 
@@ -215,8 +206,7 @@ public class RoundOfTexasScramble {
         // Deal the river
         dealCommunity(1);
 
-        int playerStart = button + 1;    //3 becouse player left to big blind starts
-
+        int playerStart = button + 1;
         bettingCycle(mainPot, playerStart);
     }
 
@@ -231,7 +221,11 @@ public class RoundOfTexasScramble {
         //for each player's word all other players have the option to challenge it
         for (Player player: players) {
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
-            for (Player challenger : players) {
+
+            //each player asked if they want to challenge in a random order (so different players take the risk of challenging)
+            List<Player> shuffledPlayers = Arrays.asList(players);
+            Collections.shuffle(shuffledPlayers);
+            for (Player challenger: shuffledPlayers) {
                 if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger) {
                     challenge(player, challenger, mainPot);
                 }
@@ -243,15 +237,16 @@ public class RoundOfTexasScramble {
 
         System.out.println("---SHOWDOWN---");
 
-        int bestHandScore = 0, score = 0, bestPos = 0, potNum = 0;
-        Player bestPlayer = null, currentPlayer = null;
+        int bestHandScore = 0;
+        int score;
+        int potNum = 0;
+        Player bestPlayer = null;
+        Player currentPlayer = null;
 
         for (PotOfMoney pot : pots) {
-
             if (pots.size() > 1) {        //if there's more than 1 pot say which pot it is
                 System.out.println("---For pot " + potNum + " ---");
             }
-
 
             bestPlayer = pot.getPlayer(0);
             for (int i = 0; i < pot.getNumPlayers(); i++) {
@@ -266,7 +261,8 @@ public class RoundOfTexasScramble {
                     bestPlayer = currentPlayer;
                 }
             }
-            System.out.println(bestPlayer.getName() + " takes pot of " + pot.getTotal() + " chips!");
+            System.out.println(bestPlayer.getName() + " takes pot of " + pot.getTotal() + " chips! \n " +
+                    "There word was \"" + bestPlayer.getWord() + "\"");
 
             bestPlayer.takePot(pot);
             potNum++;
@@ -274,12 +270,10 @@ public class RoundOfTexasScramble {
     }
 
     public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int indexCurrPot = 0;
         int stake = -1;
         int numActive = mainPot.getNumPlayers();
 
         while (stake < mainPot.getCurrentStake() && numActive > 1) {
-
             stake = mainPot.getCurrentStake();
 
             for (int i = 0; i < getNumPlayers(); i++) {
@@ -290,7 +284,6 @@ public class RoundOfTexasScramble {
                 }
 
                 delay(DELAY_BETWEEN_ACTIONS);
-
                 currentPlayer.nextAction(mainPot);
 
                 //actions after player's move
@@ -303,7 +296,7 @@ public class RoundOfTexasScramble {
 
     /*
      * Sorts the player's in ascending order of stake
-     * for each player who's stake is less than the max player's stake
+     * for each player whose stake is less than the max player's stake
      *		if the player has no stake it is already fully contained in the last pot
      *		otherwise create a new pot with this player and all remaining players (those with greater or equal stake)
      * 		pot total is this players stake * number of remaining players
@@ -312,12 +305,10 @@ public class RoundOfTexasScramble {
      */
     public ArrayList<PotOfMoney> newSidePots(PotOfMoney pot) {
         ArrayList<PotOfMoney> sidePots = new ArrayList<>();
-
         Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
 
         ArrayList<Player> remainingPlayers = new ArrayList<>(pot.getPlayers());
         for(Player player: pot.getPlayers()){
-
             if(player.getStake() == 0){				//player has excess stake not already in a pot
                 remainingPlayers.remove(player);
                 continue;
@@ -338,7 +329,6 @@ public class RoundOfTexasScramble {
             sidePots.add(newPot);
             remainingPlayers.remove(player);
         }
-
         return sidePots;
     }
 
@@ -356,7 +346,6 @@ public class RoundOfTexasScramble {
     }
 
     private void printPlayerHand() {
-
         System.out.println(">Your Cards : ");
         for (Tile tile : players[0].getHand().getHand()) {
             System.out.print(tile + " ");
@@ -368,6 +357,7 @@ public class RoundOfTexasScramble {
         try {
             Thread.sleep(numMilliseconds);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
