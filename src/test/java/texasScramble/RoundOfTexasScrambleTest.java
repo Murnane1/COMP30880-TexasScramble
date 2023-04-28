@@ -75,7 +75,7 @@ public class RoundOfTexasScrambleTest {
         me.setWord("XCXYZ");
         round.challenge(me, you, pot);
 
-        assertEquals(0, me.getHand().getBestHandValue());
+        assertEquals(0, me.getWordScore());
         assertEquals(10, you.getBank());
     }
 }

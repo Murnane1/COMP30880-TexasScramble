@@ -16,6 +16,7 @@ public class GameOfScrambleTest {
     BagOfTiles englishBag = new BagOfTiles("ENGLISH");
     BagOfTiles frenchBag = new BagOfTiles("FRENCH");
 
+
     @Before
     public void setUp() {
 
@@ -24,6 +25,15 @@ public class GameOfScrambleTest {
     @Test
     public void bagOfLanguageTest(){
         BagOfTiles englishTest = game.bagOfLanguage('e');
-        assertEquals(englishBag ,englishTest);
+        assertEquals(englishBag.getNumtiles() ,englishTest.getNumtiles());
     }
+
+    @Test
+    public void wordFrequencyDictionaryTest() {
+        WordFrequencyDictionary wordFrequencyDictionary = game.getWordFrequencyDictionary('e');
+        assertEquals(wordFrequencyDictionary.getWordFrequencies().get(0).getWord(), "THE");
+        assertEquals(wordFrequencyDictionary.getWordFrequency("MOUSE"), 33667003);
+
+    }
+
 }

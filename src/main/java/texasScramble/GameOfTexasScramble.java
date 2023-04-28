@@ -86,7 +86,7 @@ public class GameOfTexasScramble {
     }
 
     public WordFrequencyDictionary getWordFrequencyDictionary(char languageChar) {
-        WordFrequencyDictionary newFrequencies;
+        WordFrequencyDictionary newFrequencies = null;
         try {
             String filename = null;
             if (languageChar == 'e' || languageChar == 'E') {
@@ -103,7 +103,7 @@ public class GameOfTexasScramble {
             System.out.println("Error selecting word frequency");
             e.printStackTrace();
         }
-        return null;
+        return newFrequencies;
     }
 
     public int getNumPlayers() {
