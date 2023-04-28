@@ -108,8 +108,8 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    public void dealTo(BagOfTiles bag) {
-        //hand = bag.dealHand();
+    public void dealTo(BagOfTiles bag, ScrabbleDictionary dictionary) {
+        hand = bag.dealHand(dictionary);
     }
 
     public void setWord(String word){

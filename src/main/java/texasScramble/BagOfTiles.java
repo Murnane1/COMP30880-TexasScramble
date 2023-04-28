@@ -120,4 +120,8 @@ public class BagOfTiles {
     public int getNumtiles(){
         return numTiles;
     }
+
+    public ScrambleHand dealHand(ScrabbleDictionary dictionary) {
+        return new ScrambleHand(this, dictionary);
+    }
 }

@@ -30,7 +30,7 @@ public class GameOfTexasScramble {
                 players[i] = new HumanScramblePlayer(names[i].trim(), bank);
             }
             else {
-                players[i] = new ComputerScramblePlayer(names[i].trim(), bank);
+                players[i] = new FrequencyComputerPlayer(names[i].trim(), bank, 0, 100, wordFrequencyDictionary);
             }
         }
 

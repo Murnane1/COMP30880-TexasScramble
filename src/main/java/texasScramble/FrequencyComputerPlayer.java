@@ -51,8 +51,13 @@ public class FrequencyComputerPlayer extends Player{
 
     @Override
     boolean shouldChallenge(PotOfMoney pot, String word) {
-        if(word.length() < 7){
-
+        int wordValue = getHand().calculateWordValue(word);
+        if(wordValue > 20){
+            if(word.length() < 5){
+                return Math.abs(dice.nextInt()) % 1000 > getRiskTolerance();
+            } else if (word.length() == 5 && !word.equals("QUACK") && !word.equals("QUICK")) {
+                return Math.abs(dice.nextInt()) % 100 > getRiskTolerance();
+            }
         }
         return false;
     }

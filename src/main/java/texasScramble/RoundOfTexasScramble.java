@@ -5,7 +5,7 @@ import java.util.*;
 
 public class RoundOfTexasScramble {
     public static final int DELAY_BETWEEN_ACTIONS = 1000;  // number of milliseconds between game actions
-    private static final int PENALTY = 3;
+    public static final int PENALTY = 3;
     private Player[] players;
     private BagOfTiles bag;
     private ScrabbleDictionary dictionary;
@@ -69,7 +69,7 @@ public class RoundOfTexasScramble {
                 else {
 
                     getPlayer(index).reset();
-                    getPlayer(index).dealTo(bag);
+                    getPlayer(index).dealTo(bag, dictionary);
 
                     System.out.println(getPlayer(index));
                 }
@@ -226,7 +226,7 @@ public class RoundOfTexasScramble {
             List<Player> shuffledPlayers = Arrays.asList(players);
             Collections.shuffle(shuffledPlayers);
             for (Player challenger: shuffledPlayers) {
-                if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger) {
+                if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger && challenger.getBank() > PENALTY) {
                     challenge(player, challenger, mainPot);
                 }
             }

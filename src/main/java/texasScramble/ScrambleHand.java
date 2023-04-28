@@ -204,6 +204,7 @@ public class ScrambleHand {
                 return Integer.MAX_VALUE;   //best possible word
             }
             //TODO (max word value is 29+50=79)
+            return wordValue;
         }
 
         for(Tile t : playerTiles){
