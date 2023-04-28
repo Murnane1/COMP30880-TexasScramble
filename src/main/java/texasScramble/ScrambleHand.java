@@ -10,8 +10,10 @@ public class ScrambleHand {
     private List<Tile> communityTiles;
     private int bestHandValue;
     private TrieDictionary trieDictionary;
+    private BagOfTiles bag;
 
     public static final int TOTAL_TILES = 7;
+    private final static int ALL_LETTER_BONUS = 50;
 
     public ScrambleHand(BagOfTiles tiles, ScrabbleDictionary scrabbleDictionary){
         this.playerTiles = new ArrayList<>(); //init player tiles
@@ -21,6 +23,7 @@ public class ScrambleHand {
         this.communityTiles = new ArrayList<>(); //init community tiles
         this.bestHandValue = 0;
         this.trieDictionary = scrabbleDictionary.getTrie();
+        bag = tiles;
     }
 
     @Override
@@ -144,11 +147,10 @@ public class ScrambleHand {
         }
     }
 
-    public static int calculateWordValue(String word) {
-        BagOfTiles bagOfTiles = new BagOfTiles();
+    public int calculateWordValue(String word) {
         int value = 0;
         for (char c : word.toCharArray()) {
-            for (Tile tile : bagOfTiles.getBag()) {
+            for (Tile tile : bag.getBag()) {
                 if (tile != null){
                     if (tile.getLetter() == c) {
                         value += tile.getValue();
@@ -157,13 +159,50 @@ public class ScrambleHand {
                 }
             }
         }
+        if(word.length() == TOTAL_TILES){
+            value += ALL_LETTER_BONUS;
+        }
         return value;
     }
-    
 
+    public int getRiskWorthiness(String word) {
+        int wordValue = calculateWordValue(word);
+        if(communityTiles.size() == 0){
+            //TODO how will 5 more cards effect current hand (vowels more useful?)
+        }
+        else if(communityTiles.size() == 3){
+
+        }
+        else if(communityTiles.size() == 4){
+
+        }
+        else {
+
+        }
+        return wordValue; //TODO (max word value is 29+50=79) , how to manage incomplete hands
+    }
+
+    public int getBestCommunityWordValue() {
+
+        return 0;
+    }
+
+    public int getBettingRound(){
+        int betRound = 0;   //preflop
+        if(communityTiles.size() == 3){
+            betRound = 1;   //flop
+        }
+        else if(communityTiles.size() == 4){
+            betRound = 2;   //turn
+        }
+        else if(communityTiles.size() == 5){
+            betRound = 3;   //river
+        }
+        return betRound;
+    }
 
     public static void main(String[] args) throws IOException{
-        BagOfTiles bag = new BagOfTiles();
+        BagOfTiles bag = new BagOfTiles("ENGLISH");
         String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
         File file = new File(path);
         ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());
@@ -180,7 +219,7 @@ public class ScrambleHand {
         List<String> possibleWords = hand.getPossibleWords(dictionary);
         for (String word: possibleWords){
             boolean contains = dictionary.contains(word);
-            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + calculateWordValue(word));
+            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
         }
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
