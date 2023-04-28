@@ -44,7 +44,7 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    public String chooseWord() {
+    public void chooseWord() {
         boolean hasWord = false;
         String enteredWord = null;
 
@@ -56,7 +56,8 @@ public class HumanScramblePlayer extends Player {
             hasWord = checkWord(enteredWord);
         }
 
-        return enteredWord;
+        setWord(enteredWord);
+        setWordScore(getHand().calculateWordValue(enteredWord));
     }
 
     public boolean checkWord(String testWord){

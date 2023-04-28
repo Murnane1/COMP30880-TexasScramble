@@ -28,28 +28,25 @@ public class ComputerScramblePlayer extends Player {
 
     @Override
     boolean shouldSee(PotOfMoney pot) {
-        word = chooseWord();
         if (getStake() == 0)
             return true;
         else
-            return Math.abs(dice.nextInt())%100 < getHand().getRiskWorthiness(word) +
+            return Math.abs(dice.nextInt())%100 < getHand().getHandQuality(word) +
                     getRiskTolerance();
     }
 
     @Override
     boolean shouldRaise(PotOfMoney pot) {
-        word = chooseWord();
-        return Math.abs(dice.nextInt()) % 80 < getHand().getRiskWorthiness(word) +
+        return Math.abs(dice.nextInt()) % 80 < getHand().getHandQuality(word) +
                 getRiskTolerance();
     }
 
     @Override
     boolean shouldAllIn(PotOfMoney pot) {
-        word = chooseWord();
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
-            return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getRiskWorthiness(word) +
+            return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getHandQuality(word) +
                     getRiskTolerance();
         }
     }
@@ -63,8 +60,10 @@ public class ComputerScramblePlayer extends Player {
     }
 
     @Override
-    String chooseWord() {
-        return "computerWord";
+    void chooseWord() {
+        String choosenWord = "compWord";
+        setWord(choosenWord);
+        setWordScore(getHand().calculateWordValue(choosenWord));
         //first contructable word from sorted wordlist
     }
 }

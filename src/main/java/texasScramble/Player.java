@@ -1,13 +1,14 @@
 package texasScramble;
 
 public abstract class Player {
-    private int bank       		= 0;		 // the total amount of money the player has left, not counting his/her
-    private int stake      		= 0;		 // the amount of money the player has thrown into the current pot
-    private String name    		= "Player";  // the unique identifying name given to the player
-    private ScrambleHand hand 	= null;      // the hand dealt to this player
-    private boolean folded 		= false;     // set to true when the player folds (gives up)
-    private boolean allIn       = false;
-    private String word         = null;
+    private int bank = 0;         // the total amount of money the player has left, not counting his/her
+    private int stake = 0;         // the amount of money the player has thrown into the current pot
+    private String name = "Player";  // the unique identifying name given to the player
+    private ScrambleHand hand = null;      // the hand dealt to this player
+    private boolean folded = false;     // set to true when the player folds (gives up)
+    private boolean allIn = false;
+    private String word = null;
+    private int wordScore = 0;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -15,9 +16,9 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    public Player(String name, int money)	{
+    public Player(String name, int money) {
         this.name = name;
-        bank      = money;
+        bank = money;
         reset();
     }
 
@@ -29,8 +30,8 @@ public abstract class Player {
 
     public void reset() {
         folded = false;
-        allIn  = false;
-        stake  = 0;
+        allIn = false;
+        stake = 0;
     }
 
 
@@ -78,10 +79,16 @@ public abstract class Player {
         return word;
     }
 
+    public int getWordScore() {
+        return wordScore;
+    }
+
     public boolean isBankrupt() {
-        // no more money left
-        //TODO maybe make a difference between bankrupt and allIn
-        return bank == 0;
+        /*if (isAllIn()) {
+            return false;
+        } else {*/
+            return bank == 0;
+        //}
     }
 
 
@@ -101,19 +108,16 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-/*
-    public void reorganizeHand() {
-        hand = hand.categorize();
-    }
-*/
-
-
     public void dealTo(BagOfTiles bag) {
         //hand = bag.dealHand();
     }
 
     public void setWord(String word){
         this.word = word;
+    }
+
+    public void setWordScore(int wordScore) {
+        this.wordScore = wordScore;
     }
 
     public void setHand(ScrambleHand hand){
@@ -227,7 +231,7 @@ public abstract class Player {
 
     abstract boolean shouldChallenge(PotOfMoney pot, String word);
 
-    abstract String chooseWord();
+    abstract void chooseWord();
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -236,6 +240,7 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
+        chooseWord();
         if (hasFolded()) return;  // no longer in the game
 
         if (isBankrupt() ) {

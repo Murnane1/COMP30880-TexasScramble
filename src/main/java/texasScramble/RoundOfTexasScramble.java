@@ -255,7 +255,7 @@ public class RoundOfTexasScramble {
                     continue;
                 }
                 //System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getHand());
-                score = currentPlayer.getHand().getBestHandValue();
+                score = currentPlayer.getWordScore();
                 if (score > bestHandScore) {
                     bestHandScore = score;
                     bestPlayer = currentPlayer;
@@ -335,13 +335,13 @@ public class RoundOfTexasScramble {
     public void challenge(Player player, Player challenger, PotOfMoney pot){
         System.out.println(challenger.getName() + " challenges " + player.getName() + "'s word \"" + "\"");
         if(dictionary.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
+            challenger.penalty(PENALTY, pot);
             System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is a valid word \n "
                 + "The challenger " + challenger.getName() + " pays a penalty of " + PENALTY + " into the pot");
-            challenger.penalty(PENALTY, pot);
         } else {                        //if word invalid - player's score for round is 0
+            player.setWordScore(0);
             System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is NOT a valid word \n"
-                    + player.getName() + " gets a score of" + player.getHand().getBestHandValue() + "for this round");
-            player.getHand().setBestHandValueToZero();
+                    + player.getName() + " gets a score of" + player.getWordScore() + "for this round");
         }
     }
 

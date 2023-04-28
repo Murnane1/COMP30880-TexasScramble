@@ -8,12 +8,14 @@ import java.io.IOException;
 public class ScrambleHand {
     private List<Tile> playerTiles;
     private List<Tile> communityTiles;
-    private int bestHandValue;
+    //private int bestHandValue;
     private TrieDictionary trieDictionary;
+    private ScrabbleDictionary dictionary;
     private BagOfTiles bag;
 
     public static final int TOTAL_TILES = 7;
     private final static int ALL_LETTER_BONUS = 50;
+    private final static int BEST_WORD = 79;
 
     public ScrambleHand(BagOfTiles tiles, ScrabbleDictionary scrabbleDictionary){
         this.playerTiles = new ArrayList<>(); //init player tiles
@@ -21,8 +23,10 @@ public class ScrambleHand {
         this.playerTiles.add(tiles.dealNext());
         
         this.communityTiles = new ArrayList<>(); //init community tiles
-        this.bestHandValue = 0;
+        //this.bestHandValue = 0;
         this.trieDictionary = scrabbleDictionary.getTrie();
+
+        dictionary = scrabbleDictionary;
         bag = tiles;
     }
 
@@ -59,9 +63,9 @@ public class ScrambleHand {
         communityTiles.set(num, tile);
     }
 
-    public void setBestHandValueToZero() {
+  /*  public void setBestHandValueToZero() {
         bestHandValue = 0;
-    }
+    }*/
 
     //getters
     public List<Tile> getCommunityTiles() { // gets all current community tiles
@@ -91,9 +95,9 @@ public class ScrambleHand {
         return tile.getValue();
     }
     
-    public int getBestHandValue(){
+    /*public int getBestHandValue(){
         return this.bestHandValue;
-    }
+    }*/
 
     public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
         List<Tile> hand = getHand();
@@ -111,15 +115,14 @@ public class ScrambleHand {
         return trieDictionary.contains(word);
     }
 
-    public List<String> getPossibleWords(ScrabbleDictionary dictionary) {
+    public List<String> getPossibleWords() {
         List<String> possibleWords = new ArrayList<>();
         List<Tile> hand = getHand();
-        generatePossibleWords(hand, "", dictionary, possibleWords);
+        generatePossibleWords(hand, "", possibleWords);
         return possibleWords;
     }
 
-    private void generatePossibleWords(List<Tile> tiles, String wordSoFar, ScrabbleDictionary dictionary,
-            List<String> possibleWords) {
+    private void generatePossibleWords(List<Tile> tiles, String wordSoFar, List<String> possibleWords) {
         if (tiles.isEmpty()) {
             if (dictionary.contains(wordSoFar)) {
                 if (possibleWords.contains(wordSoFar)){
@@ -135,11 +138,11 @@ public class ScrambleHand {
             Tile tile = tiles.get(i);
             List<Tile> remainingTiles = new ArrayList<>(tiles);
             remainingTiles.remove(i);
-            generatePossibleWords(remainingTiles, wordSoFar + tile.getLetter(), dictionary, possibleWords);
+            generatePossibleWords(remainingTiles, wordSoFar + tile.getLetter(), possibleWords);
         }
 
         //try not using any tile in the word
-        generatePossibleWords(tiles.subList(1, tiles.size()), wordSoFar, dictionary, possibleWords);
+        generatePossibleWords(tiles.subList(1, tiles.size()), wordSoFar, possibleWords);
 
         //remove empty string at end of list
         if (!possibleWords.isEmpty() && possibleWords.get(possibleWords.size() - 1).isEmpty()) {
@@ -165,26 +168,75 @@ public class ScrambleHand {
         return value;
     }
 
-    public int getRiskWorthiness(String word) {
+    public int getHandQuality(String word) {
         int wordValue = calculateWordValue(word);
-        if(communityTiles.size() == 0){
-            //TODO how will 5 more cards effect current hand (vowels more useful?)
-        }
-        else if(communityTiles.size() == 3){
+        //maybe calculate 7 letter words still possible
+        //average tile 1.87 points
+        //players have about a 15% chance of having a 7 letter word assuming perfect knowledge (1 in 6.67)
+        //so aiming for 7 letters
 
+
+        if(communityTiles.size() == 0){
+            //TODO how will 5 more cards effect current hand (vowels more useful? (max 2 letter score 11)
+            for (Tile t: playerTiles) {
+                wordValue += t.getValue()/2;
+            }
+         }
+        else if(communityTiles.size() == 3){
+            //TODO how will 2 more cards effect current hand (max 5 letter score 21)
+            //have useful pre/suf fixes
+            if(getBestCommunityWordValue() >= wordValue){
+                wordValue -= 8; //every player can use this word
+            }
         }
         else if(communityTiles.size() == 4){
-
+            //TODO how will 1 more card effect current hand (max 6 letter score 28)
+            //have useful pre/suf fixes
+            if(getBestCommunityWordValue() >= wordValue){
+                wordValue -= 12; //every player can use this word
+            }
         }
         else {
-
+            if(getBestCommunityWordValue() >= wordValue){
+                return 0; //every player can use this word
+            }
+            if(wordValue == BEST_WORD){
+                return Integer.MAX_VALUE;   //best possible word
+            }
+            //TODO (max word value is 29+50=79)
         }
-        return wordValue; //TODO (max word value is 29+50=79) , how to manage incomplete hands
+
+        for(Tile t : playerTiles){
+            char c = t.getLetter();
+            if(c ==  'A' || c ==  'E' || c ==  'I' || c ==  'T' || c ==  'N' || c ==  'R' || c ==  'S')                     //most useful
+                wordValue += 5;
+            else if(c ==  'B' || c ==  'V' || c ==  'U' || c ==  'Z' || c ==  'X' || c ==  'W' || c ==  'K' || c ==  'J')   //biggest hinderance
+                wordValue -= 5;
+            else if (c == 'Q') {
+                wordValue -= 9;
+            }
+        }
+
+        return wordValue;
     }
 
     public int getBestCommunityWordValue() {
+        List<String> possibleWords = getCommunityWords(dictionary);
+        int bestCommunityWordValue = 0;
+        for (String word : possibleWords){
+            int wordValue = calculateWordValue(word);
+            if(wordValue > bestCommunityWordValue){
+                bestCommunityWordValue = wordValue;
+            }
+        }
+        return bestCommunityWordValue;
+    }
 
-        return 0;
+    public List<String> getCommunityWords(ScrabbleDictionary dictionary) {
+        List<String> possibleWords = new ArrayList<>();
+        List<Tile> hand = communityTiles;
+        generatePossibleWords(hand, "", possibleWords);
+        return possibleWords;
     }
 
     public int getBettingRound(){
@@ -216,7 +268,7 @@ public class ScrambleHand {
 
         System.out.println(hand.toString());
 
-        List<String> possibleWords = hand.getPossibleWords(dictionary);
+        List<String> possibleWords = hand.getPossibleWords();
         for (String word: possibleWords){
             boolean contains = dictionary.contains(word);
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
