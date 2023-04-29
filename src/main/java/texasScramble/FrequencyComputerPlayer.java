@@ -91,7 +91,7 @@ public class FrequencyComputerPlayer extends Player{
         String currBestWord = null;
 
         for (String word: possibleWords) {
-            if(wordFrequencyDictionary.getWordFrequency(word) >= wordKnowledge){
+            if(wordFrequencyDictionary.getWordFrequency(word) >= wordKnowledge){            //TODO add random chance of knowing word outside knowledge
                 knownWords.add(word);
                 if(hand.calculateWordValue(word) > currBestWordValue){
                      currBestWordValue = hand.calculateWordValue(word);

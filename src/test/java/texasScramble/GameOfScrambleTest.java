@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class GameOfScrambleTest {
 
     String[] names = {"Me","You","Madonna"};
-    GameOfTexasScramble game = new GameOfTexasScramble(names,50);
+    GameOfTexasScramble game = new GameOfTexasScramble(3,50, "Me");
     BagOfTiles englishBag = new BagOfTiles("ENGLISH");
     BagOfTiles frenchBag = new BagOfTiles("FRENCH");
 

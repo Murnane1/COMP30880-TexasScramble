@@ -20,9 +20,9 @@ public class GameOfTexasScramble {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    public GameOfTexasScramble(String[] names, int bank) {
-        numPlayers = names.length;
+    public GameOfTexasScramble(int numPlayers, int bank, String humanName) {
         players = new Player[numPlayers];
+        this.numPlayers = numPlayers;
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter e to play in English" +
@@ -33,13 +33,10 @@ public class GameOfTexasScramble {
         wordFrequencyDictionary = getWordFrequencyDictionary(language);
 
         //TODO make possible for multiple human players
-        for (int i = 0; i < numPlayers; i++) {
-            if (i == 0){
-                players[i] = new HumanScramblePlayer(names[i].trim(), bank);
-            }
-            else {
-                players[i] = new FrequencyComputerPlayer(names[i].trim(), bank, i*100, i*10, wordFrequencyDictionary);
-            }
+        CreateComputerPlayers computerPlayers = new CreateComputerPlayers(wordFrequencyDictionary, numPlayers-1 , bank, humanName);
+        players[0] = new HumanScramblePlayer(humanName, bank);
+        for(int i=1; i < numPlayers; i++){
+            players[i] = computerPlayers.getPlayer(i-1);
         }
     }
 
@@ -92,7 +89,7 @@ public class GameOfTexasScramble {
             if (languageChar == 'e' || languageChar == 'E') {
                 filename = "englishWordFrequency.txt";
             } else if (languageChar == 'f' || languageChar == 'F') {
-                //filename = "FrenchScrabbleWordlist.txt";
+                //filename = "frenchWordFrequency.txt";
                 System.out.println("FRENCH FREQUENCIES NOT AVAILABLE");     //TODO find french frequencies
             }
             URL url = ScrabbleDictionary.class.getResource("/WordFrequencies/" + filename);
@@ -126,13 +123,11 @@ public class GameOfTexasScramble {
 
     public int getNumSolventPlayers() {
         // how many players still have money left?
-
         int count = 0;
-
-        for (int i = 0; i < getNumPlayers(); i++)
+        for (int i = 0; i < getNumPlayers(); i++) {
             if (getPlayer(i) != null && !getPlayer(i).isBankrupt())
                 count++;
-
+        }
         return count;
     }
 
@@ -176,26 +171,32 @@ public class GameOfTexasScramble {
     //--------------------------------------------------------------------//
 
     public static void main(String[] args) {
-        String[] names = {"Human", "Tom", "Dick", "Harry"};
 
         System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
 
         System.out.print("\nWhat is your name?  ");
-
         byte[] input = new byte[100];
-
+        String humanName = null;
         try {
             System.in.read(input);
-
-            names[0] = new String(input);
+            humanName = new String(input);
+            humanName.trim().replaceAll("\\s","");
         }
-        catch (Exception e){};
+        catch (Exception e){e.printStackTrace();};
+
+        int numPlayers = 0;
+        while (numPlayers < 2 || numPlayers > 9) {
+            System.out.print("\nHow many players should be in the game?  ");
+            Scanner scNP = new Scanner(System.in);
+            numPlayers = scNP.nextInt();
+            //scNP.close();
+        }
 
         int startingBank = 10;
 
         System.out.println("\nLet's play SCRAMBLE ...\n\n");
 
-        GameOfTexasScramble game = new GameOfTexasScramble(names, startingBank);
+        GameOfTexasScramble game = new GameOfTexasScramble(numPlayers, startingBank, humanName);
 
         game.play();
     }

@@ -51,6 +51,7 @@ public class HumanScramblePlayer extends Player {
             enteredWord = sc.nextLine().toUpperCase();
             enteredWord.replace(" ","");
             hasWord = checkWord(enteredWord);
+            //sc.close();
         }
 
         setWord(enteredWord);
