@@ -240,7 +240,6 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
-        chooseWord();
         if (hasFolded()) return;  // no longer in the game
 
         if (isBankrupt() ) {
@@ -254,7 +253,6 @@ public abstract class Player {
         }
         if(shouldAllIn(pot)) {
             allIn(pot);
-            return;
         }
 
         else if(!isAllIn()){
@@ -271,11 +269,10 @@ public abstract class Player {
             }
             if (shouldRaise(pot)){
                 raiseBet(pot);
-                return;
             }
 
             else {
-                System.out.println(pot.getCurrentStake() + " " + getStake());
+                System.out.println("\n> The pot total is " + pot.getTotal() + ". " + getName() + "'s stake is " + getStake());
                 System.out.println("\n> " + getName() + " says: I check!\n");
             }
         }

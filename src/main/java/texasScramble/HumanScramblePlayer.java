@@ -15,11 +15,8 @@ public class HumanScramblePlayer extends Player {
 
     @Override
     public boolean shouldSee(PotOfMoney pot) {
-        if (getStake() == 0)
-            return true;
-        else
-            return askQuestion("Do you want to see the bet of " +
-                    addCount(pot.getCurrentStake() - getStake(), "chip", "chips"));
+        return askQuestion("Do you want to see the bet of " +
+                addCount(pot.getCurrentStake() - getStake(), "chip", "chips"));
     }
 
     @Override
@@ -49,7 +46,7 @@ public class HumanScramblePlayer extends Player {
         String enteredWord = null;
 
         while (hasWord == false) {
-            System.out.print("\n>> " + getName() + "Enter your scramble word");
+            System.out.print("\n>> " + getName() + ", please enter your word: ");
             Scanner sc = new Scanner(System.in);
             enteredWord = sc.nextLine().toUpperCase();
             enteredWord.replace(" ","");

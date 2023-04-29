@@ -26,25 +26,30 @@ public class FrequencyComputerPlayer extends Player{
 
     @Override
     boolean shouldSee(PotOfMoney pot) {
+        chooseWord();
         //TODO should be affected by stake:bank ratio
         if (getStake() == 0)
             return true;
         else
-            return true;
+            return Math.abs(dice.nextInt())%80 < /*getHand().getHandQuality(getWord())*/ +
+                    getRiskTolerance();
     }
 
     @Override
     boolean shouldRaise(PotOfMoney pot) {
+        chooseWord();
         //TODO should be affected by stake:bank ratio
-        return false;
+        return Math.abs(dice.nextInt())%60 < /*getHand().getHandQuality(getWord())*/ +
+                getRiskTolerance();
     }
 
     @Override
     boolean shouldAllIn(PotOfMoney pot) {
+        chooseWord();
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
-            return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getHandQuality(getWord()) +
+            return Math.abs(dice.nextInt()) % 50 + getBank() < /*getHand().getHandQuality(getWord())*/ +
                     getRiskTolerance();
         }
     }
@@ -52,18 +57,33 @@ public class FrequencyComputerPlayer extends Player{
     @Override
     boolean shouldChallenge(PotOfMoney pot, String word) {
         int wordValue = getHand().calculateWordValue(word);
+        if(wordFrequencyDictionary.getWordFrequency(word) > wordKnowledge || wordValue < getWordScore() || getWord().equals(word)) {
+            return false;
+        }
+
         if(wordValue > 20){
+            if(wordValue > 25){
+                if(wordValue > 30){
+                    return Math.abs(dice.nextInt()) % 10 > getRiskTolerance();
+                }
+                if(word.length() > 5){
+                    return Math.abs(dice.nextInt()) % 50 > getRiskTolerance();
+                } else {
+                    return Math.abs(dice.nextInt()) % 25 > getRiskTolerance();
+                }
+            }
             if(word.length() < 5){
                 return Math.abs(dice.nextInt()) % 1000 > getRiskTolerance();
-            } else if (word.length() == 5 && !word.equals("QUACK") && !word.equals("QUICK")) {
-                return Math.abs(dice.nextInt()) % 100 > getRiskTolerance();
+            }
+            else if (word.length() == 5) {
+                return Math.abs(dice.nextInt()) % 200 > getRiskTolerance();
             }
         }
-        return false;
+        return Math.abs(dice.nextInt()) % 300 > getRiskTolerance();
     }
 
     @Override
-    void chooseWord() {               //TODO test
+    void chooseWord() {                 //sets the players word as the highest scoring one from their dictionary
         ScrambleHand hand = getHand();
         List<String> possibleWords = hand.getPossibleWords();
         List<String> knownWords = new ArrayList<>();

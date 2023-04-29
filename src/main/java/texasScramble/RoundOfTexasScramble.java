@@ -210,12 +210,14 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, playerStart);
     }
 
-    private void declareWords(PotOfMoney mainPot) {
+    public void declareWords(PotOfMoney mainPot) {
 
         System.out.println("---WORD REVEAL---");
 
         for (Player player: players) {
-            player.chooseWord();
+            if(!player.hasFolded() || !player.isAllIn()){
+                player.chooseWord();
+            }
         }
 
         //for each player's word all other players have the option to challenge it
@@ -223,11 +225,14 @@ public class RoundOfTexasScramble {
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
             //each player asked if they want to challenge in a random order (so different players take the risk of challenging)
-            List<Player> shuffledPlayers = Arrays.asList(players);
-            Collections.shuffle(shuffledPlayers);
-            for (Player challenger: shuffledPlayers) {
-                if (challenger.shouldChallenge(mainPot, player.getWord()) && player != challenger && challenger.getBank() > PENALTY) {
-                    challenge(player, challenger, mainPot);
+            /*List<Player> shuffledPlayers = Arrays.asList(players);
+            Collections.shuffle(shuffledPlayers);*/
+            for (Player challenger: players) {
+                if(!player.getName().equals(challenger.getName()) && challenger.getBank() > PENALTY){
+                    if (challenger.shouldChallenge(mainPot, player.getWord())) {
+                        challenge(player, challenger, mainPot);
+                        break;
+                    }
                 }
             }
         }
@@ -261,8 +266,8 @@ public class RoundOfTexasScramble {
                     bestPlayer = currentPlayer;
                 }
             }
-            System.out.println(bestPlayer.getName() + " takes pot of " + pot.getTotal() + " chips! \n " +
-                    "There word was \"" + bestPlayer.getWord() + "\"");
+            System.out.println(bestPlayer.getName() + " takes pot of " + pot.getTotal() + " chips!\n" +
+                    "Their word was \"" + bestPlayer.getWord() + "\"");
 
             bestPlayer.takePot(pot);
             potNum++;
@@ -293,6 +298,7 @@ public class RoundOfTexasScramble {
             }
         }
     }
+
 
     /*
      * Sorts the player's in ascending order of stake
@@ -333,7 +339,7 @@ public class RoundOfTexasScramble {
     }
 
     public void challenge(Player player, Player challenger, PotOfMoney pot){
-        System.out.println(challenger.getName() + " challenges " + player.getName() + "'s word \"" + "\"");
+        System.out.println(challenger.getName() + " challenges " + player.getName() + "'s word \"" + player.getWord() + "\"");
         if(dictionary.contains(player.getWord())){        //if word valid - challenger loses penalty cost (to opposition or pot?)
             challenger.penalty(PENALTY, pot);
             System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is a valid word \n "
@@ -341,7 +347,7 @@ public class RoundOfTexasScramble {
         } else {                        //if word invalid - player's score for round is 0
             player.setWordScore(0);
             System.out.println("According to the scrabble dictionary \"" + player.getWord() + "\" is NOT a valid word \n"
-                    + player.getName() + " gets a score of" + player.getWordScore() + "for this round");
+                    + player.getName() + " gets a score of " + player.getWordScore() + " for this round");
         }
     }
 

@@ -71,11 +71,15 @@ public class RoundOfTexasScrambleTest {
     public void testInvalidWordChallenge(){
         assertEquals(0, pot.getTotal());
         assertEquals(10, me.getBank());
+        assertEquals(0, pot.getTotal());
+
 
         me.setWord("XCXYZ");
         round.challenge(me, you, pot);
 
         assertEquals(0, me.getWordScore());
         assertEquals(10, you.getBank());
+        assertEquals(0, pot.getTotal());
+
     }
 }

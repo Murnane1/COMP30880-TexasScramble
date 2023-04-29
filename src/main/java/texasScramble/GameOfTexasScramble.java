@@ -24,16 +24,6 @@ public class GameOfTexasScramble {
         numPlayers = names.length;
         players = new Player[numPlayers];
 
-        //TODO make possible for multiple human players
-        for (int i = 0; i < numPlayers; i++) {
-            if (i == 0){
-                players[i] = new HumanScramblePlayer(names[i].trim(), bank);
-            }
-            else {
-                players[i] = new FrequencyComputerPlayer(names[i].trim(), bank, 0, 100, wordFrequencyDictionary);
-            }
-        }
-
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter e to play in English" +
                 "\n or F to play in French");
@@ -41,6 +31,16 @@ public class GameOfTexasScramble {
         bag = bagOfLanguage(language);
         dictionary = getDictionary(language);
         wordFrequencyDictionary = getWordFrequencyDictionary(language);
+
+        //TODO make possible for multiple human players
+        for (int i = 0; i < numPlayers; i++) {
+            if (i == 0){
+                players[i] = new HumanScramblePlayer(names[i].trim(), bank);
+            }
+            else {
+                players[i] = new FrequencyComputerPlayer(names[i].trim(), bank, i*100, i*10, wordFrequencyDictionary);
+            }
+        }
     }
 
 

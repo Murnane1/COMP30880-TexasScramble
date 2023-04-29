@@ -7,7 +7,6 @@ public class ComputerScramblePlayer extends Player {
     public static final int VARIABILITY		= 50;
     private int riskTolerance				= 0;  // willingness of a player to take risks and bluff
     private Random dice						= new Random(System.currentTimeMillis());
-    private String word;
 
     public ComputerScramblePlayer(String name, int money) {
         super(name, money);
@@ -31,13 +30,13 @@ public class ComputerScramblePlayer extends Player {
         if (getStake() == 0)
             return true;
         else
-            return Math.abs(dice.nextInt())%100 < getHand().getHandQuality(word) +
+            return Math.abs(dice.nextInt())%100 < getHand().getHandQuality(getWord()) +
                     getRiskTolerance();
     }
 
     @Override
     boolean shouldRaise(PotOfMoney pot) {
-        return Math.abs(dice.nextInt()) % 80 < getHand().getHandQuality(word) +
+        return Math.abs(dice.nextInt()) % 80 < getHand().getHandQuality(getWord()) +
                 getRiskTolerance();
     }
 
@@ -46,7 +45,7 @@ public class ComputerScramblePlayer extends Player {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
-            return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getHandQuality(word) +
+            return Math.abs(dice.nextInt()) % 100 + getBank() < getHand().getHandQuality(getWord()) +
                     getRiskTolerance();
         }
     }
