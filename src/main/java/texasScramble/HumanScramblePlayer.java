@@ -94,17 +94,21 @@ public class HumanScramblePlayer extends Player {
     public boolean askQuestion(String question) 	{
         System.out.print("\n>> " + question + " (y/n)?  ");
 
-        byte[] input = new byte[100];
+        boolean haveAnswer = false;
+        while (!haveAnswer){
+            byte[] input = new byte[100];
+            try {
+                System.in.read(input);
 
-        try {
-            System.in.read(input);
-
-            for (int i = 0; i < input.length; i++)
-                if ((char)input[i] == 'y' || (char)input[i] == 'Y')
-                    return true;
+                for (int i = 0; i < input.length; i++)
+                    if ((char)input[i] == 'y' || (char)input[i] == 'Y')
+                        return true;
+                    else if ((char)input[i] == 'n' || (char)input[i] == 'N')
+                        return false;
+            }
+            catch (Exception e){};
+            System.out.println("Please enter 'y' or 'n' to answer");
         }
-        catch (Exception e){};
-
         return false;
     }
 }

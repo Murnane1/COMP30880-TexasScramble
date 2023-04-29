@@ -47,7 +47,7 @@ public abstract class Player {
         else if (isAllIn()) {
             return "> " + getName() + " is all in, and has " + addCount(getBank(), "chip", "chips") + " in the bank.";
         } else
-            return "> " + getName() + " has  " + addCount(getBank(), "chip", "chips") + " in the bank";
+            return "> " + getName() + " has " + addCount(getBank(), "chip", "chips") + " in the bank";
     }
 
 
