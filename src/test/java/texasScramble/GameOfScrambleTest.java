@@ -36,4 +36,11 @@ public class GameOfScrambleTest {
 
     }
 
+    @Test
+    public void verifyNamesTest(){
+        String[] takenNames = {"Tom", "Dick", "Harry", "Sarah", "Maggie", "Andrew", "Zoe", "Sadbh", "Mark", "Sean"};
+        String humanName = "Sadbh";
+        assertTrue(Arrays.asList(takenNames).contains(humanName));
+    }
+
 }

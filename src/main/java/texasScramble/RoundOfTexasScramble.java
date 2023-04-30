@@ -87,7 +87,6 @@ public class RoundOfTexasScramble {
         while (players[(button + i) % numPlayers] != null && players[(button + i) % numPlayers].getBank() < bigBlind) {
             if (numPlayers <= 1) {
                 System.exit(0);
-                ;
                 return;
             }
             //Player does not have enough chips to open

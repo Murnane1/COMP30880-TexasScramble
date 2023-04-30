@@ -2,6 +2,7 @@ package texasScramble;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameOfTexasScramble {
@@ -155,12 +156,13 @@ public class GameOfTexasScramble {
             round.play();
 
             smallBlind += SMALL_BLIND_INCREASE_PER_ROUND;
+            int bigBlind = smallBlind*2;
             button++;
             try {
-                if(getNumPlayersMeetBlinds(smallBlind*2) < 2){
-                    System.out.println("The game is over. There is only one player remaining in the game.");
+                if(getNumPlayersMeetBlinds(bigBlind) < 2){
+                    System.out.println("The game is over. There is only one player able to meet the big blind of " + bigBlind);
                     for (Player player : players){
-                        if (player != null && player.getBank() > smallBlind*2)
+                        if (player != null && player.getBank() > bigBlind)
                             System.out.println(player.getName() + " is the WINNER!");
                     }
                     return;
@@ -190,15 +192,23 @@ public class GameOfTexasScramble {
     public static void main(String[] args) {
 
         System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
-
-        System.out.print("\nWhat is your name?  ");
-        byte[] input = new byte[10];
+        String[] takenNames = {"Tom", "Dick", "Harry", "Sarah", "Maggie", "Andrew", "Zoe", "Sadbh", "Mark", "Sean"};
+        //byte[] input = new byte[10];
         String humanName = null;
-        try {
-            System.in.read(input);
-            humanName = new String(input);
+        while (humanName == null || humanName == "" || Arrays.asList(takenNames).contains(humanName)){
+            System.out.print("\nWhat is your name?  ");
+
+            try {
+                Scanner scanName = new Scanner(System.in);
+                humanName = scanName.nextLine();
+                if(humanName == "" || humanName == null){
+                    System.out.println("You must have a name");
+                } else if (Arrays.asList(takenNames).contains(humanName)) {
+                    System.out.println("The name " + humanName + " is already taken");
+                }
+            }
+            catch (Exception e){e.printStackTrace();}
         }
-        catch (Exception e){e.printStackTrace();};
 
         int numPlayers = 0;
         while (numPlayers < 2 || numPlayers > 9) {
