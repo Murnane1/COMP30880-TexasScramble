@@ -259,15 +259,14 @@ public class RoundOfTexasScramble {
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
                     continue;
                 }
-                //System.out.println("Player " + currentPlayer.getName() + "'s hand: " + currentPlayer.getHand().getHand());
                 score = currentPlayer.getWordScore();
                 if (score > bestHandScore) {
                     bestHandScore = score;
                     bestPlayer = currentPlayer;
                 }
             }
-            System.out.println(bestPlayer.getName() + " takes pot of " + pot.getTotal() + " chips!\n" +
-                    "Their word was \"" + bestPlayer.getWord() + "\"");
+            System.out.println(bestPlayer.getName() + " takes pot of " + bestPlayer.addCount(pot.getTotal(), "chip", "chips") +
+                    "Their word was \"" + bestPlayer.getWord() + "\" with a score of " + bestPlayer.getWordScore());
 
             bestPlayer.takePot(pot);
             potNum++;

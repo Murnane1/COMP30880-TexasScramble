@@ -120,7 +120,6 @@ public class GameOfTexasScramble {
             return null;
     }
 
-
     public int getNumSolventPlayers() {
         // how many players still have money left?
         int count = 0;
@@ -131,6 +130,15 @@ public class GameOfTexasScramble {
         return count;
     }
 
+    public int getNumPlayersMeetBlinds(int bigBlind) {
+        // how many players can meet the blind for the upcoming round
+        int count = 0;
+        for (int i = 0; i < getNumPlayers(); i++) {
+            if (getPlayer(i) != null && getPlayer(i).getBank() >= bigBlind)
+                count++;
+        }
+        return count;
+    }
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -149,6 +157,15 @@ public class GameOfTexasScramble {
             smallBlind += SMALL_BLIND_INCREASE_PER_ROUND;
             button++;
             try {
+                if(getNumPlayersMeetBlinds(smallBlind*2) < 2){
+                    System.out.println("The game is over. There is only one player remaining in the game.");
+                    for (Player player : players){
+                        if (player != null && player.getBank() > smallBlind*2)
+                            System.out.println(player.getName() + " is the WINNER!");
+                    }
+                    return;
+                }
+
                 System.out.print("\n\nPlay another round? Press 'q' to terminate this game ... ");
 
                 byte[] input = new byte[100];
@@ -175,12 +192,11 @@ public class GameOfTexasScramble {
         System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
 
         System.out.print("\nWhat is your name?  ");
-        byte[] input = new byte[100];
+        byte[] input = new byte[10];
         String humanName = null;
         try {
             System.in.read(input);
             humanName = new String(input);
-            humanName.trim().replaceAll("\\s","");
         }
         catch (Exception e){e.printStackTrace();};
 

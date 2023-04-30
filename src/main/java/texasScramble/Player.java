@@ -129,14 +129,7 @@ public abstract class Player {
     }
 
     public void takePot(PotOfMoney pot) {
-        // when the winner of a hand takes the pot as his/her winnings
-
-        System.out.println("\n> " + getName() + " says: I WIN " + addCount(pot.getTotal(), "chip", "chips") + "!\n");
-        System.out.println("Winning hand: \n" + hand.toString());
-
         bank += pot.takePot();
-
-        System.out.println(this);
     }
 
     public void penalty(int penaltyValue, PotOfMoney pot) {
@@ -150,13 +143,13 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    public void fold() {
+    public void fold(PotOfMoney pot) {
         if (!folded)
             System.out.println("\n> " + getName() + " says: I fold!\n");
 
         folded = true;
+        pot.removePlayer(this);
     }
-
 
     public void openBetting(PotOfMoney pot) {
         if (bank == 0) return;
@@ -213,6 +206,7 @@ public abstract class Player {
         stake += bank;
         bank = 0;
         allIn = true;
+        System.out.println("\n> " + getName() + " says: ALL IN!\n");
     }
 
     //--------------------------------------------------------------------//
@@ -240,46 +234,39 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
+        boolean seesBet = false;
+
         if (hasFolded()) return;  // no longer in the game
 
         if (isBankrupt() ) {
-            // not enough money to cover the bet
-
-            System.out.println("\n> " + getName() + " says: I'm out!\n");
-
-            fold();
-
+            fold(pot);
             return;
         }
+
         if(shouldAllIn(pot)) {
             allIn(pot);
         }
-
         else if(!isAllIn()){
             if (pot.getCurrentStake() > getStake()) {
                 // existing bet must be covered
 
                 if (shouldSee(pot)) {
                     seeBet(pot);
+                    seesBet = true;
                 }
                 else{
-                    fold();
+                    fold(pot);
                     return;
                 }
             }
             if (shouldRaise(pot)){
                 raiseBet(pot);
-            }
-
-            else {
-                System.out.println("\n> The pot total is " + pot.getTotal() + ". " + getName() + "'s stake is " + getStake());
-                System.out.println("\n> " + getName() + " says: I check!\n");
+            } else {
+                if(!seesBet)
+                    System.out.println("\n> " + getName() + " says: I check!\n");
             }
         }
     }
-
-    //TODO method to deal community tiles (for Round)
-
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
