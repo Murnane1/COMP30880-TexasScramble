@@ -84,17 +84,10 @@ public abstract class Player {
     }
 
     public boolean isBankrupt() {
-        /*if (isAllIn()) {
-            return false;
-        } else {*/
-            return bank == 0;
-        //}
+        return bank == 0;
     }
 
-
     public boolean hasFolded() {
-        // has given up on the current hand
-
         return folded;
     }
 
@@ -151,36 +144,23 @@ public abstract class Player {
         pot.removePlayer(this);
     }
 
-    public void openBetting(PotOfMoney pot) {
-        if (bank == 0) return;
-
-        stake++;
-        bank--;
-
-        pot.raiseStake(1);
-
-        System.out.println("\n> " + getName() + " says: I open with one chip!\n");
-    }
-
     public boolean postBlind(PotOfMoney pot, int blindAmt, String type) {
-        if (bank == 0) return false;
-
-        //FLAG to check if player had enough for blind
-        boolean enough = true;
+        if (bank < blindAmt) return false;
 
         stake = stake + blindAmt;
         pot.addStake(blindAmt);
         bank = bank-blindAmt;
 
         System.out.println("\n> " + getName() + " says: I post " + type + " with "+ blindAmt +" chip!\n");
-        return enough;
+        return true;
     }
 
     public void seeBet(PotOfMoney pot) {
         int needed  = pot.getCurrentStake() - getStake();
-
-        if (needed == 0 || needed > getBank())
+        if (needed == 0 || needed > getBank()) {
+            System.out.println(getName() + " cannot cover bet");
             return;
+        }
 
         stake += needed;
         bank  -= needed;
@@ -203,10 +183,11 @@ public abstract class Player {
     }
 
     public void allIn(PotOfMoney pot) {
+        pot.addToPot(bank - stake);
         stake += bank;
         bank = 0;
         allIn = true;
-        System.out.println("\n> " + getName() + " says: ALL IN!\n");
+        System.out.println("\n> " + getName() + " says: ALL IN with " + addCount(getStake(),"chip","chips") + "!\n");
     }
 
     //--------------------------------------------------------------------//
@@ -234,25 +215,18 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
-        boolean seesBet = false;
+        boolean canCheck = true;
 
         if (hasFolded()) return;  // no longer in the game
 
-        if (isBankrupt() ) {
-            fold(pot);
-            return;
-        }
-
-        if(shouldAllIn(pot)) {
+        if(shouldAllIn(pot) && pot.getCurrentStake() >= getStake() + getBank()) {
             allIn(pot);
         }
         else if(!isAllIn()){
-            if (pot.getCurrentStake() > getStake()) {
-                // existing bet must be covered
-
+            if (pot.getCurrentStake() > getStake()) {                   // existing bet must be covered
                 if (shouldSee(pot)) {
                     seeBet(pot);
-                    seesBet = true;
+                    canCheck = false;
                 }
                 else{
                     fold(pot);
@@ -262,7 +236,7 @@ public abstract class Player {
             if (shouldRaise(pot)){
                 raiseBet(pot);
             } else {
-                if(!seesBet)
+                if(canCheck)
                     System.out.println("\n> " + getName() + " says: I check!\n");
             }
         }

@@ -14,6 +14,7 @@ public class GameOfTexasScramble {
     private final static int INIT_SMALL_BLIND = 1;
 
     private final static int SMALL_BLIND_INCREASE_PER_ROUND = 1;
+    private final static int MAX_NUM_PLAYERS = 9;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -25,10 +26,16 @@ public class GameOfTexasScramble {
         players = new Player[numPlayers];
         this.numPlayers = numPlayers;
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter e to play in English" +
-                "\n or F to play in French");
-        char language = sc.next().charAt(0);
+        char language = 0;
+        while (language != 'e' && language != 'E' && language != 'f' && language != 'F'){
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter e to play in English" +
+                    "\n or F to play in French");
+            language = sc.next().charAt(0);
+            if(language != 'e' && language != 'E' && language != 'f' && language != 'F'){
+                System.out.println("You must enter the character of a valid language. \n");
+            }
+        }
         bag = bagOfLanguage(language);
         dictionary = getDictionary(language);
         wordFrequencyDictionary = getWordFrequencyDictionary(language);
@@ -197,10 +204,10 @@ public class GameOfTexasScramble {
         String humanName = null;
         while (humanName == null || humanName == "" || Arrays.asList(takenNames).contains(humanName)){
             System.out.print("\nWhat is your name?  ");
-
             try {
                 Scanner scanName = new Scanner(System.in);
                 humanName = scanName.nextLine();
+                humanName = humanName.replaceAll("\\s", "");
                 if(humanName == "" || humanName == null){
                     System.out.println("You must have a name");
                 } else if (Arrays.asList(takenNames).contains(humanName)) {
@@ -211,10 +218,15 @@ public class GameOfTexasScramble {
         }
 
         int numPlayers = 0;
-        while (numPlayers < 2 || numPlayers > 9) {
+        while (numPlayers < 2 || numPlayers > MAX_NUM_PLAYERS) {
             System.out.print("\nHow many players should be in the game?  ");
             Scanner scNP = new Scanner(System.in);
             numPlayers = scNP.nextInt();
+            if(numPlayers < 2){
+                System.out.println("You cannot play on your own! (The maximum number of players is " + MAX_NUM_PLAYERS + ")");
+            } else if(numPlayers > MAX_NUM_PLAYERS){
+                System.out.println("The maximum number of players for our game of Texas Scrabble is " + MAX_NUM_PLAYERS);
+            }
             //scNP.close();
         }
 
