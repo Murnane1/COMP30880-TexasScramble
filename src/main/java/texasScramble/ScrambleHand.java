@@ -23,7 +23,6 @@ public class ScrambleHand {
         this.playerTiles.add(tiles.dealNext());
         
         this.communityTiles = new ArrayList<>(); //init community tiles
-        //this.bestHandValue = 0;
         this.trieDictionary = scrabbleDictionary.getTrie();
 
         dictionary = scrabbleDictionary;
@@ -63,10 +62,6 @@ public class ScrambleHand {
         communityTiles.set(num, tile);
     }
 
-  /*  public void setBestHandValueToZero() {
-        bestHandValue = 0;
-    }*/
-
     //getters
     public List<Tile> getCommunityTiles() { // gets all current community tiles
         return communityTiles;
@@ -94,10 +89,6 @@ public class ScrambleHand {
     public int getValue(Tile tile) { //get value of single tile
         return tile.getValue();
     }
-    
-    /*public int getBestHandValue(){
-        return this.bestHandValue;
-    }*/
 
     public boolean isValidWord(String word, ScrabbleDictionary trieDictionary) {
         List<Tile> hand = getHand();
@@ -276,5 +267,10 @@ public class ScrambleHand {
         }
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
+    }
+
+    public void reset() {
+        playerTiles = null;
+        communityTiles = null;
     }
 }

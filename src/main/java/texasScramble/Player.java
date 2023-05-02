@@ -32,6 +32,9 @@ public abstract class Player {
         folded = false;
         allIn = false;
         stake = 0;
+        if(hand != null) {
+            hand.reset();
+        }
     }
 
 
