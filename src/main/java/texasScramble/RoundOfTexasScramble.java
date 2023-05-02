@@ -150,16 +150,23 @@ public class RoundOfTexasScramble {
         canOpen(mainPot);
         printPlayerHand();
 
-        preflop(mainPot);
+        System.out.println("---PREFLOP---");
+        bettingCycle(mainPot, button +3);   //3 is left of big blind
         printPlayerHand();
 
-        flop(mainPot);
+        System.out.println("---FLOP---");
+        dealCommunity(3);
+        bettingCycle(mainPot, button + 1);
         printPlayerHand();
 
-        turn(mainPot);
+        System.out.println("---TURN---");
+        dealCommunity(1);
+        bettingCycle(mainPot, button+1);
         printPlayerHand();
 
-        river(mainPot);
+        System.out.println("---RIVER---");
+        dealCommunity(1);
+        bettingCycle(mainPot, button+1);
         printPlayerHand();
 
         declareWords(mainPot);
@@ -168,47 +175,34 @@ public class RoundOfTexasScramble {
         showdown(pots);
     }
 
-    private void preflop(PotOfMoney mainPot) {
 
-        System.out.println("---PREFLOP---");
 
-        int playerStart = button + 3;    //3 because player left to big blind starts
-        bettingCycle(mainPot, playerStart);
+    //TODO  not going around players properly
+    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
+        int stake = -1;
+        int numActive = mainPot.getNumPlayers();
+
+        while (stake < mainPot.getCurrentStake() && numActive > 1) {
+            stake = mainPot.getCurrentStake();
+
+            for (int i = 0; i < getNumPlayers(); i++) {
+                Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
+
+                if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
+                    continue;
+                }
+
+                //delay(DELAY_BETWEEN_ACTIONS);
+                currentPlayer.nextAction(mainPot);
+
+                //actions after player's move
+                if (currentPlayer.isAllIn() || currentPlayer.hasFolded()) {
+                    numActive--;
+                }
+            }
+        }
     }
 
-    private void flop(PotOfMoney mainPot) {
-
-        System.out.println("---FLOP---");
-
-        // Turn 3 community (flop) cards
-        dealCommunity(3);
-
-        int playerStart = button + 1;    //3 becouse player left to big blind starts
-        bettingCycle(mainPot, playerStart);
-
-    }
-
-    private void turn(PotOfMoney mainPot) {
-
-        System.out.println("---TURN---");
-
-        // Deal the turn
-        dealCommunity(1);
-
-        int playerStart = button + 1;
-        bettingCycle(mainPot, playerStart);
-    }
-
-    private void river(PotOfMoney mainPot) {
-
-        System.out.println("---RIVER---");
-
-        // Deal the river
-        dealCommunity(1);
-
-        int playerStart = button + 1;
-        bettingCycle(mainPot, playerStart);
-    }
 
     public void declareWords(PotOfMoney mainPot) {
         Player[] activePlayers =  mainPot.getPlayers().toArray(new Player[mainPot.getNumPlayers()]);
@@ -225,8 +219,8 @@ public class RoundOfTexasScramble {
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
             //each player asked if they want to challenge in a random order (so different players take the risk of challenging)
-            /*List<Player> shuffledPlayers = Arrays.asList(players);
-            Collections.shuffle(shuffledPlayers);*/
+            List<Player> shuffledPlayers = Arrays.asList(players);
+            Collections.shuffle(shuffledPlayers);
             for (Player challenger: activePlayers) {
                 System.out.println("Challenger " + challenger.getName() + " has bank of " + challenger.getBank());
                 if(!player.getName().equals(challenger.getName()) && challenger.getBank() > PENALTY){
@@ -239,6 +233,7 @@ public class RoundOfTexasScramble {
             }
         }
     }
+
 
     private void showdown(ArrayList<PotOfMoney> pots) {
 
@@ -275,34 +270,6 @@ public class RoundOfTexasScramble {
             potNum++;
         }
     }
-
-
-    //TODO  not going around players properly
-    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int stake = -1;
-        int numActive = mainPot.getNumPlayers();
-
-        while (stake < mainPot.getCurrentStake() && numActive > 1) {
-            stake = mainPot.getCurrentStake();
-
-            for (int i = 0; i < getNumPlayers(); i++) {
-                Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
-
-                if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
-                    continue;
-                }
-
-                //delay(DELAY_BETWEEN_ACTIONS);
-                currentPlayer.nextAction(mainPot);
-
-                //actions after player's move
-                if (currentPlayer.isAllIn() || currentPlayer.hasFolded()) {
-                    numActive--;
-                }
-            }
-        }
-    }
-
 
     /*
      * Sorts the player's in ascending order of stake

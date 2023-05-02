@@ -150,11 +150,12 @@ public abstract class Player {
     public boolean postBlind(PotOfMoney pot, int blindAmt, String type) {
         if (bank < blindAmt) return false;
 
-        stake = stake + blindAmt;
-        pot.addStake(blindAmt);
-        bank = bank-blindAmt;
+        stake += blindAmt;
+        bank -= blindAmt;
 
-        System.out.println("\n> " + getName() + " says: I post " + type + " with "+ blindAmt +" chip!\n");
+        pot.addBlind(blindAmt);
+
+        System.out.println("\n> " + getName() + " posts the " + type + " with "+ addCount(blindAmt, "chip", "chips") + "\n");
         return true;
     }
 
@@ -186,7 +187,7 @@ public abstract class Player {
     }
 
     public void allIn(PotOfMoney pot) {
-        pot.addToPot(bank - stake);
+        pot.addToPot(bank - stake);     //add remaining of bank to pot
         stake += bank;
         bank = 0;
         allIn = true;
@@ -218,6 +219,7 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
+        System.out.println("Pot total: " + pot.getTotal() + " stake:" + pot.getCurrentStake() + " players:" + pot.getNumPlayers());
         boolean canCheck = true;
 
         if (hasFolded()) return;  // no longer in the game

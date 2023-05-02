@@ -58,18 +58,18 @@ public class PotOfMoney
 
     public void raiseStake(int addition) {
         stake += addition;
-
         addToPot(addition);
-    }
-
-    public void addStake(int newStake) {
-        addToPot(newStake - stake);
-        stake = newStake;
     }
 
     public void addToPot(int addition) {
         total += addition;
     }
+
+    public void addBlind(int blindAmt) {
+        stake = blindAmt;
+        total += blindAmt;
+    }
+
     public void removeFromPot(int subtraction) { total -= subtraction; }
     public void clearPot() {
         total = 0;
