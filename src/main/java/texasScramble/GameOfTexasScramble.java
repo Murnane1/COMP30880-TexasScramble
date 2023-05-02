@@ -113,7 +113,6 @@ public class GameOfTexasScramble {
 
     public int getNumPlayers() {
         return numPlayers;
-
     }
 
     public int getSmallBlindIncreasePerRound(){
@@ -156,14 +155,14 @@ public class GameOfTexasScramble {
 
     public void play()	{
         int smallBlind = INIT_SMALL_BLIND;
+        int bigBlind = smallBlind*2;
         int button = 0;
         while (getNumSolventPlayers() > 1) {
             RoundOfTexasScramble round = new RoundOfTexasScramble(bag, players, smallBlind, button, dictionary);
-
             round.play();
 
             smallBlind += SMALL_BLIND_INCREASE_PER_ROUND;
-            int bigBlind = smallBlind*2;
+            bigBlind = smallBlind*2;
             button++;
             try {
                 if(getNumPlayersMeetBlinds(bigBlind) < 2){

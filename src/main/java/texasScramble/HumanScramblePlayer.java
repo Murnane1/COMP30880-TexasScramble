@@ -51,7 +51,6 @@ public class HumanScramblePlayer extends Player {
             enteredWord = sc.nextLine().toUpperCase();
             enteredWord.replace(" ","");
             hasWord = checkWord(enteredWord);
-            //sc.close();
         }
 
         setWord(enteredWord);
@@ -106,7 +105,7 @@ public class HumanScramblePlayer extends Player {
                     else if ((char)input[i] == 'n' || (char)input[i] == 'N')
                         return false;
             }
-            catch (Exception e){};
+            catch (Exception e){e.printStackTrace();};
             System.out.println("Please enter 'y' or 'n' to answer");
         }
         return false;

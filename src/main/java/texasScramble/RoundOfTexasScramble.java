@@ -38,6 +38,16 @@ public class RoundOfTexasScramble {
 
     }
 
+    public int getNumActivePlayers(){
+        int activePlayers = numPlayers;
+        for(Player player: players){
+            if(player == null || player.isAllIn() || player.hasFolded() || player.isBankrupt()){
+                activePlayers--;
+            }
+        }
+        return activePlayers;
+    }
+
     public Player getPlayer(int num) {
         if (num >= 0 && num <= numPlayers)
             return players[num];
@@ -139,7 +149,7 @@ public class RoundOfTexasScramble {
     }
 
     public void play() {
-        ArrayList<PotOfMoney> pots = new ArrayList<PotOfMoney>();
+        ArrayList<PotOfMoney> pots = new ArrayList<>();
 
         ArrayList<Player> listPlayers = new ArrayList<>(Arrays.asList(players));
         PotOfMoney mainPot = new PotOfMoney(listPlayers);
@@ -177,16 +187,16 @@ public class RoundOfTexasScramble {
 
 
 
-    //TODO  not going around players properly
     public void bettingCycle(PotOfMoney mainPot, int playerStart) {
         int stake = -1;
-        int numActive = mainPot.getNumPlayers();
+        int numActive = getNumActivePlayers();
+        ArrayList<Player> potPlayers = new ArrayList<>(mainPot.getPlayers());
 
         while (stake < mainPot.getCurrentStake() && numActive > 1) {
             stake = mainPot.getCurrentStake();
 
-            for (int i = 0; i < getNumPlayers(); i++) {
-                Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
+            for (int i = 0; i < numActive; i++) {
+                Player currentPlayer = potPlayers.get((playerStart + i) % numActive);
 
                 if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
                     continue;
@@ -214,17 +224,14 @@ public class RoundOfTexasScramble {
             }
         }
 
-        //for each player's word all other players have the option to challenge it
-        for (Player player: activePlayers) {
+        Player player;
+        for(int i=0; i < activePlayers.length; i++){
+            player = activePlayers[(button + i) % activePlayers.length];
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
-            //each player asked if they want to challenge in a random order (so different players take the risk of challenging)
-            List<Player> shuffledPlayers = Arrays.asList(players);
-            Collections.shuffle(shuffledPlayers);
             for (Player challenger: activePlayers) {
                 System.out.println("Challenger " + challenger.getName() + " has bank of " + challenger.getBank());
                 if(!player.getName().equals(challenger.getName()) && challenger.getBank() > PENALTY){
-                    System.out.println(challenger.getName() + " considers challenging");        //TODO delete - for TESTING
                     if (challenger.shouldChallenge(mainPot, player.getWord())) {
                         challenge(player, challenger, mainPot);
                         break;

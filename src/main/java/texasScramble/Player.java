@@ -187,7 +187,7 @@ public abstract class Player {
     }
 
     public void allIn(PotOfMoney pot) {
-        pot.addToPot(bank - stake);     //add remaining of bank to pot
+        pot.addToPot(bank);     //add remaining of bank to pot
         stake += bank;
         bank = 0;
         allIn = true;
