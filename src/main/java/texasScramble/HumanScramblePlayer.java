@@ -47,14 +47,18 @@ public class HumanScramblePlayer extends Player {
 
         while (hasWord == false) {
             System.out.print("\n>> " + getName() + ", please enter your word: ");
-            Scanner sc = new Scanner(System.in);
-            enteredWord = sc.nextLine().toUpperCase();
+            enteredWord = getInputWord();
             enteredWord.replace(" ","");
             hasWord = checkWord(enteredWord);
         }
 
         setWord(enteredWord);
         setWordScore(getHand().calculateWordValue(enteredWord));
+    }
+
+    public String getInputWord(){
+        Scanner sc = new Scanner(System.in);
+        return sc.nextLine().toUpperCase();
     }
 
     public boolean checkWord(String testWord){

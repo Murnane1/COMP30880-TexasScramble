@@ -8,7 +8,6 @@ import java.io.IOException;
 public class ScrambleHand {
     private List<Tile> playerTiles;
     private List<Tile> communityTiles;
-    //private int bestHandValue;
     private TrieDictionary trieDictionary;
     private ScrabbleDictionary dictionary;
     private BagOfTiles bag;
@@ -27,6 +26,11 @@ public class ScrambleHand {
 
         dictionary = scrabbleDictionary;
         bag = tiles;
+    }
+
+    public void reset() {
+        playerTiles = null;
+        communityTiles = null;
     }
 
     @Override
@@ -267,10 +271,5 @@ public class ScrambleHand {
         }
         
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
-    }
-
-    public void reset() {
-        playerTiles = null;
-        communityTiles = null;
     }
 }

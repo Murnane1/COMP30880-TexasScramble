@@ -27,7 +27,9 @@ public class RoundOfTexasScramble {
 
         System.out.println("\n\nPlayer Stacks:\n");
         for (Player player: players) {
-            System.out.println(player.getName() + " has " + player.addCount(player.getBank(), "chip", "chips") + " in the bank");
+            if(player != null) {
+                System.out.println(player.getName() + " has " + player.addCount(player.getBank(), "chip", "chips") + " in the bank");
+            }
         }
         System.out.println("\nNew Deal:\n\n");
         deal();
@@ -73,7 +75,6 @@ public class RoundOfTexasScramble {
     }
 
     public void deal() {
-
         for (int i = 0; i < getNumPlayers(); i++) {
             int index = (button + i + 1) % getNumPlayers();
 
@@ -86,7 +87,6 @@ public class RoundOfTexasScramble {
                 }
             }
         }
-        //System.out.println("\n");
     }
 
     public void openBlinds(PotOfMoney pot) {
@@ -96,14 +96,12 @@ public class RoundOfTexasScramble {
         }
 
         int i = 1;
-        while (players[(button + i) % numPlayers] != null && players[(button + i) % numPlayers].getBank() < bigBlind) {         //Player to the left of the dealer posts the small blind
-            System.out.println(players[(button + i) % numPlayers].getName() + "says: I cannot post the Small Blind.");
+        while (players[(button + i) % numPlayers] == null || players[(button + i) % numPlayers].getBank() < bigBlind) {         //Player to the left of the dealer posts the small blind
             i++;
         }
         players[(button + i) % numPlayers].postBlind(pot, smallBlind, "Small Blind");
 
-        while (players[(button + i + 1) % numPlayers] != null && players[(button + i + 1) % numPlayers].getBank() < bigBlind) { //Player to the left of the small blind posts the big blind
-            System.out.println(players[(button + i + 1) % numPlayers].getName() + "says: I cannot post the Big Blind.");
+        while (players[(button + i + 1) % numPlayers] == null || players[(button + i + 1) % numPlayers].getBank() < bigBlind) { //Player to the left of the small blind posts the big blind
             i++;
         }
         players[(button + i + 1) % numPlayers].postBlind(pot, bigBlind, "Big Blind");
@@ -119,7 +117,9 @@ public class RoundOfTexasScramble {
         System.out.println(list);
 
         for (int i = 0; i < getNumPlayers(); i++) {
-            players[i].getHand().addCommunityTiles(list);
+            if(players[i] != null) {
+                players[i].getHand().addCommunityTiles(list);
+            }
         }
     }
 
@@ -127,7 +127,7 @@ public class RoundOfTexasScramble {
         ArrayList<PotOfMoney> pots = new ArrayList<>();
 
         ArrayList<Player> listPlayers = new ArrayList<>(Arrays.asList(players));
-        PotOfMoney mainPot = new PotOfMoney(listPlayers);
+        PotOfMoney mainPot = new PotOfMoney(getActivePlayers(listPlayers));
         pots.add(mainPot);
 
         bag.reset();
@@ -174,10 +174,6 @@ public class RoundOfTexasScramble {
         int numPotPlayers = mainPot.getNumPlayers();
         ArrayList<Player> potPlayers = new ArrayList<>(mainPot.getPlayers());
 
-        for (int i = playerStart; i < numPotPlayers + playerStart; i++) {
-            System.out.println(potPlayers.get(i % numPotPlayers).getName());
-        }
-
         while (stake < mainPot.getCurrentStake() && numActive > 1) {
         stake = mainPot.getCurrentStake();
 
@@ -208,9 +204,7 @@ public class RoundOfTexasScramble {
         System.out.println("---WORD REVEAL---");
 
         for (Player player: activePlayers) {
-            if(!player.hasFolded() || player != null){
-                player.chooseWord();
-            }
+            player.chooseWord();
         }
 
         Player player;
@@ -219,7 +213,6 @@ public class RoundOfTexasScramble {
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
             for (Player challenger: activePlayers) {
-                System.out.println("Challenger " + challenger.getName() + " has bank of " + challenger.getBank());
                 if(!player.getName().equals(challenger.getName()) && challenger.getBank() > PENALTY){
                     if (challenger.shouldChallenge(mainPot, player.getWord())) {
                         challenge(player, challenger, mainPot);

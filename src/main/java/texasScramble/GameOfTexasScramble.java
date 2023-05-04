@@ -147,6 +147,13 @@ public class GameOfTexasScramble {
         return count;
     }
 
+    public void removePlayer(int num) {
+        if (num >= 0 && num < numPlayers) {
+            System.out.println("\n> " + players[num].getName() + " leaves the game.\n");
+            players[num] = null;
+        }
+    }
+
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
     // Play Poker
@@ -158,6 +165,15 @@ public class GameOfTexasScramble {
         int bigBlind = smallBlind*2;
         int button = 0;
         while (getNumSolventPlayers() > 1) {
+
+            for (int i = 0; i < numPlayers; i++) {                  //remove any player without bank to play round
+                if (getPlayer(i) != null) {
+                    if (getPlayer(i).getBank() < bigBlind) {
+                        removePlayer(i);
+                    }
+                }
+            }
+
             RoundOfTexasScramble round = new RoundOfTexasScramble(bag, players, smallBlind, button, dictionary);
             round.play();
 
@@ -199,7 +215,7 @@ public class GameOfTexasScramble {
 
         System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
         String[] takenNames = {"Tom", "Dick", "Harry", "Sarah", "Maggie", "Andrew", "Zoe", "Sadbh", "Mark", "Sean"};
-        //byte[] input = new byte[10];
+
         String humanName = null;
         while (humanName == null || humanName == "" || Arrays.asList(takenNames).contains(humanName)){
             System.out.print("\nWhat is your name?  ");
