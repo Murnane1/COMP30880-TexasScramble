@@ -216,15 +216,15 @@ public abstract class Player {
     //--------------------------------------------------------------------//
 
     public void nextAction(PotOfMoney pot) {
-        System.out.println("Pot total: " + pot.getTotal() + " stake:" + pot.getCurrentStake() + " players:" + pot.getNumPlayers());
         boolean canCheck = true;
 
         if (hasFolded()) return;  // no longer in the game
 
         if(shouldAllIn(pot) && pot.getCurrentStake() >= getStake() + getBank()) {
             allIn(pot);
-        }
-        else if(!isAllIn()){
+        } else if (pot.getCurrentStake() >= getStake() + getBank()) {
+            fold(pot);
+        } else if(!isAllIn()){
             if (pot.getCurrentStake() > getStake()) {                   // existing bet must be covered
                 if (shouldSee(pot)) {
                     seeBet(pot);
