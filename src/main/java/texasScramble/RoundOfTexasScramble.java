@@ -38,11 +38,11 @@ public class RoundOfTexasScramble {
 
     }
 
-    public int getNumActivePlayers(){
-        int activePlayers = numPlayers;
+    public ArrayList<Player> getActivePlayers(ArrayList<Player> players){
+        ArrayList<Player> activePlayers = new ArrayList<>(players);
         for(Player player: players){
-            if(player == null || player.isAllIn() || player.hasFolded() || player.isBankrupt()){
-                activePlayers--;
+            if(player == null || player.hasFolded()){
+                activePlayers.remove(player);
             }
         }
         return activePlayers;
@@ -187,7 +187,7 @@ public class RoundOfTexasScramble {
 
 
 
-    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
+    /*public void bettingCycle(PotOfMoney mainPot, int playerStart) {
         int stake = -1;
         int numActive = getNumActivePlayers();
         ArrayList<Player> potPlayers = new ArrayList<>(mainPot.getPlayers());
@@ -211,11 +211,39 @@ public class RoundOfTexasScramble {
                 }
             }
         }
+    }*/
+    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
+        int indexCurrPot = 0;
+        int stake = -1;
+        int numActive = mainPot.getNumPlayers();
+
+        while (stake < mainPot.getCurrentStake() && numActive > 1) {
+
+            stake = mainPot.getCurrentStake();
+
+            for (int i = 0; i < getNumPlayers(); i++) {
+                Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
+
+                if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
+                    continue;
+                }
+
+                delay(DELAY_BETWEEN_ACTIONS);
+
+                currentPlayer.nextAction(mainPot);
+
+                //actions after player's move
+                if (currentPlayer.isAllIn() || currentPlayer.hasFolded()) {
+                    numActive--;
+                }
+            }
+        }
     }
 
 
     public void declareWords(PotOfMoney mainPot) {
-        Player[] activePlayers =  mainPot.getPlayers().toArray(new Player[mainPot.getNumPlayers()]);
+        //Player[] activePlayers =  mainPot.getPlayers().toArray(new Player[mainPot.getNumPlayers()]);
+        ArrayList<Player> activePlayers = getActivePlayers(mainPot.getPlayers());
         System.out.println("---WORD REVEAL---");
 
         for (Player player: activePlayers) {
@@ -225,8 +253,8 @@ public class RoundOfTexasScramble {
         }
 
         Player player;
-        for(int i=0; i < activePlayers.length; i++){
-            player = activePlayers[(button + i) % activePlayers.length];
+        for(int i=0; i < activePlayers.size(); i++){
+            player = activePlayers.get((button + i) % activePlayers.size());
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
             for (Player challenger: activePlayers) {
@@ -292,26 +320,32 @@ public class RoundOfTexasScramble {
         Collections.sort(pot.getPlayers(), Comparator.comparingInt(Player::getStake));			//sort the players by increasing pot size
 
         ArrayList<Player> remainingPlayers = new ArrayList<>(pot.getPlayers());
+        int foldedMoney = 0;
         for(Player player: pot.getPlayers()){
             if(player.getStake() == 0){				//player has excess stake not already in a pot
                 remainingPlayers.remove(player);
                 continue;
             }
 
-            //new pot with remaining players
-            ArrayList<Player> potPlayers = new ArrayList<>();
-            potPlayers.addAll(remainingPlayers);
-            PotOfMoney newPot = new PotOfMoney(potPlayers);
+            if(player.hasFolded()){         //if folded player don't create another pot yet
+                foldedMoney += player.getStake();
+                remainingPlayers.remove(player);
+            } else {                        //new pot with excess since last allIn player
+                ArrayList<Player> potPlayers = new ArrayList<>();
+                potPlayers.addAll(remainingPlayers);
+                PotOfMoney newPot = new PotOfMoney(potPlayers);
 
-            newPot.setTotal(player.getStake()*remainingPlayers.size());
+                newPot.setTotal(player.getStake() * remainingPlayers.size());
+                newPot.addToPot(foldedMoney);
 
-            int potStake = player.getStake();
-            for(Player otherPlayer: remainingPlayers){
-                otherPlayer.reduceStake(potStake);
+                int potStake = player.getStake();
+                for (Player otherPlayer : remainingPlayers) {
+                    otherPlayer.reduceStake(potStake);
+                }
+
+                sidePots.add(newPot);
+                remainingPlayers.remove(player);
             }
-
-            sidePots.add(newPot);
-            remainingPlayers.remove(player);
         }
         return sidePots;
     }

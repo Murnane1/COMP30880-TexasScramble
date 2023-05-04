@@ -144,7 +144,6 @@ public abstract class Player {
             System.out.println("\n> " + getName() + " says: I fold!\n");
 
         folded = true;
-        pot.removePlayer(this);
     }
 
     public boolean postBlind(PotOfMoney pot, int blindAmt, String type) {
