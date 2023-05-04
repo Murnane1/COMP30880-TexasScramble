@@ -89,47 +89,22 @@ public class RoundOfTexasScramble {
         //System.out.println("\n");
     }
 
-    public void canOpen(PotOfMoney pot) {
+    public void openBlinds(PotOfMoney pot) {
         if (numPlayers <= 1) {
+            System.out.println("Not enough players left to play " + players[0].getName() + " is the winner");
             return;
         }
+
         int i = 1;
-        //Player to the left of the dealer posts the small blind
-        while (players[(button + i) % numPlayers] != null && players[(button + i) % numPlayers].getBank() < bigBlind) {
-            if (numPlayers <= 1) {
-                System.exit(0);
-                return;
-            }
-            //Player does not have enough chips to open
-            System.out.println(players[(button + i) % numPlayers].getName() + "says: I cannot post the Small Blind. \n" + "I can't afford to play anymore");
-
-            removePlayer((button + i) % numPlayers);
-            pot.removePlayer(players[(button + i) % numPlayers]);
+        while (players[(button + i) % numPlayers] != null && players[(button + i) % numPlayers].getBank() < bigBlind) {         //Player to the left of the dealer posts the small blind
+            System.out.println(players[(button + i) % numPlayers].getName() + "says: I cannot post the Small Blind.");
             i++;
-
         }
         players[(button + i) % numPlayers].postBlind(pot, smallBlind, "Small Blind");
 
-        if (numPlayers <= 1) {
-            return;
-        }
-        //Player to the left of the small blind posts the big blind
-        while (players[(button + i + 1) % numPlayers] != null && players[(button + i + 1) % numPlayers].getBank() < bigBlind) {
-            if (numPlayers <= 1) {
-                System.exit(0);
-                ;
-
-
-                return;
-            }
-            //Player does not have enough chips to open
-            System.out.println(players[(button + i + 1) % numPlayers].getName() + "says: I cannot post the Big Blind. . \n " + "I can't afford to play anymore");
-
-            removePlayer((button + i + 1) % numPlayers);
-            pot.removePlayer(players[(button + i) % numPlayers]);
-
+        while (players[(button + i + 1) % numPlayers] != null && players[(button + i + 1) % numPlayers].getBank() < bigBlind) { //Player to the left of the small blind posts the big blind
+            System.out.println(players[(button + i + 1) % numPlayers].getName() + "says: I cannot post the Big Blind.");
             i++;
-
         }
         players[(button + i + 1) % numPlayers].postBlind(pot, bigBlind, "Big Blind");
     }
@@ -157,7 +132,7 @@ public class RoundOfTexasScramble {
 
         bag.reset();
 
-        canOpen(mainPot);
+        openBlinds(mainPot);
         printPlayerHand();
 
         System.out.println("---PREFLOP---");
@@ -187,53 +162,40 @@ public class RoundOfTexasScramble {
 
 
 
-    /*public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int stake = -1;
-        int numActive = getNumActivePlayers();
-        ArrayList<Player> potPlayers = new ArrayList<>(mainPot.getPlayers());
-
-        while (stake < mainPot.getCurrentStake() && numActive > 1) {
-            stake = mainPot.getCurrentStake();
-
-            for (int i = 0; i < numActive; i++) {
-                Player currentPlayer = potPlayers.get((playerStart + i) % numActive);
-
-                if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
-                    continue;
-                }
-
-                //delay(DELAY_BETWEEN_ACTIONS);
-                currentPlayer.nextAction(mainPot);
-
-                //actions after player's move
-                if (currentPlayer.isAllIn() || currentPlayer.hasFolded()) {
-                    numActive--;
-                }
+    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
+        int numActive = mainPot.getNumPlayers();
+        for(Player player: mainPot.getPlayers()){
+            if(player == null || player.hasFolded() || player.isAllIn()){
+                numActive--;
             }
         }
-    }*/
-    public void bettingCycle(PotOfMoney mainPot, int playerStart) {
-        int indexCurrPot = 0;
+
         int stake = -1;
-        int numActive = mainPot.getNumPlayers();
+        int numPotPlayers = mainPot.getNumPlayers();
+        ArrayList<Player> potPlayers = new ArrayList<>(mainPot.getPlayers());
+
+        for (int i = playerStart; i < numPotPlayers + playerStart; i++) {
+            System.out.println(potPlayers.get(i % numPotPlayers).getName());
+        }
 
         while (stake < mainPot.getCurrentStake() && numActive > 1) {
+        stake = mainPot.getCurrentStake();
 
-            stake = mainPot.getCurrentStake();
-
-            for (int i = 0; i < getNumPlayers(); i++) {
-                Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
+            for (int i = playerStart; i < numPotPlayers + playerStart; i++) {
+                Player currentPlayer = potPlayers.get(i % numPotPlayers);
 
                 if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
                     continue;
                 }
 
-                delay(DELAY_BETWEEN_ACTIONS);
+                if(numActive == 1){
+                    return;             //if only one player can still make bets end betting round
+                } else {
+                    delay(DELAY_BETWEEN_ACTIONS);
+                    currentPlayer.nextAction(mainPot);
+                }
 
-                currentPlayer.nextAction(mainPot);
-
-                //actions after player's move
-                if (currentPlayer.isAllIn() || currentPlayer.hasFolded()) {
+                if (currentPlayer.hasFolded() || currentPlayer.isAllIn()) {                 //actions after player's move
                     numActive--;
                 }
             }
@@ -242,12 +204,11 @@ public class RoundOfTexasScramble {
 
 
     public void declareWords(PotOfMoney mainPot) {
-        //Player[] activePlayers =  mainPot.getPlayers().toArray(new Player[mainPot.getNumPlayers()]);
         ArrayList<Player> activePlayers = getActivePlayers(mainPot.getPlayers());
         System.out.println("---WORD REVEAL---");
 
         for (Player player: activePlayers) {
-            if(!player.hasFolded()){
+            if(!player.hasFolded() || player != null){
                 player.chooseWord();
             }
         }
@@ -271,7 +232,6 @@ public class RoundOfTexasScramble {
 
 
     private void showdown(ArrayList<PotOfMoney> pots) {
-
         System.out.println("---SHOWDOWN---");
 
         Player bestPlayer = null;
