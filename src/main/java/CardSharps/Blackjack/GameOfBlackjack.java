@@ -1,6 +1,7 @@
 package CardSharps.Blackjack;
 
 import CardSharps.Poker.*;
+import CardSharps.TexasHoldem.RoundOfTexasHoldem;
 
 public class GameOfBlackjack { //reference Gameofpoker.java in poker
     private BlackjackPlayer[] players;
@@ -27,19 +28,39 @@ public class GameOfBlackjack { //reference Gameofpoker.java in poker
     }
 
     public void play(){
-        RoundOfBlackjack round = new RoundOfBlackjack(deck, players, dealer);
-        round.play();
+        while (getNumSolventPlayers() > 1) {
+            RoundOfBlackjack round = new RoundOfBlackjack(deck, players, dealer);
+            round.play();
 
-        try {
-            System.out.print("\n\nPlay another round? Press 'q' to terminate this game ... ");
-            byte[] input = new byte[100];
-            System.in.read(input);
-            for (int i = 0; i < input.length; i++)
-                if ((char) input[i] == 'q' || (char) input[i] == 'Q')
-                    return;
-        } catch (Exception e) {
-        };
+            try {
+                System.out.print("\n\nPlay another round by pressing ENTER.\nPress 'q' to terminate this game ... ");
+                byte[] input = new byte[100];
+                System.in.read(input);
+
+                for (int i = 0; i < input.length; i++)
+                    if ((char)input[i] == 'q' || (char)input[i] == 'Q')
+                        return;
+            } catch (Exception e) {
+            }
+        }
     }
+
+    public BlackjackPlayer getPlayer(int num) {
+        if (num >= 0 && num <= numPlayers)
+            return players[num];
+        else
+            return null;
+    }
+    public int getNumSolventPlayers() {
+        // how many players still have money left?
+        int count = 0;
+        for (int i = 0; i < getNumPlayers(); i++)
+            if (getPlayer(i) != null && !getPlayer(i).isBankrupt())
+                count++;
+
+        return count;
+    }
+
 
     public static void main(String[] args) {
          String[] names = { "Human", "Tom", "Dick", "Harry"}; //define names
@@ -51,7 +72,7 @@ public class GameOfBlackjack { //reference Gameofpoker.java in poker
          names[0] = new String(input);
           } catch (Exception e) {
           };
-          int startingBank = 10;
+          int startingBank = 100;
           System.out.println("Let's play Blackjack ...\n");
           GameOfBlackjack game = new GameOfBlackjack(names, startingBank);
           game.play();

@@ -2,6 +2,8 @@ package CardSharps.Blackjack;
 
 
 import CardSharps.Poker.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Random;
 
 
@@ -95,6 +97,51 @@ public class BlackjackComputerPlayer extends BlackjackPlayer{ // error caused by
         else {
             return false;
         }
+    }
+
+    public String makeChoice(BlackjackDeck deck, int handIndex, Card dealerCard) {
+        BlackjackHand hand = getHand(handIndex);
+        int handValue = hand.getHandValue();
+        boolean canSplit = canSplit(handIndex);
+        boolean canDouble = canDouble(handIndex);
+
+        // If the hand value is less than 12, always hit.
+        if (handValue < 12) {
+            hit(deck, handIndex);
+            return "HIT";
+        }
+
+        // If the hand value is greater than or equal to 17, always stand.
+        if (handValue >= 17) {
+            return "STAND";
+        }
+
+        // If the dealer's up card is 7 or higher and the hand value is between 12 and 16, stand.
+        if (dealerCard.getValue() >= 7 && handValue >= 12 && handValue <= 16) {
+            return "STAND";
+        }
+
+        // If the dealer's up card is 6 or lower and the hand value is between 12 and 16, hit.
+        if (dealerCard.getValue() <= 6 && handValue >= 12 && handValue <= 16) {
+            hit(deck, handIndex);
+            return "HIT";
+        }
+
+        // If the hand can be split and it's a good idea to do so, split.
+        if (canSplit && shouldSplit(deck, handIndex, dealerCard)) {
+            split(deck, handIndex);
+            return "SPLIT";
+        }
+
+        // If the hand can be doubled and it's a good idea to do so, double.
+        if (canDouble && shouldDouble(deck, handIndex, dealerCard)) {
+            doubleDown(deck, handIndex);
+            return "DOUBLE";
+        }
+
+        // If none of the above conditions apply, hit.
+        hit(deck, handIndex);
+        return "HIT";
     }
 
 

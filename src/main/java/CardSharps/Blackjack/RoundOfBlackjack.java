@@ -15,6 +15,7 @@ public class RoundOfBlackjack {
         this.dealer = dealer;
         this.deck = deck;
         numPlayers = players.length;
+        deck.reset();
         System.out.println("============New round:============");
         openRound();
         deal();
@@ -184,5 +185,11 @@ public class RoundOfBlackjack {
             }
             System.out.println("Your total bank is " + players[x].getBank() + " chips!\n");
         }
+    }
+
+    private void delay(int numMilliseconds) {
+        try {
+            Thread.sleep(numMilliseconds);
+        } catch (Exception e) {}
     }
 }

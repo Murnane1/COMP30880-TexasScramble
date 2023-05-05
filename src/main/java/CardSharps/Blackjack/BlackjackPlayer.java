@@ -2,6 +2,9 @@ package CardSharps.Blackjack;
 
 import java.util.Arrays;
 import CardSharps.Poker.*;
+import CardSharps.Blackjack.BlackjackHumanPlayer;
+import java.util.ArrayList;
+import java.util.List;
 
 abstract class BlackjackPlayer { //reference player.java, humanplayer.java and computerplayer.java
     private int bank = 0; //total money player has left (without stake)
@@ -9,6 +12,7 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     private BlackjackHand[] hand = new BlackjackHand[4]; //hands dealt to player
     private int[] stake = new int[4] ; //stakes of hands 
     private boolean[] stand = new boolean[4]; //flag for each hand
+    private boolean[] split = new boolean[4];
     private boolean[] bust = new boolean[4]; //flag for bust
     private boolean[] won = new boolean[4]; //flag for winning hand
     private boolean[] draw = new boolean[4]; //flag for draw
@@ -27,6 +31,7 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
         Arrays.fill(this.stake, 0);
         Arrays.fill(bust,  false);
         Arrays.fill(stand, false);
+        Arrays.fill(split, false);
         hand =  new BlackjackHand[4];
     }
 
@@ -74,6 +79,8 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     public boolean isStand(int handIndex){ //player stands
         return stand[handIndex];
     }
+
+    public boolean isSplit(int handIndex){ return split[handIndex];}
 
     public boolean isWon(int handIndex){ //condition for win.
         return won[handIndex];
@@ -139,9 +146,12 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     public boolean canSplit(int handIndex) {
         return hand[handIndex].isSplit() && bank >= stake[handIndex];
     }
+
+    public boolean canDouble(int handIndex) {
+        return !hand[handIndex].isBust() && hand[handIndex].getCards().length == 2 && bank >= stake[handIndex];
+    }
    
 
-    //split logic? -- unsure TODO
     public boolean split(BlackjackDeck deck, int handIndex){
         if (!canSplit(handIndex)){
             return false;
@@ -172,12 +182,12 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     abstract boolean shouldDouble(BlackjackDeck deck, int handIndex, Card dealerCard);
     abstract boolean shouldStand(BlackjackDeck deck, int handIndex, Card dealerCard);
 
+    abstract String makeChoice(BlackjackDeck deck, int handIndex, Card dealerCard);
+
     //game decisions
-    public void nextAction(BlackjackDeck deck, int handIndex, Card dealerCard){ //need to implement functions such as hit etc
-        if (hand[handIndex].isBlackjack()){
+    public void nextAction(BlackjackDeck deck, int handIndex, Card dealerCard) {
+        if (hand[handIndex].isBlackjack()) {
             System.out.println("> " + getName() + " says: I have BLACKJACK!");
-            
-            //CHECKING FOR BLACKJACK
             won[handIndex] = true;
             stand[handIndex] = true;
             return;
@@ -188,16 +198,17 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
             bust[handIndex] = true;
             return;
         }
-        else{
-            if(shouldHit(deck, handIndex, dealerCard))
-                hit(deck, handIndex);
-            else if(shouldStand(deck, handIndex, dealerCard))
-                stand(handIndex);
-            else if(shouldDouble(deck, handIndex,dealerCard))
-                doubleDown(deck, handIndex);
-            else if(shouldSplit(deck, handIndex, dealerCard))
-                split(deck, handIndex);
+
+        String choice = makeChoice(deck, handIndex, dealerCard);
+        if (choice.equals("HIT")) {
+            // continue playing
+        } else if (choice.equals("STAND")) {
+            stand[handIndex] = true;
+        } else if (choice.equals("SPLIT")) {
+            split[handIndex] = true;
+           //continue playing
+        } else if (choice.equals("DOUBLE")) {
+            // continue playing
         }
-        return;
     }
 }
