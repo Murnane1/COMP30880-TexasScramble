@@ -39,7 +39,7 @@ public class FrequencyComputerPlayer extends Player{
     boolean shouldRaise(PotOfMoney pot) {
         chooseWord();
         //TODO should be affected by stake:bank ratio
-        return Math.abs(dice.nextInt())%60 < /*getHand().getHandQuality(getWord())*/ +
+        return Math.abs(dice.nextInt())%200 < /*getHand().getHandQuality(getWord())*/ +
                 getRiskTolerance();
     }
 
