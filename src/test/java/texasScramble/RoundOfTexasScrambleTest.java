@@ -112,22 +112,13 @@ public class RoundOfTexasScrambleTest {
         //System.out.println("pot1 total: " + pots.get(1).getTotal());
         player6.fold(pot);
 
-        /*assertEquals(1, pots.get(0).getMaxStake());
-        assertEquals(5,  pots.get(0).getTotal());
-        assertEquals(4,  pots.get(1).getTotal());*/
-
         //3rd cycle
         player1.raiseBet(pot);
         player2.seeBet(pot);
         player3.seeBet(pot);
         player4.seeBet(pot);
 
-        /*assertEquals(3, pots.get(1).getCurrentStake());
-        assertEquals(5, pots.get(0).getTotal());
-        assertEquals(8, pots.get(1).getTotal());*/
-
         pots = round.newSidePots(pots.get(0));
-        //round.newSidePots(pots.get(0));
         for (PotOfMoney aPot:pots) {
             System.out.println(aPot.getTotal() + " total|players " + aPot.getNumPlayers());
         }

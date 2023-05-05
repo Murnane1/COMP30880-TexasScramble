@@ -154,9 +154,8 @@ public class RoundOfTexasScramble {
         bettingCycle(mainPot, button+1);
         printPlayerHand();
 
-        declareWords(mainPot);
-
         pots = newSidePots(mainPot);
+        declareWords(pots.get(0));
         showdown(pots);
     }
 
