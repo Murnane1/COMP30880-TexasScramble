@@ -94,8 +94,8 @@ public class FrequencyComputerPlayer extends Player{
             if(wordFrequencyDictionary.getWordFrequency(word) >= wordKnowledge){            //TODO add random chance of knowing word outside knowledge
                 knownWords.add(word);
                 if(hand.calculateWordValue(word) > currBestWordValue){
-                     currBestWordValue = hand.calculateWordValue(word);
-                     currBestWord = word;
+                    currBestWordValue = hand.calculateWordValue(word);
+                    currBestWord = word;
                 }
             }
         }

@@ -33,6 +33,8 @@ public abstract class Player {
         allIn = false;
         stake = 0;
         hand = null;
+        word = null;
+        wordScore = 0;
     }
 
 
@@ -123,7 +125,18 @@ public abstract class Player {
     }
 
     public void takePot(PotOfMoney pot) {
+        System.out.println(getName() + " takes pot of " + addCount(pot.getTotal(), "chip", "chips"));
+        if(getWord() != null) {
+            System.out.println("Their word was \"" + getWord() + "\" with a score of " + getWordScore());
+        }
         bank += pot.takePot();
+    }
+
+    public void sharePot(PotOfMoney pot, int numWinners){
+        int share = pot.sharePot(numWinners);
+        System.out.println(getName() + " takes their share of " + addCount(share, "chip", "chips") +
+                " from the pot\nTheir word was \"" + getWord() + "\" with a score of " + getWordScore());
+        bank += share;
     }
 
     public void penalty(int penaltyValue, PotOfMoney pot) {

@@ -3,12 +3,14 @@ package CardSharps.TexasScramble;
 import java.util.Random;
 
 public class ComputerScramblePlayer extends Player {
+
     public static final int VARIABILITY		= 50;
     private int riskTolerance				= 0;  // willingness of a player to take risks and bluff
     private Random dice						= new Random(System.currentTimeMillis());
 
     public ComputerScramblePlayer(String name, int money) {
         super(name, money);
+
         riskTolerance = Math.abs(dice.nextInt())%VARIABILITY
                 - VARIABILITY/2;
     }

@@ -21,13 +21,15 @@ public class HumanScramblePlayer extends Player {
 
     @Override
     public boolean shouldRaise(PotOfMoney pot) {
+        if(getBank() == 1){
+            System.out.println("Note: Raising will make you All In");
+        }
         return askQuestion("Do you want to raise the bet by 1 chip");
     }
 
 
     @Override
     public boolean shouldAllIn(PotOfMoney pot) {
-        //TODO is there a way to let player know they won't have blind for next round
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
@@ -61,7 +63,7 @@ public class HumanScramblePlayer extends Player {
         return sc.nextLine().toUpperCase();
     }
 
-    public boolean checkWord(String testWord){
+    public boolean checkWord(String testWord){      //TODO test works with strange characters different languages
         testWord = testWord.toUpperCase();
         testWord = testWord.replace(" ","");
 
@@ -73,9 +75,6 @@ public class HumanScramblePlayer extends Player {
         for (Tile tile: getHand().getHand()) {
             playerTiles.add(tile.getLetter());
         }
-        for (Tile tile: getHand().getCommunityTiles()) {
-            playerTiles.add(tile.getLetter());
-        }
 
         //does player have entered letters
         if(!playerTiles.containsAll(enteredChars)){
@@ -85,7 +84,7 @@ public class HumanScramblePlayer extends Player {
 
         //check each tile used max once
         for(Character letter : enteredChars){
-            if (Collections.frequency(enteredChars, letter) >= Collections.frequency(playerTiles, letter)){
+            if (Collections.frequency(enteredChars, letter) > Collections.frequency(playerTiles, letter)){
                 System.out.println("You can only use each tile once. Try another word");
                 return false;
             }
@@ -102,11 +101,13 @@ public class HumanScramblePlayer extends Player {
             try {
                 System.in.read(input);
 
-                for (int i = 0; i < input.length; i++)
-                    if ((char)input[i] == 'y' || (char)input[i] == 'Y')
+                for (int i = 0; i < input.length; i++) {
+                    System.out.println("\n");
+                    if ((char) input[i] == 'y' || (char) input[i] == 'Y')
                         return true;
-                    else if ((char)input[i] == 'n' || (char)input[i] == 'N')
+                    else if ((char) input[i] == 'n' || (char) input[i] == 'N')
                         return false;
+                }
             }
             catch (Exception e){e.printStackTrace();};
             System.out.println("Please enter 'y' or 'n' to answer");

@@ -1,5 +1,4 @@
 package CardSharps.TexasScramble;
-
 // This package provides classes necessary for implementing a game system for playing poker
 
 
@@ -81,6 +80,13 @@ public class PotOfMoney
         int winnings = getTotal();
         clearPot();
         return winnings;
+    }
+
+    public int sharePot(int numWinners){
+        int remainder = getTotal() % numWinners;        //house takes remainder
+        int allPlayerWinnings = getTotal() - remainder;
+        int share = allPlayerWinnings / numWinners;
+        return share;
     }
 
     public void setTotal(int total) {
