@@ -19,6 +19,7 @@ public class HumanScramblePlayerTest {
     private Tile tile4 = new Tile('S', 1);
     private Tile tile5 = new Tile('C', 1);
     private Tile tile6 = new Tile('R', 1);
+    private Tile tile7 = new Tile('A', 1);
 
     List<Tile> playerTiles = new ArrayList<>();
     List<Tile> commTiles = new ArrayList<>();
@@ -39,26 +40,22 @@ public class HumanScramblePlayerTest {
 
         playerHand = new ScrambleHand(tiles, dictionary);
 
-        /*playerTiles.add(tile1);
-        playerTiles.add(tile2);*/
+
         playerHand.setPlayerTiles(0, tile1);
         playerHand.setPlayerTiles(1, tile2);
-        //player.getHand().addPlayerTiles(playerTiles);
-        //playerHand.addPlayerTiles(playerTiles);
 
         commTiles.add(tile3);
         commTiles.add(tile4);
         commTiles.add(tile5);
         commTiles.add(tile6);
-        //player.getHand().addCommunityTiles(commTiles);
+        commTiles.add(tile7);
         playerHand.addCommunityTiles(commTiles);
-
         player.setHand(playerHand);
     }
 
     @Test
     public void testCheckWord() {
-        boolean check1 = player.checkWord("nascar");
+        boolean check1 = player.checkWord("NASCAR");
         assertEquals(true, check1);
 
         boolean check2 = player.checkWord("house");
@@ -75,5 +72,14 @@ public class HumanScramblePlayerTest {
 
         boolean check6 = player.checkWord("aa");
         assertEquals(true, check6);
+
+        boolean checkMaxSameLetter = player.checkWord("AAA");
+        assertEquals(true, checkMaxSameLetter);
+
+        boolean checkManySameLetter = player.checkWord("AAAA");
+        assertEquals(false, checkManySameLetter);
+
+        boolean checkNull = player.checkWord("");
+        assertEquals(true, checkNull);
     }
 }

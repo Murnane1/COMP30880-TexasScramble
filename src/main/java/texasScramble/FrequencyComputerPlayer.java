@@ -99,9 +99,13 @@ public class FrequencyComputerPlayer extends Player{
                 }
             }
         }
+        if(currBestWord == null){
+            //TODO try make up a word
+            setWordScore(0);
+            setWord("CAN'T FIND A WORD");
+        }
         setWordScore(currBestWordValue);
         setWord(currBestWord);
-        //return currBestWord;
     }
 
     private int getRiskTolerance() {

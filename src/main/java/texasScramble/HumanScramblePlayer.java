@@ -85,12 +85,11 @@ public class HumanScramblePlayer extends Player {
 
         //check each tile used max once
         for(Character letter : enteredChars){
-            if (Collections.frequency(enteredChars, letter) > Collections.frequency(playerTiles, letter)){
+            if (Collections.frequency(enteredChars, letter) >= Collections.frequency(playerTiles, letter)){
                 System.out.println("You can only use each tile once. Try another word");
                 return false;
             }
         }
-
         return true;
     }
 
