@@ -1,6 +1,6 @@
 # COMP30880-TexasScramble by Card Sharps
 
-Ronan
+1. Ronan
  -Trie Strucutre and Dictionary parsing
  -Algorithm to generate all possible words and validating their existance in the dictionary
  -Generating potential words from given player hand
