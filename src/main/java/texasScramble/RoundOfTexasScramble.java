@@ -289,6 +289,7 @@ public class RoundOfTexasScramble {
 
                 newPot.setTotal(player.getStake() * remainingPlayers.size());
                 newPot.addToPot(foldedMoney);
+                foldedMoney = 0;
 
                 int potStake = player.getStake();
                 for (Player otherPlayer : remainingPlayers) {
