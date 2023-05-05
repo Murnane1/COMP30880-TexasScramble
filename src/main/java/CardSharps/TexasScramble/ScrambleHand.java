@@ -13,7 +13,7 @@ public class ScrambleHand {
     private BagOfTiles bag;
 
     public static final int TOTAL_TILES = 7;
-    private final static int ALL_LETTER_BONUS = 50;
+    public final static int ALL_LETTER_BONUS = 50;
     private final static int BEST_WORD = 79;
 
     public ScrambleHand(BagOfTiles tiles, ScrabbleDictionary scrabbleDictionary){

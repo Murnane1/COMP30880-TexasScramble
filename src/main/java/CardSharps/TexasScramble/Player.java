@@ -185,15 +185,15 @@ public abstract class Player {
     }
 
 
-    public void raiseBet(PotOfMoney pot) {
+    public void raiseBet(PotOfMoney pot, int amount) {
         if (getBank() == 0) return;
 
-        stake++;
-        bank--;
+        stake += amount;
+        bank  -= amount;
 
-        pot.raiseStake(1);
+        pot.raiseStake(amount);
 
-        System.out.println("\n> " + getName() + " says: and I raise you 1 chip!\n");
+        System.out.println("\n> " + getName() + " says: and I raise you "+ addCount(amount, "chip", "chips") +"\n");
     }
 
     public void allIn(PotOfMoney pot) {
@@ -215,6 +215,7 @@ public abstract class Player {
     abstract boolean shouldSee(PotOfMoney pot);
 
     abstract boolean shouldRaise(PotOfMoney pot);
+    abstract int raiseAmount();
 
     abstract boolean shouldAllIn(PotOfMoney pot);
 
@@ -249,7 +250,8 @@ public abstract class Player {
                 }
             }
             if (shouldRaise(pot)){
-                raiseBet(pot);
+                int amount = raiseAmount();
+                raiseBet(pot, amount);
             } else {
                 if(canCheck)
                     System.out.println("\n> " + getName() + " says: I check!\n");

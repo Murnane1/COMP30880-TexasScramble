@@ -41,6 +41,11 @@ public class ComputerScramblePlayer extends Player {
     }
 
     @Override
+    int raiseAmount() {
+        return 2;
+    }
+
+    @Override
     boolean shouldAllIn(PotOfMoney pot) {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;

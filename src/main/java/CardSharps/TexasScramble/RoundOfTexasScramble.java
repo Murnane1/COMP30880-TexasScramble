@@ -1,5 +1,6 @@
 package CardSharps.TexasScramble;
 
+
 import java.util.*;
 
 public class RoundOfTexasScramble {
@@ -185,7 +186,7 @@ public class RoundOfTexasScramble {
                 if(numActive == 1){
                     return;             //if only one player can still make bets end betting round
                 } else {
-                    delay(DELAY_BETWEEN_ACTIONS);                 //TODO put back in in final submission
+                    //delay(DELAY_BETWEEN_ACTIONS);                 //TODO put back in in final submission
                     currentPlayer.nextAction(mainPot);
                 }
 
