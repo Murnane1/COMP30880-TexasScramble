@@ -91,7 +91,7 @@ public class RoundOfTexasScrambleTest {
     public void testNewSidePot() {
         //1st cycle
         PotOfMoney pot = pots.get(0);
-        player1.raiseBet(pot);
+        player1.raiseBet(pot, 1);
         player2.seeBet(pot);
         player3.seeBet(pot);
         player4.seeBet(pot);
@@ -102,7 +102,7 @@ public class RoundOfTexasScrambleTest {
         assertEquals(6, pots.get(0).getTotal());
 
         //2nd cycle
-        player1.raiseBet(pot);
+        player1.raiseBet(pot, 1);
         player2.seeBet(pot);
         player3.seeBet(pot);
         player4.seeBet(pot);
@@ -113,7 +113,7 @@ public class RoundOfTexasScrambleTest {
         player6.fold(pot);
 
         //3rd cycle
-        player1.raiseBet(pot);
+        player1.raiseBet(pot,1);
         player2.seeBet(pot);
         player3.seeBet(pot);
         player4.seeBet(pot);
@@ -134,7 +134,7 @@ public class RoundOfTexasScrambleTest {
         PotOfMoney pot = pots.get(0);
 
         //1st cycle - stake 1
-        player1.raiseBet(pot);  //1
+        player1.raiseBet(pot,1);  //1
         player2.seeBet(pot);    //1
         player3.seeBet(pot);
         player4.seeBet(pot);
@@ -142,25 +142,25 @@ public class RoundOfTexasScrambleTest {
         player5.allIn(pot);
 
         //2nd cycle - stake2
-        player1.raiseBet(pot);
+        player1.raiseBet(pot,1);
         player2.seeBet(pot);
         player3.seeBet(pot);
         player4.seeBet(pot);
         //player5.allIn(pot);      //1
 
         //3rd cycle - stake 3
-        player1.raiseBet(pot);
+        player1.raiseBet(pot,1);
         player2.seeBet(pot);
         player3.allIn(pot);
         player4.seeBet(pot);
 
         //4th cycle - stake 4
-        player1.raiseBet(pot);
+        player1.raiseBet(pot,1);
         player2.seeBet(pot);
         player4.seeBet(pot);
 
         //5th cycle - stake 5
-        player1.raiseBet(pot);
+        player1.raiseBet(pot,1);
 
         pots = round.newSidePots(pots.get(0));
 
@@ -178,18 +178,18 @@ public class RoundOfTexasScrambleTest {
     public void testSameValueAllIns(){
         PotOfMoney newPot = pots.get(0);
 
-        player1.raiseBet(newPot);
+        player1.raiseBet(newPot,1);
         player3.seeBet(newPot);
         player6.seeBet(newPot);     //stake = 1
 
-        player1.raiseBet(newPot);
+        player1.raiseBet(newPot,1);
         player3.seeBet(newPot);
         player6.seeBet(newPot);     //stake = 2
 
-        player1.raiseBet(newPot);
+        player1.raiseBet(newPot,1);
         player3.allIn(newPot);
 
-        player1.raiseBet(newPot);     //stake = 4
+        player1.raiseBet(newPot,1);     //stake = 4
 
         player6.allIn(newPot);     //stake = 3
 
@@ -206,15 +206,15 @@ public class RoundOfTexasScrambleTest {
     public void testFolding(){
         PotOfMoney newPot = pots.get(0);
 
-        player1.raiseBet(newPot);
+        player1.raiseBet(newPot,1);
         player3.seeBet(newPot);
         player6.seeBet(newPot);     //pot = 3
 
-        player1.raiseBet(newPot);
+        player1.raiseBet(newPot,1);
         player3.fold(newPot);
         player6.seeBet(newPot);     //pot = 5
 
-        player1.raiseBet(newPot);     //pot = 6
+        player1.raiseBet(newPot,1);     //pot = 6
         player6.fold(newPot);
 
         pots.clear();
