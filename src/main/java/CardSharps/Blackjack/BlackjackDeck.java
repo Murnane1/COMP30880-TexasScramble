@@ -5,8 +5,7 @@ import java.util.Random;
 
 public class BlackjackDeck {
     public static final String[] suits = { "hearts", "diamonds", "clubs", "spades" };
-    public static final int NUMCARDS = 52; //cards in deck (idk if this should be scaled as real-life play)
-
+    public static final int NUMCARDS = 52; //cards in deck
     private Card[] deck = new Card[NUMCARDS]; //total sequence of playing cards
     private int next = 0; //next card dealt
     private Random dice = new Random(System.currentTimeMillis());
@@ -60,6 +59,6 @@ public class BlackjackDeck {
 
     public BlackjackHand dealHand(){ //deals hand
         BlackjackHand hand = new BlackjackHand(this);
-        return hand; //can catergorise
+        return hand;
     }
 }

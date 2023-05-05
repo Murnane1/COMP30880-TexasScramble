@@ -2,23 +2,7 @@ package CardSharps.Blackjack;
 
 
 import CardSharps.Poker.*;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Random;
-
-
-
-// TODO
-// 
-// Lookup table
-// Should method ->checks lookup table
-// 
-// 
-// 
-// 
-// 
-// 
-// 
 
 public class BlackjackComputerPlayer extends BlackjackPlayer{ // error caused by abstract methods such as shouldSplit etc
     
@@ -142,25 +126,5 @@ public class BlackjackComputerPlayer extends BlackjackPlayer{ // error caused by
         // If none of the above conditions apply, hit.
         hit(deck, handIndex);
         return "HIT";
-    }
-
-
-
-    //todo (verify) DECISIONS
-    public boolean askQuestion(String question) {
-        System.out.print("\n>> " + question + " (y/n)?  ");
-
-        byte[] input = new byte[100];
-
-        try {
-            System.in.read(input);
-
-            for (int i = 0; i < input.length; i++)
-                if ((char) input[i] == 'y' || (char) input[i] == 'Y')
-                    return true;
-        } catch (Exception e) {
-        };
-
-        return false;
     }
 }

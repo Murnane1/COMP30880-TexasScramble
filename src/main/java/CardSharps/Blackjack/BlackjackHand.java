@@ -1,15 +1,11 @@
 package CardSharps.Blackjack;
 import CardSharps.Poker.*;
 
-
-//notes - unsure if we need to implement riskiness of hands. (probably do for ai)
-//we need to ensure that aces are either be determined as 1 or 11.
-
 public class BlackjackHand { //reference pokerhand.java in poker, references both dealer and player
     
     //static variables for cards etc
     private int numCards = 2;
-    public static final int MAXCARDS = 11; //initally gets 2 card to then hit on (the dealer gets 1 card initally)
+    public static final int MAXCARDS = 11; //initially gets 2 card to then hit on (the dealer gets 1 card initially)
     
     
     private Card[] hand;
@@ -27,8 +23,6 @@ public class BlackjackHand { //reference pokerhand.java in poker, references bot
             setCard(i, blackjackDeck.dealNext());
         }
     }
-
-   
 
     public String toString(){ //display hand
         String desc = "";
@@ -93,7 +87,7 @@ public class BlackjackHand { //reference pokerhand.java in poker, references bot
         hand[numCards++] = card;
     }
 
-    //hand classifer
+    //hand classifier
     public boolean isBlackjack(){
         if (getNumCards() != 2){
             return false;

@@ -3,12 +3,10 @@ package CardSharps.Blackjack;
 import CardSharps.Poker.*;
 import java.util.Scanner;
 
-public class BlackjackHumanPlayer extends BlackjackPlayer { //error caused by abstract methods such as shouldSplit etc
-    //constructor
+public class BlackjackHumanPlayer extends BlackjackPlayer {
     public BlackjackHumanPlayer(String name, int money){
         super(name, money);
-    }
-
+    }//constructor
     public String makeChoice(BlackjackDeck deck, int handIndex, Card dealerCard) {
         while (true) {
             System.out.println("\nYour current hand statistics: \nHand Value: " + getHand(handIndex).getHandValue() + "\nDealer Hand Value: " + dealerCard.getValue() + "\nCurrent Stakes: " + getStake(handIndex) + "\nHand Index: " + handIndex);
@@ -65,7 +63,6 @@ public class BlackjackHumanPlayer extends BlackjackPlayer { //error caused by ab
         return false;
     }
 
-
     public boolean shouldSplit(BlackjackDeck deck, int handIndex, Card dealerCard){
         if(getBank() >= getStake(handIndex)*2) {
             return true;
@@ -76,7 +73,6 @@ public class BlackjackHumanPlayer extends BlackjackPlayer { //error caused by ab
     public boolean shouldHit(BlackjackDeck deck, int handIndex, Card dealerCard) { // TODO---------------
             return true;
     }
-
     public boolean shouldStand(BlackjackDeck deck, int handIndex, Card dealerCard){
         return true;
     }

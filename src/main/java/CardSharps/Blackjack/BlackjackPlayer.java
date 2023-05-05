@@ -2,12 +2,11 @@ package CardSharps.Blackjack;
 
 import java.util.Arrays;
 import CardSharps.Poker.*;
-import CardSharps.Blackjack.BlackjackHumanPlayer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+import java.util.InputMismatchException;
 
 abstract class BlackjackPlayer { //reference player.java, humanplayer.java and computerplayer.java
-    private int bank = 0; //total money player has left (without stake)
+    public int bank = 0; //total money player has left (without stake)
     
     private BlackjackHand[] hand = new BlackjackHand[4]; //hands dealt to player
     private int[] stake = new int[4] ; //stakes of hands 
@@ -23,7 +22,7 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     public BlackjackPlayer(String name, int money){
         this.name = name;
         this.bank = money;
-
+        stake = new int[1];
         reset();
     }
 
@@ -49,17 +48,15 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     }
 
     public int getBank(){
-        return bank;
+        return this.bank;
     }
 
     public int getStake(int handIndex){
         return stake[handIndex];
     }
 
-    public void resetStake(int handIndex) {
-        for (int i = 0; i < stake.length; i++) {
-            stake[handIndex] = 1;
-        }
+    public int setStake(int handIndex, int amount){
+        return stake[handIndex] = amount;
     }
 
     public String getName(){
@@ -94,16 +91,17 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
     public void dealTo(BlackjackDeck deck, int originalStake){
         //Only Give 2 Cards when first dealt a hand
         if(originalStake>bank || isBankrupt()){
-            //Need to do error handeling TODO
         }
 
-        hand[0] = deck.dealHand();
-        stake[0] = originalStake;
+        for (int i = 0; i < numOfHands; i++) {
+            hand[i] = deck.dealHand();
+            stake[i] = originalStake;
+        }
     }
 
 
     public void addBank(int addition){
-        bank += addition;
+        this.bank += addition;
     }
 
     public boolean hit(BlackjackDeck deck, int handIndex){
@@ -121,7 +119,6 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
             System.out.println("> " + getName() + " says: STAND!");
         }
     }
-
 
     public void doubleDown(BlackjackDeck deck, int handIndex){
         if (bank < stake[handIndex]) {
@@ -167,14 +164,47 @@ abstract class BlackjackPlayer { //reference player.java, humanplayer.java and c
         return true;
     }
 
-    public void openBetting(){ //Add player input for amount of the bet
+    public void openBettingHuman(){
         if (bank == 0){
             return;
         }
-        //need player input TODO
-        stake[0]++;
-        bank--;
-        System.out.println("> " + getName() + " says: I bet ONE chip!");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your bet amount:");
+        int playerBet = 0;
+        boolean isValidInput = false;
+        while (!isValidInput) {
+            try {
+                playerBet = scanner.nextInt();
+                if (playerBet > bank) {
+                    System.out.println("You cannot bet more than what you have in the bank.");
+                    System.out.println("Enter your bet amount:");
+                } else {
+                    isValidInput = true;
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, Please enter a number.");
+                scanner.nextLine();
+                System.out.println("Enter your bet amount:");
+            }
+        }
+        setStake(0, playerBet);
+        System.out.println("> " + getName() + " says: I bet " + playerBet + " chips!");
+
+        addBank(-playerBet);
+    }
+
+    public void openBettingAI() {
+        if (bank == 0) {
+            return;
+        }
+        int maxBet = bank / 2; // maximum bet is less than half of bank
+        int minBet = 2; // minimum bet is 2
+        int playerBet = (int) (Math.random() * (maxBet - minBet + 1) + minBet); // random bet between minBet and maxBet
+        setStake(0, playerBet);
+        System.out.println("> " + getName() + " says: I bet " + playerBet + " chips!");
+
+        addBank(-playerBet);
     }
    
     abstract boolean shouldSplit(BlackjackDeck deck, int handIndex, Card dealerCard);
