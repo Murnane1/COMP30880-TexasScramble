@@ -4,7 +4,6 @@ public class Tile {
     private char letter;
     private int value;
 
-
     public Tile(char letter, int value){
         this.letter = letter;
         this.value = value;
@@ -17,6 +16,8 @@ public class Tile {
     public int getValue() {
         return value;
     }
+
+
     public String toString(){
         return letter + "";
     }

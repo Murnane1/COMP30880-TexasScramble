@@ -172,20 +172,20 @@ public class ScrambleHand {
 
 
         if(communityTiles.size() == 0){
-            //TODO how will 5 more cards effect current hand (vowels more useful? (max 2 letter score 11)
+            //TODO how will 5 more tiles effect current hand (vowels more useful? (max 2 letter score 11)
             for (Tile t: playerTiles) {
                 wordValue += t.getValue()/2;
             }
          }
         else if(communityTiles.size() == 3){
-            //TODO how will 2 more cards effect current hand (max 5 letter score 21)
+            //TODO how will 2 more tiles effect current hand (max 5 letter score 21)
             //have useful pre/suf fixes
             if(getBestCommunityWordValue() >= wordValue){
                 wordValue -= 8; //every player can use this word
             }
         }
         else if(communityTiles.size() == 4){
-            //TODO how will 1 more card effect current hand (max 6 letter score 28)
+            //TODO how will 1 more tiles effect current hand (max 6 letter score 28)
             //have useful pre/suf fixes
             if(getBestCommunityWordValue() >= wordValue){
                 wordValue -= 12; //every player can use this word
@@ -249,6 +249,45 @@ public class ScrambleHand {
         return betRound;
     }
 
+
+    public List<String> getPotentialSevenLetterWords(List<Tile> hand, List<Tile> communityTiles) {
+        List<String> potentialWords = new ArrayList<>();
+        for (int i = hand.size() + communityTiles.size(); i <= 7; i++) {
+            List<String> sevenLetterWords = getSevenLetterWordsContainingTiles(hand, communityTiles, i);
+            potentialWords.addAll(sevenLetterWords);
+        }
+        return potentialWords;
+    }
+
+    public List<String> getSevenLetterWordsContainingTiles(List<Tile> hand, List<Tile> communityTiles, int numTiles) {
+        List<String> possibleWords = new ArrayList<>();
+        generatePossibleSevenLetterWords(hand, communityTiles, "", numTiles, possibleWords, numTiles);
+        return possibleWords;
+    }
+
+    private void generatePossibleSevenLetterWords(List<Tile> hand, List<Tile> communityTiles, String wordSoFar, int numTilesLeft, List<String> possibleWords, int maxTiles) {
+        if (numTilesLeft == 0) {
+            if (dictionary.contains(wordSoFar)) {
+                if (!possibleWords.contains(wordSoFar)) {
+                    possibleWords.add(wordSoFar);
+                }
+            }
+            return;
+        }
+        List<Tile> allTiles = new ArrayList<>(hand);
+        allTiles.addAll(communityTiles);
+        int tilesAdded = hand.size() + communityTiles.size() - numTilesLeft;
+        for (int i = 0; i < allTiles.size(); i++) {
+            Tile tile = allTiles.get(i);
+            if (tilesAdded < 7 - hand.size()) {
+                List<Tile> remainingTiles = new ArrayList<>(allTiles);
+                remainingTiles.remove(i);
+                generatePossibleSevenLetterWords(hand, communityTiles, wordSoFar + tile.getLetter(), numTilesLeft - 1, possibleWords, maxTiles);
+            }
+        }
+    }
+
+
     public static void main(String[] args) throws IOException{
         BagOfTiles bag = new BagOfTiles("ENGLISH");
         String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
@@ -265,11 +304,19 @@ public class ScrambleHand {
         System.out.println(hand.toString());
 
         List<String> possibleWords = hand.getPossibleWords();
-        for (String word: possibleWords){
+        List<String> possible7letterwords = hand.getPotentialSevenLetterWords(hand.getPlayerTiles(), hand.getCommunityTiles());
+//        for (String word: possibleWords){
+//            boolean contains = dictionary.contains(word);
+//            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
+//        }
+
+        for (String word: possible7letterwords){
             boolean contains = dictionary.contains(word);
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
         }
-        
+
         System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
+
+
     }
 }
