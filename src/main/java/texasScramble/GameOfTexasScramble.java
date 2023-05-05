@@ -11,10 +11,11 @@ public class GameOfTexasScramble {
     private ScrabbleDictionary dictionary;
     private WordFrequencyDictionary wordFrequencyDictionary;
     private int numPlayers;
-    private final static int INIT_SMALL_BLIND = 1;
+    private final static int INIT_SMALL_BLIND = 5;
 
-    private final static int SMALL_BLIND_INCREASE_PER_ROUND = 1;
+    private final static double BLIND_INCREASE_PER_ROUND = 1.25;
     private final static int MAX_NUM_PLAYERS = 9;
+    private final static int STARTING_BANK = 100;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -115,8 +116,8 @@ public class GameOfTexasScramble {
         return numPlayers;
     }
 
-    public int getSmallBlindIncreasePerRound(){
-        return SMALL_BLIND_INCREASE_PER_ROUND;
+    public double getBlindIncreasePerRound(){
+        return BLIND_INCREASE_PER_ROUND;
     }
 
 
@@ -161,16 +162,17 @@ public class GameOfTexasScramble {
     //--------------------------------------------------------------------//
 
     public void play()	{
+        double blindTracker = INIT_SMALL_BLIND;
         int smallBlind = INIT_SMALL_BLIND;
         int bigBlind = smallBlind*2;
         int button = 0;
-        while (getNumSolventPlayers() > 1) {
 
+        while (getNumSolventPlayers() > 1) {
             for (int i = 0; i < numPlayers; i++) {                  //remove any player without bank to play round
                 if (getPlayer(i) != null) {
                     if (getPlayer(i).getBank() < bigBlind) {
                         if(getPlayer(i) == getPlayer(0)){
-                            System.out.println(getPlayer(0).getName() + " you do not have sufficient funds to play anymore\nYour game is over");
+                            System.out.println("\n"+getPlayer(0).getName() + " you do not have sufficient funds to play anymore\nYour game is over");
                             System.exit(0);
                         }
                         removePlayer(i);
@@ -181,15 +183,17 @@ public class GameOfTexasScramble {
             RoundOfTexasScramble round = new RoundOfTexasScramble(bag, players, smallBlind, button, dictionary);
             round.play();
 
-            smallBlind += SMALL_BLIND_INCREASE_PER_ROUND;
-            bigBlind = smallBlind*2;
+            blindTracker    *=  BLIND_INCREASE_PER_ROUND;
+            smallBlind      =   (int) Math.floor(blindTracker);
+            bigBlind        =   smallBlind*2;
             button++;
+
             try {
                 if(getNumPlayersMeetBlinds(bigBlind) < 2){
                     System.out.println("The game is over. There is only one player able to meet the big blind of " + bigBlind);
                     for (Player player : players){
                         if (player != null && player.getBank() > bigBlind)
-                            System.out.println(player.getName() + " is the WINNER!");
+                            System.out.println("\n\n***** "+player.getName() + " is the WINNER! *****\n");
                     }
                     return;
                 }
@@ -246,14 +250,11 @@ public class GameOfTexasScramble {
             } else if(numPlayers > MAX_NUM_PLAYERS){
                 System.out.println("The maximum number of players for our game of Texas Scrabble is " + MAX_NUM_PLAYERS);
             }
-            //scNP.close();
         }
-
-        int startingBank = 10;
 
         System.out.println("\nLet's play SCRAMBLE ...\n\n");
 
-        GameOfTexasScramble game = new GameOfTexasScramble(numPlayers, startingBank, humanName);
+        GameOfTexasScramble game = new GameOfTexasScramble(numPlayers, STARTING_BANK, humanName);
 
         game.play();
     }

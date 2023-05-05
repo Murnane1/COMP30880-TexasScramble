@@ -84,4 +84,17 @@ public class HumanScramblePlayerTest {
         boolean checkNull = player.checkWord("");
         assertEquals(true, checkNull);
     }
+
+    @Test
+    public void testSharePot(){
+        assertEquals(10, player.getBank());
+        PotOfMoney pot = new PotOfMoney();
+        pot.addToPot(40);
+        player.sharePot(pot, 3);
+        int share = (40-(40 % 3)) / 3;
+        assertEquals(10+share, player.getBank());
+
+        player.sharePot(pot, 3);
+        assertEquals(10+2*share, player.getBank());
+    }
 }

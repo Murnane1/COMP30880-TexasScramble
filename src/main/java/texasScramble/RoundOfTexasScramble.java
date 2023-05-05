@@ -186,7 +186,7 @@ public class RoundOfTexasScramble {
                 if(numActive == 1){
                     return;             //if only one player can still make bets end betting round
                 } else {
-                    delay(DELAY_BETWEEN_ACTIONS);
+                    delay(DELAY_BETWEEN_ACTIONS);                 //TODO put back in in final submission
                     currentPlayer.nextAction(mainPot);
                 }
 
@@ -200,6 +200,10 @@ public class RoundOfTexasScramble {
 
     public void declareWords(PotOfMoney mainPot) {
         ArrayList<Player> activePlayers = getActivePlayers(mainPot.getPlayers());
+        if(activePlayers.size() == 1) {
+            System.out.println("As " + activePlayers.get(0).getName() + " is the only remaining player there is no word reveal");
+            return;
+        }
         System.out.println("---WORD REVEAL---");
 
         for (Player player: activePlayers) {
@@ -212,7 +216,7 @@ public class RoundOfTexasScramble {
             System.out.println(player.getName() + "'s word is \"" + player.getWord() + "\"");
 
             for (Player challenger: activePlayers) {
-                if(!player.getName().equals(challenger.getName()) && challenger.getBank() > PENALTY){
+                if(!player.getName().equals(challenger.getName()) /*&& challenger.getBank() > PENALTY*/){
                     if (challenger.shouldChallenge(mainPot, player.getWord())) {
                         challenge(player, challenger, mainPot);
                         break;
@@ -223,7 +227,7 @@ public class RoundOfTexasScramble {
     }
 
 
-    private void showdown(ArrayList<PotOfMoney> pots) {
+    public void showdown(ArrayList<PotOfMoney> pots) {
         System.out.println("---SHOWDOWN---");
 
         ArrayList<Player> bestPlayer = new ArrayList<>();
@@ -238,8 +242,8 @@ public class RoundOfTexasScramble {
             int bestHandScore = 0;
             int score;
 
-            bestPlayer.add(pot.getPlayer(0));
             for (int i = 0; i < pot.getNumPlayers(); i++) {
+
                 currentPlayer = pot.getPlayer(i);
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
                     continue;
@@ -255,13 +259,18 @@ public class RoundOfTexasScramble {
                 }
             }
 
-            if (bestPlayer.size() == 1) {
+            int numWinners = bestPlayer.size();
+            if (numWinners == 1) {
                 Player potWinner = bestPlayer.get(0);
                 potWinner.takePot(pot);
             }
-            else if (bestPlayer.size() > 1) {
+            else if (numWinners > 1) {
                 for (Player player: bestPlayer) {
-                    player.sharePot(pot, bestPlayer.size());
+                    player.sharePot(pot, numWinners);
+                }
+                int remainder = pot.getTotal() % numWinners;
+                if(remainder > 0) {
+                    System.out.println("The remainder of " + currentPlayer.addCount(remainder, "chip", "chips") + " goes to the house");
                 }
                 pot.clearPot();
             }

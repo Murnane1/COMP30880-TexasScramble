@@ -21,13 +21,15 @@ public class HumanScramblePlayer extends Player {
 
     @Override
     public boolean shouldRaise(PotOfMoney pot) {
+        if(getBank() == 1){
+            System.out.println("Note: Raising will make you All In");
+        }
         return askQuestion("Do you want to raise the bet by 1 chip");
     }
 
 
     @Override
     public boolean shouldAllIn(PotOfMoney pot) {
-        //TODO is there a way to let player know they won't have blind for next round
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
@@ -99,11 +101,13 @@ public class HumanScramblePlayer extends Player {
             try {
                 System.in.read(input);
 
-                for (int i = 0; i < input.length; i++)
-                    if ((char)input[i] == 'y' || (char)input[i] == 'Y')
+                for (int i = 0; i < input.length; i++) {
+                    System.out.println("\n");
+                    if ((char) input[i] == 'y' || (char) input[i] == 'Y')
                         return true;
-                    else if ((char)input[i] == 'n' || (char)input[i] == 'N')
+                    else if ((char) input[i] == 'n' || (char) input[i] == 'N')
                         return false;
+                }
             }
             catch (Exception e){e.printStackTrace();};
             System.out.println("Please enter 'y' or 'n' to answer");
