@@ -226,7 +226,7 @@ public class RoundOfTexasScramble {
     private void showdown(ArrayList<PotOfMoney> pots) {
         System.out.println("---SHOWDOWN---");
 
-        Player bestPlayer = null;
+        ArrayList<Player> bestPlayer = new ArrayList<>();
         Player currentPlayer = null;
         int potNum = 0;
 
@@ -238,7 +238,7 @@ public class RoundOfTexasScramble {
             int bestHandScore = 0;
             int score;
 
-            bestPlayer = pot.getPlayer(0);
+            bestPlayer.add(pot.getPlayer(0));
             for (int i = 0; i < pot.getNumPlayers(); i++) {
                 currentPlayer = pot.getPlayer(i);
                 if (currentPlayer.getName() == null || currentPlayer.hasFolded()) {
@@ -247,13 +247,24 @@ public class RoundOfTexasScramble {
                 score = currentPlayer.getWordScore();
                 if (score > bestHandScore) {
                     bestHandScore = score;
-                    bestPlayer = currentPlayer;
+                    bestPlayer.clear();
+                    bestPlayer.add(currentPlayer);
+                }
+                else if (score == bestHandScore) {
+                    bestPlayer.add(currentPlayer);
                 }
             }
-            System.out.println(bestPlayer.getName() + " takes pot of " + bestPlayer.addCount(pot.getTotal(), "chip", "chips") +
-                    "\nTheir word was \"" + bestPlayer.getWord() + "\" with a score of " + bestPlayer.getWordScore());
 
-            bestPlayer.takePot(pot);
+            if (bestPlayer.size() == 1) {
+                Player potWinner = bestPlayer.get(0);
+                potWinner.takePot(pot);
+            }
+            else if (bestPlayer.size() > 1) {
+                for (Player player: bestPlayer) {
+                    player.sharePot(pot, bestPlayer.size());
+                }
+                pot.clearPot();
+            }
             potNum++;
         }
     }

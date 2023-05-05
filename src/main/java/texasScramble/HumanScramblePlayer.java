@@ -61,7 +61,7 @@ public class HumanScramblePlayer extends Player {
         return sc.nextLine().toUpperCase();
     }
 
-    public boolean checkWord(String testWord){
+    public boolean checkWord(String testWord){      //TODO test works with strange characters different languages
         testWord = testWord.toUpperCase();
         testWord = testWord.replace(" ","");
 
@@ -73,9 +73,6 @@ public class HumanScramblePlayer extends Player {
         for (Tile tile: getHand().getHand()) {
             playerTiles.add(tile.getLetter());
         }
-        for (Tile tile: getHand().getCommunityTiles()) {
-            playerTiles.add(tile.getLetter());
-        }
 
         //does player have entered letters
         if(!playerTiles.containsAll(enteredChars)){
@@ -85,7 +82,7 @@ public class HumanScramblePlayer extends Player {
 
         //check each tile used max once
         for(Character letter : enteredChars){
-            if (Collections.frequency(enteredChars, letter) >= Collections.frequency(playerTiles, letter)){
+            if (Collections.frequency(enteredChars, letter) > Collections.frequency(playerTiles, letter)){
                 System.out.println("You can only use each tile once. Try another word");
                 return false;
             }

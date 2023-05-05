@@ -51,6 +51,8 @@ public class HumanScramblePlayerTest {
         commTiles.add(tile7);
         playerHand.addCommunityTiles(commTiles);
         player.setHand(playerHand);
+
+        System.out.println(playerHand.getHand());
     }
 
     @Test

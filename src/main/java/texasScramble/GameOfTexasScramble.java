@@ -37,8 +37,8 @@ public class GameOfTexasScramble {
             }
         }
         bag = bagOfLanguage(language);
-        dictionary = getDictionary(language);
-        wordFrequencyDictionary = getWordFrequencyDictionary(language);
+        dictionary = getDictionary(language);       //TODO catch errors loading - if word doesn't work just don't load bad value
+        wordFrequencyDictionary = getWordFrequencyDictionary(language); //TODO catch errors loading
 
         //TODO make possible for multiple human players
         CreateComputerPlayers computerPlayers = new CreateComputerPlayers(wordFrequencyDictionary, numPlayers-1 , bank, humanName);
@@ -169,6 +169,10 @@ public class GameOfTexasScramble {
             for (int i = 0; i < numPlayers; i++) {                  //remove any player without bank to play round
                 if (getPlayer(i) != null) {
                     if (getPlayer(i).getBank() < bigBlind) {
+                        if(getPlayer(i) == getPlayer(0)){
+                            System.out.println(getPlayer(0).getName() + " you do not have sufficient funds to play anymore\nYour game is over");
+                            System.exit(0);
+                        }
                         removePlayer(i);
                     }
                 }

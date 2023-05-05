@@ -83,6 +83,13 @@ public class PotOfMoney
         return winnings;
     }
 
+    public int sharePot(int numWinners){
+        int remainder = getTotal() % numWinners;        //house takes remainder
+        int allPlayerWinnings = getTotal() - remainder;
+        int share = allPlayerWinnings / numWinners;
+        return share;
+    }
+
     public void setTotal(int total) {
         this.total = total;
     }

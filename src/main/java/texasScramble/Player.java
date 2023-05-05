@@ -123,7 +123,16 @@ public abstract class Player {
     }
 
     public void takePot(PotOfMoney pot) {
+        System.out.println(getName() + " takes pot of " + addCount(pot.getTotal(), "chip", "chips") +
+                "\nTheir word was \"" + getWord() + "\" with a score of " + getWordScore());
         bank += pot.takePot();
+    }
+
+    public void sharePot(PotOfMoney pot, int numWinners){
+        int share = pot.sharePot(numWinners);
+        System.out.println(getName() + " takes their share of " + addCount(share, "chip", "chips") +
+                " from the pot\nTheir word was \"" + getWord() + "\" with a score of " + getWordScore());
+        bank += share;
     }
 
     public void penalty(int penaltyValue, PotOfMoney pot) {
