@@ -30,37 +30,56 @@ public class FrequencyComputerPlayer extends Player{
 
     @Override
     boolean shouldSee(PotOfMoney pot) {
-        chooseWord();
-        //TODO should be affected by stake:bank ratio
         if (getStake() == 0)
             return true;
         else
-            return Math.abs(dice.nextInt())%80 < /*getHand().getHandQuality(getWord())*/ +
-                    getRiskTolerance();
+            return getBetWortiness(pot, 35) > 0;
     }
 
     @Override
     boolean shouldRaise(PotOfMoney pot) {
-        chooseWord();
-        //TODO should be affected by stake:bank ratio
-        return Math.abs(dice.nextInt())%60 < /*getHand().getHandQuality(getWord())*/ +
-                getRiskTolerance();
+        return getBetWortiness(pot, 65) > 0;
     }
 
     @Override
-    int raiseAmount() {
-        return 2;
+    int raiseAmount(PotOfMoney pot) {
+        int amount = getBetWortiness(pot, 0)/200 * getBank();
+        if(amount < 1){
+            return 1;
+        } else {
+            return amount;
+        }
     }
+
 
     @Override
     boolean shouldAllIn(PotOfMoney pot) {
-        chooseWord();
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
-            return Math.abs(dice.nextInt()) % 50 + getBank() < /*getHand().getHandQuality(getWord())*/ +
-                    getRiskTolerance();
+            return getBetWortiness(pot, 25) > pot.getCurrentStake() - getStake();       // all in factors the amount the player has to raise by to go all in more than other actions
         }
+    }
+
+    /*
+    *   Higher the value the better the bet
+    *   All factors that encourage a larger bet minus the factors that make a bet more risky
+    *   The risk integer is riskiness of given move. I.E raising is taking on a bigger risk than seeing a bet
+    *   The highest value it can return is 300
+    *   The lowest value it can return is -127 + provided risk integer
+     */
+    public int getBetWortiness(PotOfMoney pot, int risk) {
+        if(risk == 0){
+            risk = 1;       //Prevent breaking game with risk of 0. Can't get the modulus of 0
+        }
+
+        chooseWord();
+        if (getWord() == null) {
+            return (int) (getRiskTolerance() + 100 * getStakeToBankRatio() + getHand().getHandQuality("") -
+                    (100 * pot.getAverageStakeToBankRatio() + 3 * pot.getActivePlayers().size() + 2 * (pot.getCurrentStake() - getStake()) + 30-10*(getHand().getBettingRound()) + Math.abs(dice.nextInt() % risk)));
+        } else
+            return (int) (getRiskTolerance() + 100 * getStakeToBankRatio() + getHand().getHandQuality(getWord()) -
+                    (100 * pot.getAverageStakeToBankRatio() + 3 * pot.getActivePlayers().size() + 2 * (pot.getCurrentStake() - getStake()) + Math.abs(dice.nextInt() % risk)));
     }
 
 
@@ -70,7 +89,7 @@ public class FrequencyComputerPlayer extends Player{
      *       2) Slightly suspicious words
      *       3) Very normal words
      *
-     *       The likelihood of being challenged is proporional to this
+     *       The likelihood of being challenged is proportional to this
      *
      */
     @Override
@@ -81,7 +100,7 @@ public class FrequencyComputerPlayer extends Player{
         }
 
         int doubt = 0;
-        if(word.length() == TOTAL_TILES){
+        if(word.length() == TOTAL_TILES){           //remove any all tiles bonus
             wordValue -= ALL_LETTER_BONUS;
         }
 

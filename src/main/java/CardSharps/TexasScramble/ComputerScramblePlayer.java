@@ -41,7 +41,7 @@ public class ComputerScramblePlayer extends Player {
     }
 
     @Override
-    int raiseAmount() {
+    int raiseAmount(PotOfMoney pot) {
         return 2;
     }
 

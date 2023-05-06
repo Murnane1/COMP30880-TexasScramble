@@ -98,6 +98,10 @@ public abstract class Player {
         return allIn;
     }
 
+    public double getStakeToBankRatio(){
+        return getStake() / (getBank() + getStake());
+    }
+
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
     // Modifiers
@@ -215,7 +219,7 @@ public abstract class Player {
     abstract boolean shouldSee(PotOfMoney pot);
 
     abstract boolean shouldRaise(PotOfMoney pot);
-    abstract int raiseAmount();
+    abstract int raiseAmount(PotOfMoney pot);
 
     abstract boolean shouldAllIn(PotOfMoney pot);
 
@@ -250,7 +254,7 @@ public abstract class Player {
                 }
             }
             if (shouldRaise(pot)){
-                int amount = raiseAmount();
+                int amount = raiseAmount(pot);
                 raiseBet(pot, amount);
             } else {
                 if(canCheck)

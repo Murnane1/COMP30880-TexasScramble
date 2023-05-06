@@ -164,7 +164,12 @@ public class ScrambleHand {
     }
 
     public int getHandQuality(String word) {
-        int wordValue = calculateWordValue(word);
+        int wordValue = 0;
+        if(word == ""){
+            wordValue = 0;
+        } else {
+            wordValue = calculateWordValue(word);
+        }
         //maybe calculate 7-letter words still possible
         //average tile 1.87 points
         //players have about a 15% chance of having a 7-letter word assuming perfect knowledge (1 in 6.67)
@@ -191,15 +196,18 @@ public class ScrambleHand {
                 wordValue -= 12; //every player can use this word
             }
         }
-        else {
+        else {                              //have all tiles best word should be evaluated
             if(getBestCommunityWordValue() >= wordValue){
                 return 0; //every player can use this word
             }
             if(wordValue == BEST_WORD){
                 return Integer.MAX_VALUE;   //best possible word
             }
-            //TODO (max word value is 29+50=79)
-            return wordValue;
+            if(word.length() == TOTAL_TILES){
+                return wordValue + 20;
+            } else {
+                return wordValue * 3;
+            }
         }
 
         for(Tile t : playerTiles){
@@ -303,7 +311,7 @@ public class ScrambleHand {
 
         System.out.println(hand.toString());
 
-        List<String> possibleWords = hand.getPossibleWords();
+        //List<String> possibleWords = hand.getPossibleWords();
         List<String> possible7letterwords = hand.getPotentialSevenLetterWords(hand.getPlayerTiles(), hand.getCommunityTiles());
 //        for (String word: possibleWords){
 //            boolean contains = dictionary.contains(word);
@@ -314,8 +322,8 @@ public class ScrambleHand {
             boolean contains = dictionary.contains(word);
             System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
         }
-
-        System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
+        System.out.println(possible7letterwords + ": Total Words = " + possible7letterwords.size());
+        //System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
 
 
     }

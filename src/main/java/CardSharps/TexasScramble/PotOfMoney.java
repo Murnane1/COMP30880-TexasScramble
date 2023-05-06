@@ -49,6 +49,25 @@ public class PotOfMoney
         return stake;
     }
 
+    public ArrayList<Player> getActivePlayers(){
+        ArrayList<Player> activePlayers = new ArrayList<>();
+        for (Player player: getPlayers()) {
+            if(player == null || player.hasFolded()){
+                continue;
+            }
+            activePlayers.add(player);
+        }
+        return activePlayers;
+    }
+
+    public double getAverageStakeToBankRatio() {
+        double commitment = 0;
+        for (Player player: getActivePlayers()) {
+            commitment += player.getStakeToBankRatio();
+        }
+        return commitment / getActivePlayers().size();
+    }
+
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
     // Modifiers

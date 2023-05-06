@@ -28,7 +28,7 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    int raiseAmount() {
+    int raiseAmount(PotOfMoney pot) {
         int enteredValue = -1;
         while (enteredValue < 0 || enteredValue > getBank()) {
             System.out.print("\n>> " + getName() + ", please enter how much you want to raise by: ");
