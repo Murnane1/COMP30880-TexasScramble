@@ -5,10 +5,10 @@ import CardSharps.Poker.PotOfMoney;
 
 public class PotTexasHoldem extends PotOfMoney{
     
-    private ArrayList<PlayerInterface> players;
+    private ArrayList<Player> players;
     int maxStake = Integer.MAX_VALUE;       //no max until a player goes all-in
     
-    public PotTexasHoldem(ArrayList<PlayerInterface> potPlayers){
+    public PotTexasHoldem(ArrayList<Player> potPlayers){
         super();
         players = potPlayers;
     }
@@ -17,19 +17,19 @@ public class PotTexasHoldem extends PotOfMoney{
         return players.size();
     }
 
-    public PlayerInterface getPlayer(int i){
+    public Player getPlayer(int i){
         return players.get(i);
     }
 
-    public ArrayList<PlayerInterface> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void addPlayer(PlayerInterface player){
+    public void addPlayer(Player player){
         players.add(player);
     }
 
-    public void removePlayer(PlayerInterface player){
+    public void removePlayer(Player player){
         players.remove(player);
     }
 
@@ -37,7 +37,7 @@ public class PotTexasHoldem extends PotOfMoney{
         players.remove(i);
     }
 
-    public void addPlayers(PlayerInterface[] newPlayers){
+    public void addPlayers(Player[] newPlayers){
         for(int i = 0 ; i< newPlayers.length;i++){
             players.add(newPlayers[i]);
         }

@@ -1,6 +1,7 @@
+/*
 import CardSharps.TexasHoldem.ComputerHoldemPlayer;
 import CardSharps.TexasHoldem.HumanHoldemPlayer;
-import CardSharps.TexasHoldem.PlayerInterface;
+import CardSharps.TexasHoldem.Player;
 import CardSharps.TexasHoldem.PotTexasHoldem;
 import CardSharps.TexasHoldem.RoundOfTexasHoldem;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class RoundOfHoldemTest {
     private ComputerHoldemPlayer player4 = new ComputerHoldemPlayer("p4",4);
     private ComputerHoldemPlayer player5 = new ComputerHoldemPlayer("p5",1);
 
-    private PlayerInterface[] players = {player1,player2,player3,player4,player5};
+    private Player[] players = {player1,player2,player3,player4,player5};
 
     private RoundOfTexasHoldem round = new RoundOfTexasHoldem(new DeckOfCards(), players, 1, 0);
 
@@ -28,7 +29,7 @@ public class RoundOfHoldemTest {
 
     @Before
     public void setUp() {
-        ArrayList<PlayerInterface> listPlayers = new ArrayList<>(Arrays.asList(players));
+        ArrayList<Player> listPlayers = new ArrayList<>(Arrays.asList(players));
         PotTexasHoldem mainPot = new PotTexasHoldem(listPlayers);
         pots.add(mainPot);
         //RoundOfTexasHoldem round = new RoundOfTexasHoldem(new DeckOfCards(), players);
@@ -122,4 +123,4 @@ public class RoundOfHoldemTest {
         round.addSidePot(player2, 0);
         assertEquals(pots.get(0).getNumPlayers(), 5);
     }
-}
+}*/

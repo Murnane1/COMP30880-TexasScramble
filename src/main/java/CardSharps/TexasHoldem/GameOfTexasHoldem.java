@@ -10,7 +10,7 @@ import CardSharps.Poker.*;
 
 public class GameOfTexasHoldem 
 {	
-	private PlayerInterface[] players;
+	private Player[] players;
 	
 	private DeckOfCards deck;
 	
@@ -26,7 +26,7 @@ public class GameOfTexasHoldem
 	
 	public GameOfTexasHoldem(String[] names, int bank) {
 		numPlayers = names.length;
-		players = new PlayerInterface[numPlayers];
+		players = new Player[numPlayers];
 		
 		for (int i = 0; i < numPlayers; i++)
 			if (i == 0)
@@ -50,7 +50,7 @@ public class GameOfTexasHoldem
 	}
 	
 	
-	public PlayerInterface getPlayer(int num) {
+	public Player getPlayer(int num) {
 		if (num >= 0 && num <= numPlayers)
 			return players[num];
 		else

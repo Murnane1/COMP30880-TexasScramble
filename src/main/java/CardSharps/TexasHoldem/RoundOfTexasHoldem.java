@@ -17,7 +17,7 @@ import CardSharps.Poker.*;
 
 public class RoundOfTexasHoldem {	
 	public static final int DELAY_BETWEEN_ACTIONS	=	1000;  // number of milliseconds between game actions
-	private PlayerInterface[] players;
+	private Player[] players;
 	private DeckOfCards deck;
 	private int numPlayers;
 	
@@ -31,7 +31,7 @@ public class RoundOfTexasHoldem {
 	//--------------------------------------------------------------------//
 	//--------------------------------------------------------------------//
 	
-	public RoundOfTexasHoldem(DeckOfCards deck, PlayerInterface[] players, int smallBlind, int button) {
+	public RoundOfTexasHoldem(DeckOfCards deck, Player[] players, int smallBlind, int button) {
 		this.players = players; //init players
 		this.deck    = deck; //init deck
 		this.smallBlind = smallBlind;
@@ -56,7 +56,7 @@ public class RoundOfTexasHoldem {
 	}
 	
 	
-	public PlayerInterface getPlayer(int num) {
+	public Player getPlayer(int num) {
 		if (num >= 0 && num <= numPlayers)
 			return players[num];
 		else
@@ -88,7 +88,7 @@ public class RoundOfTexasHoldem {
 		{
 			System.out.println("\n> " + players[num].getName() + " leaves the game.\n");
 
-			PlayerInterface[] newPlayers = new PlayerInterface[players.length-1];
+			Player[] newPlayers = new Player[players.length-1];
 			int count = 0;
 			for(int i = 0; i<players.length; i++){
 				if( i!=num){
@@ -208,7 +208,7 @@ public class RoundOfTexasHoldem {
 
 	public void play(){
 
-		ArrayList<PlayerInterface> listPlayers = new ArrayList<>(Arrays.asList(players));
+		ArrayList<Player> listPlayers = new ArrayList<>(Arrays.asList(players));
 		PotTexasHoldem mainPot = new PotTexasHoldem(listPlayers);
 		pots.add(mainPot);
 
@@ -319,7 +319,7 @@ public class RoundOfTexasHoldem {
 		System.out.println("---SHOWDOWN---");
 
 		int bestHandScore = 0, score = 0, bestPos = 0, potNum =0;
-		PlayerInterface bestPlayer = null, currentPlayer = null;
+		Player bestPlayer = null, currentPlayer = null;
 
 		for (PotTexasHoldem pot: pots) {
 
@@ -359,7 +359,7 @@ public class RoundOfTexasHoldem {
 			stake = mainPot.getCurrentStake();
 
 			for (int i = 0; i < getNumPlayers(); i++) {
-				PlayerInterface currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
+				Player currentPlayer = mainPot.getPlayer((playerStart + i) % mainPot.getNumPlayers());
 
 				if (currentPlayer == null || currentPlayer.hasFolded() || currentPlayer.isAllIn()) {
 					continue;
@@ -384,16 +384,16 @@ public class RoundOfTexasHoldem {
 	*
 	*
 	* */
-	ArrayList<PlayerInterface> newPotPlayers;
+	ArrayList<Player> newPotPlayers;
 	public ArrayList<PotTexasHoldem> newSidePots(PotTexasHoldem pot) {
 		ArrayList<PotTexasHoldem> sidePots = new ArrayList<>();
 		sidePots.add(pot);
 
 		newPotPlayers = new ArrayList<>(pot.getPlayers());
 
-		Collections.sort(newPotPlayers, new Comparator<PlayerInterface>() {
+		Collections.sort(newPotPlayers, new Comparator<Player>() {
 			@Override
-			public int compare(PlayerInterface p1, PlayerInterface p2) {
+			public int compare(Player p1, Player p2) {
 				return p1.getStake() - p2.getStake();
 			}
 		});
@@ -412,13 +412,13 @@ public class RoundOfTexasHoldem {
 		return sidePots;
 	}
 
-	public void addNewSidePot(ArrayList<PlayerInterface> XXXXnewPotPlayers, ArrayList<PotTexasHoldem> sidePots, int allInPlayer) {
+	public void addNewSidePot(ArrayList<Player> XXXXnewPotPlayers, ArrayList<PotTexasHoldem> sidePots, int allInPlayer) {
 		int currPot = sidePots.size() - 1;
 
 		int potMax = newPotPlayers.get(allInPlayer).getStake();    //max value allowed for each player in current pot
 		sidePots.get(currPot).setMaxStake(potMax);
 
-		//ArrayList<PlayerInterface> nextPotPlayers = new ArrayList<>(newPotPlayers);
+		//ArrayList<Player> nextPotPlayers = new ArrayList<>(newPotPlayers);
 		newPotPlayers.remove(allInPlayer);
 
 		PotTexasHoldem newPot = new PotTexasHoldem(newPotPlayers);
