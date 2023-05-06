@@ -43,11 +43,13 @@ public class FrequencyComputerPlayer extends Player{
 
     @Override
     int raiseAmount(PotOfMoney pot) {
-        int amount = getBetWortiness(pot, 0)/200 * getBank();
-        if(amount < 1){
-            return 1;
-        } else {
-            return amount;
+        if(getStakeToBankRatio() == 0){
+            return getBetWortiness(pot, 0) / 25;           //decreasing the value the more of the bank invested
+        } else if (getStakeToBankRatio() <= 0.25){              //prevent large investment at low stakes
+            return (int) (getBetWortiness(pot, 0) / (70*getStakeToBankRatio()));
+        }
+        else {
+            return (int) (getBetWortiness(pot, 0) / (50*getStakeToBankRatio()));
         }
     }
 
