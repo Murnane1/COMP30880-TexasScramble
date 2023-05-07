@@ -256,6 +256,20 @@ public class HoldemHand {
         return RiskWorthiness.DEFAULT_RISK.getRiskValue();
     }
 
+    public int getBettingRound(){
+        int betRound = 0;   //preflop
+        if(communityCards.size() == 3){
+            betRound = 1;   //flop
+        }
+        else if(communityCards.size() == 4){
+            betRound = 2;   //turn
+        }
+        else if(communityCards.size() == 5){
+            betRound = 3;   //river
+        }
+        return betRound;
+    }
+
     //Hand classifiers
     public boolean isFourOfAKind(List<Card> hand) {
         return hand.get(0).getValue() == hand.get(3).getValue() 

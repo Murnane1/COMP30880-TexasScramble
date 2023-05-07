@@ -25,16 +25,31 @@ public class PotTexasHoldem extends PotOfMoney{
         return players;
     }
 
+    public ArrayList<Player> getActivePlayers(){
+        ArrayList<Player> activePlayers = new ArrayList<>();
+        for (Player player: getPlayers()) {
+            if(player == null || player.hasFolded()){
+                continue;
+            }
+            activePlayers.add(player);
+        }
+        return activePlayers;
+    }
+
+    public double getAverageStakeToBankRatio() {
+        double commitment = 0;
+        for (Player player: getActivePlayers()) {
+            commitment += player.getStakeToBankRatio();
+        }
+        return commitment / getActivePlayers().size();
+    }
+
     public void addPlayer(Player player){
         players.add(player);
     }
 
     public void removePlayer(Player player){
         players.remove(player);
-    }
-
-    public void removePlayer(int i){
-        players.remove(i);
     }
 
     public void addPlayers(Player[] newPlayers){
@@ -52,6 +67,12 @@ public class PotTexasHoldem extends PotOfMoney{
         addToPot(amount);
     }
 
+    public int sharePot(int numWinners){
+        int remainder = getTotal() % numWinners;        //house takes remainder
+        int allPlayerWinnings = getTotal() - remainder;
+        int share = allPlayerWinnings / numWinners;
+        return share;
+    }
 
     public int getMaxStake() {
         return maxStake;
