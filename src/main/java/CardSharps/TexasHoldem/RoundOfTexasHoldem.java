@@ -372,7 +372,7 @@ public class RoundOfTexasHoldem {
 		for (Card card : players[0].getHand().getHand()) {
 			System.out.print(card + " ");
 		}
-		System.out.println("");
+		System.out.println();
 		
 	}
 
