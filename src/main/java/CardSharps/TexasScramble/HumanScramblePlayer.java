@@ -9,11 +9,6 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    boolean shouldOpen(PotOfMoney pot) {
-        return true;
-    }
-
-    @Override
     public boolean shouldSee(PotOfMoney pot) {
         return askQuestion("Do you want to see the bet of " +
                 addCount(pot.getCurrentStake() - getStake(), "chip", "chips"));

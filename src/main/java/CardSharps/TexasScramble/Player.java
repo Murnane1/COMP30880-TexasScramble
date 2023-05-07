@@ -214,8 +214,6 @@ public abstract class Player {
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
 
-    abstract boolean shouldOpen(PotOfMoney pot);
-
     abstract boolean shouldSee(PotOfMoney pot);
 
     abstract boolean shouldRaise(PotOfMoney pot);
@@ -238,11 +236,14 @@ public abstract class Player {
 
         if (hasFolded()) return;  // no longer in the game
 
-        if(shouldAllIn(pot) && pot.getCurrentStake() >= getStake() + getBank()) {
-            allIn(pot);
-        } else if (pot.getCurrentStake() >= getStake() + getBank()) {
-            fold(pot);
-        } else if(!isAllIn()){
+        if(pot.getCurrentStake() >= getStake() + getBank()) {
+            if(shouldAllIn(pot)) {
+                allIn(pot);
+            } else{
+                fold(pot);
+            }
+        }
+        else if(!isAllIn()){
             if (pot.getCurrentStake() > getStake()) {                   // existing bet must be covered
                 if (shouldSee(pot)) {
                     seeBet(pot);

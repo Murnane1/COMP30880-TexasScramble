@@ -218,10 +218,10 @@ public class GameOfTexasScramble {
     public static void main(String[] args) {
 
         System.out.println("\nWelcome to the Automated Texas Scramble Machine ...\n\n");
-        String[] takenNames = {"Tom", "Dick", "Harry", "Sarah", "Maggie", "Andrew", "Zoe", "Sadbh", "Mark", "Sean"};
+        String[] takenNames = {"tom", "dick", "harry", "sarah", "maggie", "andrew", "zoe", "sadbh", "mark", "sean", "martin", "jane"};
 
         String humanName = null;
-        while (humanName == null || humanName == "" || Arrays.asList(takenNames).contains(humanName)){
+        while (humanName == null || humanName == "" || Arrays.asList(takenNames).contains(humanName.toLowerCase())){
             System.out.print("\nWhat is your name?  ");
             try {
                 Scanner scanName = new Scanner(System.in);
@@ -229,7 +229,7 @@ public class GameOfTexasScramble {
                 humanName = humanName.replaceAll("\\s", "");
                 if(humanName.equals("")){
                     System.out.println("You must have a name");
-                } else if (Arrays.asList(takenNames).contains(humanName)) {
+                } else if (Arrays.asList(takenNames).contains(humanName.toLowerCase())) {
                     System.out.println("The name " + humanName + " is already taken");
                 }
             }

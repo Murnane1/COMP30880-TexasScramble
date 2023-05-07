@@ -37,6 +37,8 @@ public class CreateComputerPlayers {
         FrequencyComputerPlayer Sadbh = new FrequencyComputerPlayer("Sadbh", bank, 8000, 40, wordFrequencyDictionary);
         FrequencyComputerPlayer Mark = new FrequencyComputerPlayer("Mark", bank, 100, 55, wordFrequencyDictionary);
         FrequencyComputerPlayer Sean = new FrequencyComputerPlayer("Sean", bank, 30000, 45, wordFrequencyDictionary);
+        CopycatComputerPlayer Martin = new CopycatComputerPlayer("Martin", bank, 250000, 25, wordFrequencyDictionary);
+        CopycatComputerPlayer Jane = new CopycatComputerPlayer("Jane", bank, 200000, 15, wordFrequencyDictionary);
 
         availablePlayers.add(Tom);
         availablePlayers.add(Dick);
@@ -48,6 +50,8 @@ public class CreateComputerPlayers {
         availablePlayers.add(Sadbh);
         availablePlayers.add(Mark);
         availablePlayers.add(Sean);
+        availablePlayers.add(Martin);
+        availablePlayers.add(Jane);
     }
 
 

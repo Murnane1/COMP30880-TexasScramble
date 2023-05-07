@@ -18,7 +18,7 @@ public class RoundOfTexasScrambleTest {
     ScrambleHand meHand;
     ScrabbleDictionary dictionary;
     Player me = new HumanScramblePlayer("me", 10);
-    Player you = new ComputerScramblePlayer("you", 10);
+    Player you = new HumanScramblePlayer("you", 10);
 
     private Player player1 = new HumanScramblePlayer("p1",5);
     private Player player2 = new HumanScramblePlayer("p2",4);
