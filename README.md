@@ -26,7 +26,8 @@
  - The players word does not need to be valid, that is the purpose of challenging and gives another chance to bluff.
  - The ability to choose the amount to raise by has been added in. Players are warned if they raise up to their all in amount and are asked to confirm they are sure
  - The computer player challenges more as the word value increases with 3 levels of suspicion for each word length.
- - The computer players see, raise and fold based on their risk level and a degree of randomness
+ - The computer players see, raise and fold based on several factors. There include their risk tolerance, the ratio of other players & their own stake:bank, the quality of hand, the number of players still betting and how much they need to raise by. Along with a random element.
+ - Fixed the Holdem game, allowing it to play through in the same way as Scramble. The opposition players are the same with the same characteristics in both games
 
 
 
