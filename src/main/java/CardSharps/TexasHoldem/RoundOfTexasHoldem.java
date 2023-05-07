@@ -18,7 +18,7 @@ import CardSharps.Poker.*;
 public class RoundOfTexasHoldem {	
 	public static final int DELAY_BETWEEN_ACTIONS	=	1000;  // number of milliseconds between game actions
 	private Player[] players;
-	private DeckOfCards deck;
+	private final DeckOfCards deck;
 	private int numPlayers;
 	
 	private int button = 0; // Player starts as the dealer;

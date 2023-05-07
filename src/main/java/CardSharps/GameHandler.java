@@ -11,7 +11,7 @@ import CardSharps.Poker.GameOfPoker;
 
 public class GameHandler {
     public static void main(String[] args) {
-        System.out.printf("Welcome to CardSharps!");
+        System.out.print("Welcome to CardSharps!");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please select which game you want to play: ");
         System.out.println("1. Texas Holdem");

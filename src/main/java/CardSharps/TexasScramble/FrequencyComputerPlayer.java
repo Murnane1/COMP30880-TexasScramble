@@ -10,10 +10,10 @@ import static CardSharps.TexasScramble.ScrambleHand.TOTAL_TILES;
 
 public class FrequencyComputerPlayer extends Player{
 
-    private long wordKnowledge;     //can only use words with a frequency above to this value (0 for perfect knowledge)
-    private WordFrequencyDictionary wordFrequencyDictionary;
-    private Random dice			= new Random(System.currentTimeMillis());
-    private int riskTolerance;  // willingness of a player to take risks and bluff
+    private final long wordKnowledge;     //can only use words with a frequency above to this value (0 for perfect knowledge)
+    private final WordFrequencyDictionary wordFrequencyDictionary;
+    private final Random dice			= new Random(System.currentTimeMillis());
+    private final int riskTolerance;  // willingness of a player to take risks and bluff
 
 
     public FrequencyComputerPlayer(String name, int money, long wordKnowledge, int riskTolerance , WordFrequencyDictionary wordFrequencyDictionary) {

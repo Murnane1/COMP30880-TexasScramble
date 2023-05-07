@@ -7,8 +7,8 @@ public class RoundOfTexasScramble {
     public static final int DELAY_BETWEEN_ACTIONS = 1000;  // number of milliseconds between game actions
     public static final int PENALTY = 3;
     private Player[] players;
-    private BagOfTiles bag;
-    private ScrabbleDictionary dictionary;
+    private final BagOfTiles bag;
+    private final ScrabbleDictionary dictionary;
     private int numPlayers;
     private int button      = 0;
     private int smallBlind  = 1;
@@ -40,7 +40,7 @@ public class RoundOfTexasScramble {
 
     }
 
-    public ArrayList<Player> getActivePlayers(ArrayList<Player> players){
+    public ArrayList<Player> getActivePlayers(List<Player> players){
         ArrayList<Player> activePlayers = new ArrayList<>(players);
         for(Player player: players){
             if(player == null || player.hasFolded()){

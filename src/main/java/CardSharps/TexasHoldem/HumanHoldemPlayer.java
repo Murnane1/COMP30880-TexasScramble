@@ -1,7 +1,5 @@
 package CardSharps.TexasHoldem;
 
-import CardSharps.Poker.*;
-
 import java.util.Scanner;
 
 public class HumanHoldemPlayer extends Player {
@@ -31,11 +29,6 @@ public class HumanHoldemPlayer extends Player {
             System.out.println("Please enter 'y' or 'n' to answer");
         }
         return false;
-    }
-
-    @Override
-    public boolean shouldOpen(PotTexasHoldem pot) {
-        return true;
     }
 
     @Override

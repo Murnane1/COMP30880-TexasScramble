@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class WordFrequencyDictionary {
 
-    private ArrayList<WordFrequency> wordFrequencies;
-    private final static int MAX_WORD_LENGTH = 7;
+    private final ArrayList<WordFrequency> wordFrequencies;
+    private static final int MAX_WORD_LENGTH = 7;
 
     public WordFrequencyDictionary(String filename) throws IOException {
         ArrayList<WordFrequency> frequencyList = new ArrayList<>();

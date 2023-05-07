@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CreateComputerPlayers {
-    private Player[] players;
-    private ArrayList<Player> availablePlayers = new ArrayList<>();
-    private int bank;
-    private WordFrequencyDictionary wordFrequencyDictionary;
+    private final Player[] players;
+    private final ArrayList<Player> availablePlayers = new ArrayList<>();
+    private final WordFrequencyDictionary wordFrequencyDictionary;
 
     /*
     * Puts a random selection of our predefined players into an array of players
     * Can then use the getPlayers methods to assign the array of players in the game class
     */
-    CreateComputerPlayers(WordFrequencyDictionary wordFrequencyDictionary, int numPlayers, int bank, String humanName){
+    CreateComputerPlayers(WordFrequencyDictionary wordFrequencyDictionary, int numPlayers, int bank){
         this.wordFrequencyDictionary = wordFrequencyDictionary;
-        this.bank = bank;
         players = new Player[numPlayers];
 
         generatePlayers(bank);

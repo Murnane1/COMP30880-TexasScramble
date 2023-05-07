@@ -1,15 +1,12 @@
 package CardSharps.TexasHoldem;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import CardSharps.Poker.*;
 
 public class ComputerHoldemPlayer extends Player {
     public static final int VARIABILITY		= 50;
     private int riskTolerance				= 0;
-    private Random dice						= new Random(System.currentTimeMillis());
+    private final Random dice						= new Random(System.currentTimeMillis());
 
 
 
@@ -20,11 +17,6 @@ public class ComputerHoldemPlayer extends Player {
 
     public int getRiskTolerance() {
         return riskTolerance - getStake(); // tolerance drops as stake increases
-    }
-
-    @Override
-    boolean shouldOpen(PotTexasHoldem pot) {
-        return true;
     }
 
     @Override

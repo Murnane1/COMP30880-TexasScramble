@@ -9,12 +9,12 @@ public class ScrambleHand {
     private List<Tile> playerTiles;
     private List<Tile> communityTiles;
     private TrieDictionary trieDictionary;
-    private ScrabbleDictionary dictionary;
-    private BagOfTiles bag;
+    private final ScrabbleDictionary dictionary;
+    private final BagOfTiles bag;
 
     public static final int TOTAL_TILES = 7;
-    public final static int ALL_LETTER_BONUS = 50;
-    private final static int BEST_WORD = 79;
+    public static final int ALL_LETTER_BONUS = 50;
+    private static final int BEST_WORD = 79;
 
     public ScrambleHand(BagOfTiles tiles, ScrabbleDictionary scrabbleDictionary){
         this.playerTiles = new ArrayList<>(); //init player tiles
@@ -164,12 +164,8 @@ public class ScrambleHand {
     }
 
     public int getHandQuality(String word) {
-        int wordValue = 0;
-        if(word == ""){
-            wordValue = 0;
-        } else {
-            wordValue = calculateWordValue(word);
-        }
+        int wordValue = calculateWordValue(word);
+
         //maybe calculate 7-letter words still possible
         //average tile 1.87 points
         //players have about a 15% chance of having a 7-letter word assuming perfect knowledge (1 in 6.67)
@@ -177,20 +173,17 @@ public class ScrambleHand {
 
 
         if(communityTiles.size() == 0){
-            //TODO how will 5 more tiles effect current hand (vowels more useful? (max 2 letter score 11)
             for (Tile t: playerTiles) {
                 wordValue += t.getValue()/2;
             }
          }
         else if(communityTiles.size() == 3){
-            //TODO how will 2 more tiles effect current hand (max 5 letter score 21)
             //have useful pre/suf fixes
             if(getBestCommunityWordValue() >= wordValue){
                 wordValue -= 8; //every player can use this word
             }
         }
         else if(communityTiles.size() == 4){
-            //TODO how will 1 more tiles effect current hand (max 6 letter score 28)
             //have useful pre/suf fixes
             if(getBestCommunityWordValue() >= wordValue){
                 wordValue -= 12; //every player can use this word
@@ -293,38 +286,5 @@ public class ScrambleHand {
                 generatePossibleSevenLetterWords(hand, communityTiles, wordSoFar + tile.getLetter(), numTilesLeft - 1, possibleWords, maxTiles);
             }
         }
-    }
-
-
-    public static void main(String[] args) throws IOException{
-        BagOfTiles bag = new BagOfTiles("ENGLISH");
-        String path = "src/main/resources/WordLists/ukEnglishScrabbleWordlist.txt";
-        File file = new File(path);
-        ScrabbleDictionary dictionary = new ScrabbleDictionary(file.getAbsolutePath());
-        ScrambleHand hand = new ScrambleHand(bag, dictionary);
-
-        List<Tile> communityTiles = new ArrayList<>();
-        communityTiles.add(bag.dealNext());
-        communityTiles.add(bag.dealNext());
-        communityTiles.add(bag.dealNext());
-        hand.addCommunityTiles(communityTiles);
-
-        System.out.println(hand.toString());
-
-        //List<String> possibleWords = hand.getPossibleWords();
-        List<String> possible7letterwords = hand.getPotentialSevenLetterWords(hand.getPlayerTiles(), hand.getCommunityTiles());
-//        for (String word: possibleWords){
-//            boolean contains = dictionary.contains(word);
-//            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
-//        }
-
-        for (String word: possible7letterwords){
-            boolean contains = dictionary.contains(word);
-            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary!" + " Word value = "  + hand.calculateWordValue(word));
-        }
-        System.out.println(possible7letterwords + ": Total Words = " + possible7letterwords.size());
-        //System.out.println(possibleWords + ": Total Words = " + possibleWords.size());
-
-
     }
 }

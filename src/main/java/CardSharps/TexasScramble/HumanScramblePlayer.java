@@ -75,10 +75,9 @@ public class HumanScramblePlayer extends Player {
         boolean hasWord = false;
         String enteredWord = null;
 
-        while (hasWord == false) {
+        while (!hasWord) {
             System.out.print("\n>> " + getName() + ", please enter your word: ");
             enteredWord = getInputWord();
-            enteredWord.replace(" ","");
             hasWord = checkWord(enteredWord);
         }
 

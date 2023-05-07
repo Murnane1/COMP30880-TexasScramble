@@ -6,15 +6,14 @@ import java.util.Scanner;
 
 public class GameOfTexasScramble {
     private Player[] players;
-    private BagOfTiles bag;
-    private ScrabbleDictionary dictionary;
-    private WordFrequencyDictionary wordFrequencyDictionary;
+    private final BagOfTiles bag;
+    private final ScrabbleDictionary dictionary;
     private int numPlayers;
-    private final static int INIT_SMALL_BLIND = 5;
+    private static final int INIT_SMALL_BLIND = 5;
 
-    private final static double BLIND_INCREASE_PER_ROUND = 1.25;
-    private final static int MAX_NUM_PLAYERS = 9;
-    private final static int STARTING_BANK = 100;
+    private static final double BLIND_INCREASE_PER_ROUND = 1.25;
+    private static final int MAX_NUM_PLAYERS = 9;
+    private static final int STARTING_BANK = 100;
 
     //--------------------------------------------------------------------//
     //--------------------------------------------------------------------//
@@ -38,10 +37,10 @@ public class GameOfTexasScramble {
         }
         bag = bagOfLanguage(language);
         dictionary = getDictionary(language);       //TODO catch errors loading - if word doesn't work just don't load bad value
-        wordFrequencyDictionary = getWordFrequencyDictionary(language); //TODO catch errors loading
+        WordFrequencyDictionary wordFrequencyDictionary = getWordFrequencyDictionary(language); //TODO catch errors loading
 
         //TODO make possible for multiple human players
-        CreateComputerPlayers computerPlayers = new CreateComputerPlayers(wordFrequencyDictionary, numPlayers-1 , bank, humanName);
+        CreateComputerPlayers computerPlayers = new CreateComputerPlayers(wordFrequencyDictionary, numPlayers-1 , bank);
         players[0] = new HumanScramblePlayer(humanName, bank);
         for(int i=1; i < numPlayers; i++){
             players[i] = computerPlayers.getPlayer(i-1);
@@ -201,8 +200,8 @@ public class GameOfTexasScramble {
                 byte[] input = new byte[100];
                 System.in.read(input);
 
-                for (int i = 0; i < input.length; i++)
-                    if ((char)input[i] == 'q' || (char)input[i] == 'Q')
+                for (byte b : input)
+                    if ((char) b == 'q' || (char) b == 'Q')
                         return;
             }
             catch (Exception e) {e.printStackTrace();};
@@ -228,7 +227,7 @@ public class GameOfTexasScramble {
                 Scanner scanName = new Scanner(System.in);
                 humanName = scanName.nextLine();
                 humanName = humanName.replaceAll("\\s", "");
-                if(humanName == "" || humanName == null){
+                if(humanName.equals("")){
                     System.out.println("You must have a name");
                 } else if (Arrays.asList(takenNames).contains(humanName)) {
                     System.out.println("The name " + humanName + " is already taken");

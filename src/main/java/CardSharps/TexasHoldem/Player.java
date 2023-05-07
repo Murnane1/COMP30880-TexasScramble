@@ -18,7 +18,7 @@ public abstract class Player {
     private boolean folded 		= false;     // set to true when the player folds (gives up)
     private boolean allIn       = false;
 
-    public Player(String name, int money) {
+    protected Player(String name, int money) {
         this.name = name;
         bank = money;
     }
@@ -46,15 +46,13 @@ public abstract class Player {
     }
 
     public double getStakeToBankRatio(){
-        return getStake() / (getBank() + getStake());
+        return ( (double) getStake() / (getBank() + getStake()));
     }
 
     public void dealTo(DeckOfCards deck) {
         hand = deck.dealHoldemHand();
     }
-    public void addCommunityCards(List<Card> cards){
-        this.hand.addCommunityCards(cards);
-    }
+
     public void takePot(PotTexasHoldem pot) {
         System.out.println("\n> " + getName() + " says: I WIN " + addCount(pot.getTotal(), "chip", "chips") + "!\n");
         System.out.println(hand.toString());
@@ -77,19 +75,6 @@ public abstract class Player {
             System.out.println("\n> " + getName() + " says: I fold!\n");
 
         folded = true;
-    }
-
-    public void openBetting(PotTexasHoldem pot) {
-
-        if (bank == 0) return;
-
-        stake++;
-        bank--;
-
-        pot.raiseStake(1);
-
-        System.out.println("\n> " + getName() + " says: I open with one chip!\n");
-
     }
 
     public void seeBet(PotOfMoney pot) {
@@ -126,7 +111,6 @@ public abstract class Player {
         System.out.println("\n> " + getName() + " says: ALL IN with " + addCount(getStake(),"chip","chips") + "!\n");
     }
 
-    abstract boolean shouldOpen(PotTexasHoldem pot);
     abstract boolean shouldSee(PotTexasHoldem pot);
     abstract boolean shouldRaise(PotTexasHoldem pot);
 
@@ -165,18 +149,14 @@ public abstract class Player {
     }
 
     //Different method to open bet
-    public boolean postBlind(PotTexasHoldem pot, int blindAmt, String type) {
-        if (bank == 0) return false;
-
-        //FLAG to check if player had enough for blind
-        boolean enough = true;
+    public void postBlind(PotTexasHoldem pot, int blindAmt, String type) {
+        if (bank == 0) return;
 
         stake = stake + blindAmt;
         pot.addStake(blindAmt);
         bank = bank-blindAmt;
 
         System.out.println("\n> " + getName() + " says: I post " + type + " with "+ blindAmt +" chip!\n");
-        return enough;
     }
 
     public void reduceStake(int reduction){

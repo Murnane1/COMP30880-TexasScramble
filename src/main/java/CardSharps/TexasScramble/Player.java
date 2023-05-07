@@ -99,7 +99,7 @@ public abstract class Player {
     }
 
     public double getStakeToBankRatio(){
-        return getStake() / (getBank() + getStake());
+        return ( (double) getStake() / (getBank() + getStake()));
     }
 
     //--------------------------------------------------------------------//

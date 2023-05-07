@@ -15,15 +15,15 @@ public class GameOfTexasHoldem
 {	
 	private Player[] players;
 	
-	private DeckOfCards deck;
+	private final DeckOfCards deck;
 	
 	private int numPlayers;
 
-	private final static int INIT_SMALL_BLIND = 1;
+	private static final int INIT_SMALL_BLIND = 1;
 
-	private final static double BLIND_INCREASE_PER_ROUND = 1.25;
-	private final static int MAX_NUM_PLAYERS = 9;
-	private final static int STARTING_BANK = 100;
+	private static final double BLIND_INCREASE_PER_ROUND = 1.25;
+	private static final int MAX_NUM_PLAYERS = 9;
+	private static final int STARTING_BANK = 100;
 	
 	//--------------------------------------------------------------------//
 	//--------------------------------------------------------------------//

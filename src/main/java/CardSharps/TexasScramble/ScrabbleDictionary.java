@@ -26,28 +26,6 @@ public class ScrabbleDictionary {
         return trie.contains(word.toUpperCase());
     }
 
-    public static void main(String[] args) { //../pathtofile when getting specific path
-        //TESTING WORDS EXIST
-        String filename = "usEnglishScrabbleWordlist.txt";
-        URL url = ScrabbleDictionary.class.getResource("/WordLists/" + filename);
-        String filepath = url.getPath();
-        ScrabbleDictionary dictionary = null;
-        try {
-            dictionary = new ScrabbleDictionary(filepath);
-        } catch (IOException e) {
-            System.out.println("Error loading dictionary from file: " + filename);
-            e.printStackTrace();
-            return;
-        }
-
-        // Test if words are in dictionary
-        String[] words = { "test", "hello", "WORLD", "HOUSE", "PROGRAM", "WORD", "CLOUD", "FUN", "ACT", "NO", "TO", "FLABBERGASTED", "BILFRIT", "BILKIRKEGÅRD", "DRÆBE", "HALVT", "STIKKER", "UBM", "TH"};
-        for (String word : words) {
-            boolean contains = dictionary.contains(word);
-            System.out.println(word + " is " + (contains ? "" : "not ") + "in the dictionary\n");
-        }
-    }
-
     public TrieDictionary getTrie() {
         return this.trie;
     }
@@ -73,7 +51,7 @@ class TrieDictionary {
         return instance;
     }
 
-    public void insert(String word) throws IOException { //inserts the word into the trie structure
+    public void insert(String word) { //inserts the word into the trie structure
         TrieNode node = root;
         for (char c : word.toCharArray()) {
             node.children.putIfAbsent(c, new TrieNode());

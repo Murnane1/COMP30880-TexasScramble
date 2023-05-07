@@ -1,5 +1,6 @@
 package CardSharps.TexasScramble;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class BagOfTiles {
@@ -9,11 +10,11 @@ public class BagOfTiles {
 
     private int next = 0;
 
-    private Random dice = new Random(System.currentTimeMillis());
+    private final Random dice = new Random(System.currentTimeMillis());
 
 
     public BagOfTiles(String language){ //language arg?
-        if(language == "ENGLISH"){
+        if(language.equals("ENGLISH")){
             numTiles = 98;
             bag = new Tile[numTiles];
             addTiles('A', 1, 9);
@@ -43,7 +44,7 @@ public class BagOfTiles {
             addTiles('Y', 8, 2);
             addTiles('Z', 4, 1);
         }
-        else if (language == "FRENCH") {
+        else if (language.equals("FRENCH")) {
             numTiles = 100;
             bag = new Tile[numTiles];
             addTiles('E', 1, 15);
