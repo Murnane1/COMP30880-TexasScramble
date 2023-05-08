@@ -2,7 +2,7 @@ package CardSharps.TexasHoldem;
 
 import java.util.Scanner;
 
-public class HumanHoldemPlayer extends Player {
+public class HumanHoldemPlayer extends HoldemPlayer {
 
     public HumanHoldemPlayer(String name, int money) {
         super(name, money);
@@ -46,7 +46,7 @@ public class HumanHoldemPlayer extends Player {
     }
 
     @Override
-    int raiseAmount(PotTexasHoldem pot) {
+    public int raiseAmount(PotTexasHoldem pot) {
         int enteredValue = -1;
         while (enteredValue < 0 || enteredValue > getBank()) {
             System.out.print("\n>> " + getName() + ", please enter how much you want to raise by: ");

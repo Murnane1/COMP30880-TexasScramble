@@ -1,24 +1,17 @@
 package CardSharps.TexasHoldem;
 
-
-import CardSharps.Poker.*;
-
-import java.util.List;
-
 public abstract class Player {
-
     private int bank       		= 0;		 // the total amount of money the player has left, not counting his/her
 
     private int stake      		= 0;		 // the amount of money the player has thrown into the current pot
 
     private String name    		= "Player";  // the unique identifying name given to the player
 
-    private HoldemHand hand 		= null;      // the hand dealt to this player
-
     private boolean folded 		= false;     // set to true when the player folds (gives up)
     private boolean allIn       = false;
 
-    protected Player(String name, int money) {
+
+    public Player(String name, int money){
         this.name = name;
         bank = money;
     }
@@ -31,11 +24,14 @@ public abstract class Player {
     public String toString() {
         if (hasFolded())
             return "> " + getName() + " has folded, and has " + addCount(getBank(), "chip", "chips") + " in the bank.";
-        else
-            return "> " + getName() + " has  " + addCount(getBank(), "chip", "chips") + " in the bank";
+        else if (isAllIn()) {
+            return "> " + getName() + " is all in, and has " + addCount(getBank(), "chip", "chips") + " in the bank.";
+        } else
+            return "> " + getName() + " has " + addCount(getBank(), "chip", "chips") + " in the bank";
     }
 
-    public HoldemHand getHand(){return hand;}
+
+    //Accessors
     public int getBank(){return bank;};
     public int getStake() {return stake;};
     public String getName() { return name;};
@@ -45,28 +41,31 @@ public abstract class Player {
         return allIn;
     }
 
+    //Modifiers
+    public void setBank(int bank) { this.bank = bank; }
+    public void reduceBank(int amount) {
+        bank -= amount;
+    }
+    public void increaseBank(int amount) {
+        bank += amount;
+    }
+    public void setStake(int stake) { this.stake = stake; }
+
+    public void setFolded(boolean folded) { this.folded = folded; }
+
     public double getStakeToBankRatio(){
         return ( (double) getStake() / (getBank() + getStake()));
     }
 
-    public void dealTo(DeckOfCards deck) {
-        hand = deck.dealHoldemHand();
-    }
-
     public void takePot(PotTexasHoldem pot) {
-        System.out.println("\n> " + getName() + " says: I WIN " + addCount(pot.getTotal(), "chip", "chips") + "!\n");
-        System.out.println(hand.toString());
-
+        System.out.println(getName() + " takes pot of " + addCount(pot.getTotal(), "chip", "chips"));
         bank += pot.takePot();
-
-        System.out.println(this);
     }
 
     public void sharePot(PotTexasHoldem pot, int numWinners){
         int share = pot.sharePot(numWinners);
-        System.out.println(getName() + " takes their share of " + addCount(share, "chip", "chips") + " from the pot");
-        System.out.println(hand.toString());
-
+        System.out.println(getName() + " takes their share of " + addCount(share, "chip", "chips") +
+                " from the pot");
         bank += share;
     }
 
@@ -77,7 +76,7 @@ public abstract class Player {
         folded = true;
     }
 
-    public void seeBet(PotOfMoney pot) {
+    public void seeBet(PotTexasHoldem pot) {
         int needed  = pot.getCurrentStake() - getStake();
         if (needed == 0 || needed > getBank()) {
             System.out.println(getName() + " cannot cover bet");
@@ -92,7 +91,7 @@ public abstract class Player {
         System.out.println("\n> " + getName() + " says: I see that " + addCount(needed, "chip", "chips") + "!\n");
     }
 
-    public void raiseBet(PotOfMoney pot, int amount) {
+    public void raiseBet(PotTexasHoldem pot, int amount) {
         if (getBank() == 0) return;
 
         stake += amount;
@@ -111,23 +110,32 @@ public abstract class Player {
         System.out.println("\n> " + getName() + " says: ALL IN with " + addCount(getStake(),"chip","chips") + "!\n");
     }
 
-    abstract boolean shouldSee(PotTexasHoldem pot);
-    abstract boolean shouldRaise(PotTexasHoldem pot);
+    //--------------------------------------------------------------------//
+    //--------------------------------------------------------------------//
+    // Key decisions a player must make
+    //--------------------------------------------------------------------//
+    //--------------------------------------------------------------------//
 
-    abstract int raiseAmount(PotTexasHoldem pot);
+    protected abstract boolean shouldSee(PotTexasHoldem pot);
+    protected abstract boolean shouldRaise(PotTexasHoldem pot);
 
-    abstract boolean shouldAllIn(PotTexasHoldem pot);
+    protected abstract int raiseAmount(PotTexasHoldem pot);
+
+    protected abstract boolean shouldAllIn(PotTexasHoldem pot);
 
     public void nextAction(PotTexasHoldem pot) {
         boolean canCheck = true;
 
         if (hasFolded()) return;  // no longer in the game
 
-        if(shouldAllIn(pot) && pot.getCurrentStake() >= getStake() + getBank()) {
-            allIn(pot);
-        } else if (pot.getCurrentStake() >= getStake() + getBank()) {
-            fold(pot);
-        } else if(!isAllIn()){
+        if(pot.getCurrentStake() >= getStake() + getBank()) {
+            if(shouldAllIn(pot)) {
+                allIn(pot);
+            } else{
+                fold(pot);
+            }
+        }
+        else if(!isAllIn()){
             if (pot.getCurrentStake() > getStake()) {                   // existing bet must be covered
                 if (shouldSee(pot)) {
                     seeBet(pot);
@@ -148,15 +156,24 @@ public abstract class Player {
         }
     }
 
+
+    //--------------------------------------------------------------------//
+    //--------------------------------------------------------------------//
+    // Allowable player actions in Poker
+    //--------------------------------------------------------------------//
+    //--------------------------------------------------------------------//
+
     //Different method to open bet
-    public void postBlind(PotTexasHoldem pot, int blindAmt, String type) {
-        if (bank == 0) return;
+    public boolean postBlind(PotTexasHoldem pot, int blindAmt, String type) {
+        if (bank < blindAmt) return false;
 
-        stake = stake + blindAmt;
-        pot.addStake(blindAmt);
-        bank = bank-blindAmt;
+        stake += blindAmt;
+        bank -= blindAmt;
 
-        System.out.println("\n> " + getName() + " says: I post " + type + " with "+ blindAmt +" chip!\n");
+        pot.addBlind(blindAmt);
+
+        System.out.println("\n> " + getName() + " posts the " + type + " with "+ addCount(blindAmt, "chip", "chips") + "\n");
+        return true;
     }
 
     public void reduceStake(int reduction){

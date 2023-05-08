@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CreateComputerPlayers {
-    private final Player[] players;
-    private final ArrayList<Player> availablePlayers = new ArrayList<>();
+    private final ScramblePlayer[] players;
+    private final ArrayList<ScramblePlayer> availablePlayers = new ArrayList<>();
     private final WordFrequencyDictionary wordFrequencyDictionary;
 
     /*
@@ -14,7 +14,7 @@ public class CreateComputerPlayers {
     */
     CreateComputerPlayers(WordFrequencyDictionary wordFrequencyDictionary, int numPlayers, int bank){
         this.wordFrequencyDictionary = wordFrequencyDictionary;
-        players = new Player[numPlayers];
+        players = new ScramblePlayer[numPlayers];
 
         generatePlayers(bank);
 
@@ -55,11 +55,11 @@ public class CreateComputerPlayers {
     }
 
 
-    public Player[] getPlayers() {
+    public ScramblePlayer[] getPlayers() {
         return players;
     }
 
-    public Player getPlayer(int index){
+    public ScramblePlayer getPlayer(int index){
         return players[index];
     }
 }

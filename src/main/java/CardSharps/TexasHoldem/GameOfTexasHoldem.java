@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class GameOfTexasHoldem 
 {	
-	private Player[] players;
+	private HoldemPlayer[] players;
 	
 	private final DeckOfCards deck;
 	
@@ -32,10 +32,10 @@ public class GameOfTexasHoldem
 	//--------------------------------------------------------------------//
 	
 	public GameOfTexasHoldem(int numPlayers, int bank, String humanName) {
-		players = new Player[numPlayers];
+		players = new HoldemPlayer[numPlayers];
 		this.numPlayers = numPlayers;
 
-		CreateHoldemPlayers computerPlayers = new CreateHoldemPlayers(numPlayers-1 , bank, humanName);
+		CreateHoldemPlayers computerPlayers = new CreateHoldemPlayers(numPlayers-1 , bank);
 		players[0] = new HumanHoldemPlayer(humanName, bank);
 		for(int i=1; i < numPlayers; i++){
 			players[i] = computerPlayers.getPlayer(i-1);
@@ -57,7 +57,7 @@ public class GameOfTexasHoldem
 	}
 	
 	
-	public Player getPlayer(int num) {
+	public HoldemPlayer getPlayer(int num) {
 		if (num >= 0 && num <= numPlayers)
 			return players[num];
 		else
@@ -130,7 +130,7 @@ public class GameOfTexasHoldem
 			try {
 				if(getNumPlayersMeetBlinds(bigBlind) < 2){
 					System.out.println("The game is over. There is only one player able to meet the big blind of " + bigBlind);
-					for (Player player : players){
+					for (HoldemPlayer player : players){
 						if (player != null && player.getBank() > bigBlind)
 							System.out.println("\n\n***** "+player.getName() + " is the WINNER! *****\n");
 					}

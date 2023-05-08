@@ -1,6 +1,5 @@
 package CardSharps.TexasHoldem;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import CardSharps.Poker.PotOfMoney;
@@ -8,8 +7,7 @@ import CardSharps.Poker.PotOfMoney;
 public class PotTexasHoldem extends PotOfMoney{
     
     private ArrayList<Player> players;
-    int maxStake = Integer.MAX_VALUE;       //no max until a player goes all-in
-    
+
     public PotTexasHoldem(ArrayList<Player> potPlayers){
         super();
         players = potPlayers;
@@ -44,6 +42,11 @@ public class PotTexasHoldem extends PotOfMoney{
             commitment += player.getStakeToBankRatio();
         }
         return commitment / getActivePlayers().size();
+    }
+
+    public void addBlind(int blindAmt) {
+        setStake(blindAmt);
+        addToPot(blindAmt);
     }
 
     public void removeFromPot(int subtraction) {

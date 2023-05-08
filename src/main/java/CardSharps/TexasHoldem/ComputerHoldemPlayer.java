@@ -3,8 +3,7 @@ package CardSharps.TexasHoldem;
 
 import java.util.Random;
 
-public class ComputerHoldemPlayer extends Player {
-    public static final int VARIABILITY		= 50;
+public class ComputerHoldemPlayer extends HoldemPlayer {
     private int riskTolerance				= 0;
     private final Random dice						= new Random(System.currentTimeMillis());
 
@@ -20,7 +19,7 @@ public class ComputerHoldemPlayer extends Player {
     }
 
     @Override
-    boolean shouldSee(PotTexasHoldem pot) {
+    public boolean shouldSee(PotTexasHoldem pot) {
         if (getStake() == 0)
             return true;
         else
@@ -28,12 +27,12 @@ public class ComputerHoldemPlayer extends Player {
     }
 
     @Override
-    boolean shouldRaise(PotTexasHoldem pot) {
+    public boolean shouldRaise(PotTexasHoldem pot) {
         return getBetWortiness(pot, 65) > 0;
     }
 
     @Override
-    int raiseAmount(PotTexasHoldem pot) {
+    public int raiseAmount(PotTexasHoldem pot) {
         if(getStakeToBankRatio() == 0){
             return getBetWortiness(pot, 0) / 25;           //decreasing the value the more of the bank invested
         } else if (getStakeToBankRatio() <= 0.25){              //prevent large investment at low stakes
@@ -46,7 +45,7 @@ public class ComputerHoldemPlayer extends Player {
 
 
     @Override
-    boolean shouldAllIn(PotTexasHoldem pot) {
+    public boolean shouldAllIn(PotTexasHoldem pot) {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {

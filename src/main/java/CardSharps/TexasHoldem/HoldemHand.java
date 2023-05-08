@@ -4,7 +4,7 @@ package CardSharps.TexasHoldem;
 import CardSharps.Poker.*;
 import java.util.*;
 
-public class HoldemHand {
+public class HoldemHand /*implements Handable*/ {
     //enum for cardvalue, suit, risk and handvalue
     public enum CardValue{
         ACE(1, "Ace"),
@@ -129,6 +129,8 @@ public class HoldemHand {
     public void addCommunityCards(List<Card> cards){
         this.communityCards.addAll(cards);
     }
+
+
 
     public List<Card> getBestHand(){ //returns the best hand a player can have - gets a value from evaluatehand
         List<Card> cards = new ArrayList<>();

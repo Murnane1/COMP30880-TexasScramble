@@ -1,21 +1,24 @@
 package CardSharps.TexasScramble;
 
+import CardSharps.TexasHoldem.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HumanScramblePlayer extends Player {
+public class HumanScramblePlayer extends ScramblePlayer {
+
     public HumanScramblePlayer(String name, int money) {
         super(name, money);
     }
 
     @Override
-    public boolean shouldSee(PotOfMoney pot) {
+    public boolean shouldSee(PotTexasHoldem pot) {
         return askQuestion("Do you want to see the bet of " +
                 addCount(pot.getCurrentStake() - getStake(), "chip", "chips"));
     }
 
     @Override
-    public boolean shouldRaise(PotOfMoney pot) {
+    public boolean shouldRaise(PotTexasHoldem pot) {
         if(getBank() == 1){
             System.out.println("Note: Raising will make you All In");
         }
@@ -23,7 +26,7 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    int raiseAmount(PotOfMoney pot) {
+    public int raiseAmount(PotTexasHoldem pot) {
         int enteredValue = -1;
         while (enteredValue < 0 || enteredValue > getBank()) {
             System.out.print("\n>> " + getName() + ", please enter how much you want to raise by: ");
@@ -52,7 +55,7 @@ public class HumanScramblePlayer extends Player {
 
 
     @Override
-    public boolean shouldAllIn(PotOfMoney pot) {
+    public boolean shouldAllIn(PotTexasHoldem pot) {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {
@@ -61,7 +64,7 @@ public class HumanScramblePlayer extends Player {
     }
 
     @Override
-    public boolean shouldChallenge(PotOfMoney pot, String word) {
+    public boolean shouldChallenge(PotTexasHoldem pot, String word) {
         return askQuestion("Do you want to challenge the word \"" + word + "\"");
     }
 
@@ -85,7 +88,7 @@ public class HumanScramblePlayer extends Player {
         return sc.nextLine().toUpperCase();
     }
 
-    public boolean checkWord(String testWord){      //TODO test works with strange characters different languages
+    public boolean checkWord(String testWord){
         testWord = testWord.toUpperCase();
         testWord = testWord.replace(" ","");
 

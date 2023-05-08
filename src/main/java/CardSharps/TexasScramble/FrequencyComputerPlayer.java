@@ -1,15 +1,8 @@
 package CardSharps.TexasScramble;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static java.lang.Math.pow;
-import static CardSharps.TexasScramble.ScrambleHand.ALL_LETTER_BONUS;
-import static CardSharps.TexasScramble.ScrambleHand.TOTAL_TILES;
+import CardSharps.TexasHoldem.*;
 
 public class FrequencyComputerPlayer extends ComputerScramblePlayer{
-
 
 
     public FrequencyComputerPlayer(String name, int money, long wordKnowledge, int riskTolerance , WordFrequencyDictionary wordFrequencyDictionary) {
@@ -17,7 +10,7 @@ public class FrequencyComputerPlayer extends ComputerScramblePlayer{
     }
 
     @Override
-    boolean shouldSee(PotOfMoney pot) {
+    public boolean shouldSee(PotTexasHoldem pot) {
         if (getStake() == 0)
             return true;
         else
@@ -25,12 +18,12 @@ public class FrequencyComputerPlayer extends ComputerScramblePlayer{
     }
 
     @Override
-    boolean shouldRaise(PotOfMoney pot) {
+    public boolean shouldRaise(PotTexasHoldem pot) {
         return getBetWorthiness(pot, 65) > 0;
     }
 
     @Override
-    int raiseAmount(PotOfMoney pot) {
+    public int raiseAmount(PotTexasHoldem pot) {
         if(getStakeToBankRatio() == 0){
             return getBetWorthiness(pot, 0) / 25;           //decreasing the value the more of the bank invested
         } else if (getStakeToBankRatio() <= 0.25){              //prevent large investment at low stakes
@@ -43,7 +36,7 @@ public class FrequencyComputerPlayer extends ComputerScramblePlayer{
 
 
     @Override
-    boolean shouldAllIn(PotOfMoney pot) {
+    public boolean shouldAllIn(PotTexasHoldem pot) {
         if(pot.getCurrentStake() < getStake() + getBank()){
             return false;
         } else {

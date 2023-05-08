@@ -1,5 +1,7 @@
 package CardSharps.TexasScramble;
 
+import CardSharps.TexasHoldem.PotTexasHoldem;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +10,7 @@ import static CardSharps.TexasScramble.ScrambleHand.ALL_LETTER_BONUS;
 import static CardSharps.TexasScramble.ScrambleHand.TOTAL_TILES;
 import static java.lang.Math.pow;
 
-public abstract class ComputerScramblePlayer extends Player {
+public abstract class ComputerScramblePlayer extends ScramblePlayer {
     private final Random dice			= new Random(System.currentTimeMillis());
     private final int riskTolerance;  // willingness of a player to take risks and bluff
     private final long wordKnowledge;     //can only use words with a frequency above to this value (0 for perfect knowledge)
@@ -16,7 +18,7 @@ public abstract class ComputerScramblePlayer extends Player {
     private final WordFrequencyDictionary wordFrequencyDictionary;
 
 
-    public ComputerScramblePlayer(String name, int money, long wordKnowledge, int riskTolerance , WordFrequencyDictionary wordFrequencyDictionary) {
+    protected ComputerScramblePlayer(String name, int money, long wordKnowledge, int riskTolerance , WordFrequencyDictionary wordFrequencyDictionary) {
         super(name, money);
         this.riskTolerance = riskTolerance;
         this.wordFrequencyDictionary = wordFrequencyDictionary;
@@ -41,7 +43,7 @@ public abstract class ComputerScramblePlayer extends Player {
      *   The highest value it can return is 300
      *   The lowest value it can return is -127 + provided risk integer
      */
-    public int getBetWorthiness(PotOfMoney pot, int risk) {
+    public int getBetWorthiness(PotTexasHoldem pot, int risk) {
         if(risk == 0){
             risk = 1;       //Prevent breaking game with risk of 0. Can't get the modulus of 0
         }
@@ -56,7 +58,7 @@ public abstract class ComputerScramblePlayer extends Player {
     }
 
     @Override
-    boolean shouldChallenge(PotOfMoney pot, String word) {
+    boolean shouldChallenge(PotTexasHoldem pot, String word) {
         int wordValue = getHand().calculateWordValue(word);
         if(wordFrequencyDictionary.getWordFrequency(word) > getWordKnowledge() || wordValue < getWordScore() || getWord().equals(word)) {
             return false;
@@ -131,7 +133,7 @@ public abstract class ComputerScramblePlayer extends Player {
         String currBestWord = null;
 
         for (String word: possibleWords) {
-            if(wordFrequencyDictionary.getWordFrequency(word) >= getWordKnowledge()){            //TODO add random chance of knowing word outside knowledge
+            if(wordFrequencyDictionary.getWordFrequency(word) >= getWordKnowledge()){
                 knownWords.add(word);
                 if(hand.calculateWordValue(word) > currBestWordValue){
                     currBestWordValue = hand.calculateWordValue(word);

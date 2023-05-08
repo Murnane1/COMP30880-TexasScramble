@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameOfTexasScramble {
-    private Player[] players;
+    private ScramblePlayer[] players;
     private final BagOfTiles bag;
     private final ScrabbleDictionary dictionary;
     private int numPlayers;
@@ -22,7 +22,7 @@ public class GameOfTexasScramble {
     //--------------------------------------------------------------------//
 
     public GameOfTexasScramble(int numPlayers, int bank, String humanName) {
-        players = new Player[numPlayers];
+        players = new ScramblePlayer[numPlayers];
         this.numPlayers = numPlayers;
 
         char language = 0;
@@ -36,10 +36,9 @@ public class GameOfTexasScramble {
             }
         }
         bag = bagOfLanguage(language);
-        dictionary = getDictionary(language);       //TODO catch errors loading - if word doesn't work just don't load bad value
-        WordFrequencyDictionary wordFrequencyDictionary = getWordFrequencyDictionary(language); //TODO catch errors loading
+        dictionary = getDictionary(language);
+        WordFrequencyDictionary wordFrequencyDictionary = getWordFrequencyDictionary(language);
 
-        //TODO make possible for multiple human players
         CreateComputerPlayers computerPlayers = new CreateComputerPlayers(wordFrequencyDictionary, numPlayers-1 , bank);
         players[0] = new HumanScramblePlayer(humanName, bank);
         for(int i=1; i < numPlayers; i++){
@@ -119,7 +118,7 @@ public class GameOfTexasScramble {
     }
 
 
-    public Player getPlayer(int num) {
+    public ScramblePlayer getPlayer(int num) {
         if (num >= 0 && num <= numPlayers)
             return players[num];
         else
@@ -189,7 +188,7 @@ public class GameOfTexasScramble {
             try {
                 if(getNumPlayersMeetBlinds(bigBlind) < 2){
                     System.out.println("The game is over. There is only one player able to meet the big blind of " + bigBlind);
-                    for (Player player : players){
+                    for (ScramblePlayer player : players){
                         if (player != null && player.getBank() > bigBlind)
                             System.out.println("\n\n***** "+player.getName() + " is the WINNER! *****\n");
                     }

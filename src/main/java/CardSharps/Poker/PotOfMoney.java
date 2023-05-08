@@ -63,6 +63,10 @@ public class PotOfMoney
 		addToPot(newStake - stake);
 		stake = newStake;
 	}
+
+	public void setStake(int amount) {
+		stake = amount;
+	}
 	
 	public void addToPot(int addition) {
 		total += addition;

@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CreateHoldemPlayers {
-    private final Player[] players;
-    private final ArrayList<Player> availablePlayers = new ArrayList<>();
-    private int bank;
+    private final HoldemPlayer[] players;
+    private final ArrayList<HoldemPlayer> availablePlayers = new ArrayList<>();
+
     /*
      * Puts a random selection of our predefined players into an array of players
      * Can then use the getPlayers methods to assign the array of players in the game class
      */
-    CreateHoldemPlayers(int numPlayers, int bank, String humanName){
-        this.bank = bank;
-        players = new Player[numPlayers];
+    CreateHoldemPlayers(int numPlayers, int bank){
+        players = new HoldemPlayer[numPlayers];
 
         generatePlayers(bank);
 
@@ -50,11 +49,11 @@ public class CreateHoldemPlayers {
     }
 
 
-    public Player[] getPlayers() {
+    public HoldemPlayer[] getPlayers() {
         return players;
     }
 
-    public Player getPlayer(int index){
+    public HoldemPlayer getPlayer(int index){
         return players[index];
     }
 }
