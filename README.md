@@ -21,14 +21,18 @@
  - The small blind increases by 25% rounded down each round. Starting with a small blind of 5 and a big blind of 10. To gradually reduce the number of players.
  - A word frequency list was used to assign values to the most used words from the dictionary using Peter Norvig's 1/3 million most frequent words (https://norvig.com/ngrams/)
  - The scrabble dictionaries were found through various sources. Using the SOWPODS wordlist for English and ODS6 for French
- - Computer players choose words based on the frequency dictionary. Each word in the dictionary found in the frequency list assigned a value. If the player had a word knowledge above this frequency they can use the word
+ - Most computer players choose words based on the frequency dictionary. Each word in the dictionary found in the frequency list assigned a value. If the player had a word knowledge above this frequency they can use the word
+ - A second type of computer player "copycat" that makes its decisions based on other players in the rounds actions
  - Human players input their word. The word is checked to make sure the player has each tile they are using including enough of each letter used.
  - The players word does not need to be valid, that is the purpose of challenging and gives another chance to bluff.
  - The ability to choose the amount to raise by has been added in. Players are warned if they raise up to their all in amount and are asked to confirm they are sure
  - The computer player challenges more as the word value increases with 3 levels of suspicion for each word length.
  - The computer players see, raise and fold based on several factors. There include their risk tolerance, the ratio of other players & their own stake:bank, the quality of hand, the number of players still betting and how much they need to raise by. Along with a random element.
  - Fixed the Holdem game, allowing it to play through in the same way as Scramble. The opposition players are the same with the same characteristics in both games
+ - Reconfigured the codebase so Texas Scramble was built off Texas Holdem
 
+### Ryan
+- Created the fundamentals of AI word invention and detection, explained in the AI bluffing package
 
 
 
