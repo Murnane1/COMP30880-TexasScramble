@@ -1,10 +1,6 @@
 
 package CardSharps.TexasHoldem;
 
-// This package provides classes necessary for implementing a game system for playing poker
-
-// A RoundOfPoker is a single round/deal in a game
-// A GameOfPoker is a sequence of one or more RoundOfPoker's
 import CardSharps.Poker.*;
 
 import java.util.Arrays;

@@ -57,6 +57,10 @@ public abstract class ScramblePlayer extends Player {
         this.word = word;
     }
 
+    public void setHand(ScrambleHand hand) {
+        this.hand = hand;
+    }
+
     public void setWordScore(int wordScore) {
         this.wordScore = wordScore;
     }
